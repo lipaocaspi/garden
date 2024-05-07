@@ -2,6 +2,8 @@
 
 #### Normalización
 
+![DER](https://raw.githubusercontent.com/lipaocaspi/gardenDB/main/DER.png)
+
 #### Creación BD
 
 ```sql
