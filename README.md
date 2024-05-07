@@ -1488,7 +1488,30 @@ VALUES
 1. Devuelve un listado con el código de oficina y la ciudad donde hay oficinas.
 
    ```sql
+   SELECT o.codigo_oficina, c.nombre_ciudad
+   FROM oficina AS o, ciudad AS c, direccion AS d
+   WHERE d.codigo_ciudad = c.codigo_ciudad AND d.codigo_oficina = o.codigo_oficina;
    
+   SELECT o.codigo_oficina, c.nombre_ciudad
+   FROM direccion AS d
+   INNER JOIN oficina AS o
+   ON d.codigo_oficina = o.codigo_oficina
+   INNER JOIN ciudad AS c
+   ON d.codigo_ciudad = c.codigo_ciudad;
+   
+   +----------------+----------------------+
+   | codigo_oficina | nombre_ciudad        |
+   +----------------+----------------------+
+   | BCN-ES         | Barcelona            |
+   | BOS-USA        | Boston               |
+   | LON-UK         | Londres              |
+   | MAD-ES         | Madrid               |
+   | PAR-FR         | Paris                |
+   | SFC-USA        | San Francisco        |
+   | SYD-AU         | Sydney               |
+   | TAL-ES         | Talavera de la Reina |
+   | TOK-JP         | Tokyo                |
+   +----------------+----------------------+
    ```
 
    
@@ -1496,7 +1519,22 @@ VALUES
 2. Devuelve un listado con la ciudad y el teléfono de las oficinas de España.
 
    ```sql
-   
+   SELECT c.nombre_ciudad, t.numero_telefono
+   FROM ciudad AS c, region AS r, pais AS p, telefono AS t, direccion AS d, oficina AS o
+   WHERE t.codigo_oficina = o.codigo_oficina 
+   	AND o.codigo_oficina = d.codigo_oficina 
+   	AND d.codigo_ciudad = c.codigo_ciudad 
+   	AND c.codigo_region = r.codigo_region 
+   	AND r.codigo_pais = p.codigo_pais 
+   	AND p.nombre_pais = 'España';
+   	
+   +----------------------+-----------------+
+   | nombre_ciudad        | numero_telefono |
+   +----------------------+-----------------+
+   | Talavera de la Reina | +34 925 867231  |
+   | Madrid               | +34 91 7514487  |
+   | Barcelona            | +34 93 3561182  |
+   +----------------------+-----------------+
    ```
 
    
@@ -1504,7 +1542,17 @@ VALUES
 3. Devuelve un listado con el nombre, apellidos y email de los empleados cuyo jefe tiene un código de jefe igual a 7.
 
    ```sql
+   SELECT e.nombre, e.apellido1, e.apellido2, e.email
+   FROM empleado AS e
+   WHERE codigo_jefe = 7;
    
+   +---------+-----------+-----------+--------------------------+
+   | nombre  | apellido1 | apellido2 | email                    |
+   +---------+-----------+-----------+--------------------------+
+   | Mariano | López     | Murcia    | mlopez@jardineria.es     |
+   | Lucio   | Campoamor | Martín    | lcampoamor@jardineria.es |
+   | Hilario | Rodriguez | Huertas   | hrodriguez@jardineria.es |
+   +---------+-----------+-----------+--------------------------+
    ```
 
    
@@ -1512,7 +1560,15 @@ VALUES
 4. Devuelve el nombre del puesto, nombre, apellidos y email del jefe de la empresa.
 
    ```sql
+   SELECT p.nombre_puesto, e.nombre, e.apellido1, e.apellido2, e.email
+   FROM puesto AS p, empleado AS e
+   WHERE p.codigo_puesto = e.codigo_puesto AND e.codigo_jefe IS NULL;
    
+   +------------------+--------+-----------+-----------+----------------------+
+   | nombre_puesto    | nombre | apellido1 | apellido2 | email                |
+   +------------------+--------+-----------+-----------+----------------------+
+   | Director General | Marcos | Magaña    | Perez     | marcos@jardineria.es |
+   +------------------+--------+-----------+-----------+----------------------+
    ```
 
    
@@ -1520,7 +1576,26 @@ VALUES
 5. Devuelve un listado con el nombre, apellidos y puesto de aquellos empleados que no sean representantes de ventas.
 
    ```sql
+   SELECT e.nombre, e.apellido1, e.apellido2, p.nombre_puesto
+   FROM empleado AS e, puesto AS p
+   WHERE e.codigo_puesto = p.codigo_puesto AND p.nombre_puesto <> 'Representante Ventas';
    
+   +----------+------------+-----------+-----------------------+
+   | nombre   | apellido1  | apellido2 | nombre_puesto         |
+   +----------+------------+-----------+-----------------------+
+   | Marcos   | Magaña     | Perez     | Director General      |
+   | Ruben    | López      | Martinez  | Subdirector Marketing |
+   | Alberto  | Soria      | Carrasco  | Subdirector Ventas    |
+   | Maria    | Solís      | Jerez     | Secretaria            |
+   | Carlos   | Soria      | Jimenez   | Director Oficina      |
+   | Emmanuel | Magaña     | Perez     | Director Oficina      |
+   | Francois | Fignon     |           | Director Oficina      |
+   | Michael  | Bolton     |           | Director Oficina      |
+   | Hilary   | Washington |           | Director Oficina      |
+   | Nei      | Nishikori  |           | Director Oficina      |
+   | Amy      | Johnson    |           | Director Oficina      |
+   | Kevin    | Fallmer    |           | Director Oficina      |
+   +----------+------------+-----------+-----------------------+
    ```
 
    
@@ -1528,7 +1603,45 @@ VALUES
 6. Devuelve un listado con el nombre de los todos los clientes españoles.
 
    ```sql
-   
+   SELECT c.nombre_cliente
+   FROM cliente AS c, direccion AS d, ciudad AS ci, region AS r, pais AS p
+   WHERE c.codigo_cliente = d.codigo_cliente 
+   	AND d.codigo_ciudad = ci.codigo_ciudad 
+   	AND ci.codigo_region = r.codigo_region 
+   	AND r.codigo_pais = p.codigo_pais 
+   	AND p.nombre_pais = 'España';
+   	
+   +--------------------------------+
+   | nombre_cliente                 |
+   +--------------------------------+
+   | Vivero Humanes                 |
+   | Top Campo                      |
+   | Agrojardin                     |
+   | Lasas S.A.                     |
+   | Flores Marivi                  |
+   | Fuenla City                    |
+   | Jardineria Sara                |
+   | Campohermoso                   |
+   | Lasas S.A.                     |
+   | Madrileña de riegos            |
+   | Dardena S.A.                   |
+   | Jardin de Flores               |
+   | Naturajardin                   |
+   | Jardines y Mansiones Cactus SL |
+   | Jardinerías Matías SL          |
+   | Flores S.L.                    |
+   | Beragua                        |
+   | Club Golf Puerta del hierro    |
+   | Naturagua                      |
+   | DaraDistribuciones             |
+   | Camunas Jardines S.L.          |
+   | Flowers, S.A                   |
+   | Golf S.A.                      |
+   | Americh Golf Management SL     |
+   | El Prat                        |
+   | Aloha                          |
+   | Sotogrande                     |
+   +--------------------------------+
    ```
 
    
@@ -1536,7 +1649,16 @@ VALUES
 7. Devuelve un listado con los distintos estados por los que puede pasar un pedido.
 
    ```sql
+   SELECT e.nombre_estado
+   FROM estado AS e;
    
+   +---------------+
+   | nombre_estado |
+   +---------------+
+   | Entregado     |
+   | Pendiente     |
+   | Rechazado     |
+   +---------------+
    ```
 
    
@@ -1545,27 +1667,99 @@ VALUES
    • Utilizando la función YEAR de MySQL.
 
    ```sql
+   SELECT DISTINCT(c.codigo_cliente)
+   FROM cliente AS c, pago AS p
+   WHERE c.codigo_cliente = p.codigo_cliente AND YEAR(fecha_pago) = '2008';
    
+   +----------------+
+   | codigo_cliente |
+   +----------------+
+   |              1 |
+   |             13 |
+   |             14 |
+   |             26 |
+   +----------------+
    ```
-
+   
    • Utilizando la función DATE_FORMAT de MySQL.
-
-   ```sql
    
+   ```sql
+   SELECT DISTINCT(c.codigo_cliente)
+   FROM cliente AS c, pago AS p
+   WHERE c.codigo_cliente = p.codigo_cliente AND DATE_FORMAT(fecha_pago, '%Y') = '2008';
+   
+   +----------------+
+   | codigo_cliente |
+   +----------------+
+   |              1 |
+   |             13 |
+   |             14 |
+   |             26 |
+   +----------------+
    ```
-
+   
    • Sin utilizar ninguna de las funciones anteriores.
-
+   
    ```sql
+   SELECT DISTINCT(c.codigo_cliente)
+   FROM cliente AS c, pago AS p
+   WHERE c.codigo_cliente = p.codigo_cliente AND fecha_pago LIKE '%2008%';
    
+   +----------------+
+   | codigo_cliente |
+   +----------------+
+   |              1 |
+   |             13 |
+   |             14 |
+   |             26 |
+   +----------------+
    ```
-
    
-
+   
+   
 9. Devuelve un listado con el código de pedido, código de cliente, fecha esperada y fecha de entrega de los pedidos que no han sido entregados a tiempo.
 
    ```sql
+   SELECT p.codigo_pedido, p.codigo_cliente, p.fecha_esperada, p.fecha_entrega
+   FROM pedido AS p
+   WHERE p.fecha_entrega > p.fecha_esperada;
    
+   +---------------+----------------+----------------+---------------+
+   | codigo_pedido | codigo_cliente | fecha_esperada | fecha_entrega |
+   +---------------+----------------+----------------+---------------+
+   |             9 |              1 | 2008-12-27     | 2008-12-28    |
+   |            13 |              7 | 2009-01-14     | 2009-01-15    |
+   |            16 |              7 | 2009-01-07     | 2009-01-15    |
+   |            17 |              7 | 2009-01-09     | 2009-01-11    |
+   |            18 |              9 | 2009-01-06     | 2009-01-07    |
+   |            22 |              9 | 2009-01-11     | 2009-01-13    |
+   |            28 |              3 | 2009-02-17     | 2009-02-20    |
+   |            31 |             13 | 2008-09-30     | 2008-10-04    |
+   |            32 |              4 | 2007-01-19     | 2007-01-27    |
+   |            38 |             19 | 2009-03-06     | 2009-03-07    |
+   |            39 |             19 | 2009-03-07     | 2009-03-09    |
+   |            40 |             19 | 2009-03-10     | 2009-03-13    |
+   |            42 |             19 | 2009-03-23     | 2009-03-27    |
+   |            43 |             23 | 2009-03-26     | 2009-03-28    |
+   |            44 |             23 | 2009-03-27     | 2009-03-30    |
+   |            45 |             23 | 2009-03-04     | 2009-03-07    |
+   |            46 |             23 | 2009-03-04     | 2009-03-05    |
+   |            49 |             26 | 2008-07-22     | 2008-07-30    |
+   |            55 |             14 | 2009-01-10     | 2009-01-11    |
+   |            60 |              1 | 2008-12-27     | 2008-12-28    |
+   |            68 |              3 | 2009-02-17     | 2009-02-20    |
+   |            92 |             27 | 2009-04-30     | 2009-05-03    |
+   |            96 |             35 | 2008-04-12     | 2008-04-13    |
+   |           103 |             30 | 2009-01-20     | 2009-01-24    |
+   |           106 |             30 | 2009-05-15     | 2009-05-20    |
+   |           112 |             36 | 2009-04-06     | 2009-05-07    |
+   |           113 |             36 | 2008-11-09     | 2009-01-09    |
+   |           114 |             36 | 2009-01-29     | 2009-01-31    |
+   |           115 |             36 | 2009-01-26     | 2009-02-27    |
+   |           123 |             30 | 2009-01-20     | 2009-01-24    |
+   |           126 |             30 | 2009-05-15     | 2009-05-20    |
+   |           128 |             38 | 2008-12-10     | 2008-12-29    |
+   +---------------+----------------+----------------+---------------+
    ```
 
    
@@ -1574,27 +1768,98 @@ VALUES
     • Utilizando la función ADDDATE de MySQL.
 
     ```sql
+    SELECT p.codigo_pedido, p.codigo_cliente, p.fecha_esperada, p.fecha_entrega
+    FROM pedido AS p
+    WHERE ADDDATE(p.fecha_entrega, INTERVAL 2 DAY) <= p.fecha_esperada;
     
+    +---------------+----------------+----------------+---------------+
+    | codigo_pedido | codigo_cliente | fecha_esperada | fecha_entrega |
+    +---------------+----------------+----------------+---------------+
+    |             2 |              5 | 2007-10-28     | 2007-10-26    |
+    |            24 |             14 | 2008-07-31     | 2008-07-25    |
+    |            30 |             13 | 2008-09-03     | 2008-08-31    |
+    |            36 |             14 | 2008-12-15     | 2008-12-10    |
+    |            53 |             13 | 2008-11-15     | 2008-11-09    |
+    |            89 |             35 | 2007-12-13     | 2007-12-10    |
+    |            91 |             27 | 2009-03-29     | 2009-03-27    |
+    |            93 |             27 | 2009-05-30     | 2009-05-17    |
+    +---------------+----------------+----------------+---------------+
     ```
-
+    
     • Utilizando la función DATEDIFF de MySQL.
-
-    ```sql
     
+    ```sql
+    SELECT p.codigo_pedido, p.codigo_cliente, p.fecha_esperada, p.fecha_entrega
+    FROM pedido AS p
+    WHERE DATEDIFF(p.fecha_esperada, p.fecha_entrega) >= 2;
+    
+    +---------------+----------------+----------------+---------------+
+    | codigo_pedido | codigo_cliente | fecha_esperada | fecha_entrega |
+    +---------------+----------------+----------------+---------------+
+    |             2 |              5 | 2007-10-28     | 2007-10-26    |
+    |            24 |             14 | 2008-07-31     | 2008-07-25    |
+    |            30 |             13 | 2008-09-03     | 2008-08-31    |
+    |            36 |             14 | 2008-12-15     | 2008-12-10    |
+    |            53 |             13 | 2008-11-15     | 2008-11-09    |
+    |            89 |             35 | 2007-12-13     | 2007-12-10    |
+    |            91 |             27 | 2009-03-29     | 2009-03-27    |
+    |            93 |             27 | 2009-05-30     | 2009-05-17    |
+    +---------------+----------------+----------------+---------------+
     ```
-
+    
     • ¿Sería posible resolver esta consulta utilizando el operador de suma + o resta -?
-
+    
     ```sql
+    SELECT p.codigo_pedido, p.codigo_cliente, p.fecha_esperada, p.fecha_entrega
+    FROM pedido AS p
+    WHERE (p.fecha_esperada - p.fecha_entrega) >= 2;
     
+    +---------------+----------------+----------------+---------------+
+    | codigo_pedido | codigo_cliente | fecha_esperada | fecha_entrega |
+    +---------------+----------------+----------------+---------------+
+    |             2 |              5 | 2007-10-28     | 2007-10-26    |
+    |            24 |             14 | 2008-07-31     | 2008-07-25    |
+    |            30 |             13 | 2008-09-03     | 2008-08-31    |
+    |            36 |             14 | 2008-12-15     | 2008-12-10    |
+    |            53 |             13 | 2008-11-15     | 2008-11-09    |
+    |            89 |             35 | 2007-12-13     | 2007-12-10    |
+    |            91 |             27 | 2009-03-29     | 2009-03-27    |
+    |            93 |             27 | 2009-05-30     | 2009-05-17    |
+    +---------------+----------------+----------------+---------------+
     ```
-
     
-
+    
+    
 11. Devuelve un listado de todos los pedidos que fueron rechazados en 2009.
 
     ```sql
-    
+    SELECT p.codigo_pedido, p.fecha_pedido, p.fecha_esperada, p.fecha_entrega, p.comentarios, p.codigo_cliente, p.codigo_estado
+    FROM pedido AS p, estado AS e
+    WHERE p.codigo_estado = e.codigo_estado 
+    	AND e.nombre_estado = 'Rechazado' 
+    	AND (YEAR(p.fecha_esperada) = '2009' OR YEAR(p.fecha_entrega) = '2009');
+    +---------------+--------------+----------------+---------------+--------------------------------------------------------------------------+----------------+---------------+
+    | codigo_pedido | fecha_pedido | fecha_esperada | fecha_entrega | comentarios                                                              | codigo_cliente | codigo_estado |
+    +---------------+--------------+----------------+---------------+--------------------------------------------------------------------------+----------------+---------------+
+    |            14 | 2009-01-02   | 2009-01-02     | NULL          | mal pago                                                                 |              7 | 3             |
+    |            21 | 2009-01-09   | 2009-01-09     | 2009-01-09    | mal pago                                                                 |              9 | 3             |
+    |            23 | 2008-12-30   | 2009-01-10     | NULL          | El pedido fue anulado por el cliente                                     |              5 | 3             |
+    |            25 | 2009-02-02   | 2009-02-08     | NULL          | El cliente carece de saldo en la cuenta asociada                         |              1 | 3             |
+    |            26 | 2009-02-06   | 2009-02-12     | NULL          | El cliente anula la operacion para adquirir mas producto                 |              3 | 3             |
+    |            35 | 2008-03-10   | 2009-03-20     | NULL          | Limite de credito superado                                               |              4 | 3             |
+    |            40 | 2009-03-09   | 2009-03-10     | 2009-03-13    | NULL                                                                     |             19 | 3             |
+    |            46 | 2009-04-03   | 2009-03-04     | 2009-03-05    | NULL                                                                     |             23 | 3             |
+    |            56 | 2008-12-19   | 2009-01-20     | NULL          | El cliente a anulado el pedido el dia 2009-01-10                         |             13 | 3             |
+    |            65 | 2009-02-02   | 2009-02-08     | NULL          | El cliente carece de saldo en la cuenta asociada                         |              1 | 3             |
+    |            66 | 2009-02-06   | 2009-02-12     | NULL          | El cliente anula la operacion para adquirir mas producto                 |              3 | 3             |
+    |            74 | 2009-01-14   | 2009-01-22     | NULL          | El pedido no llego el dia que queria el cliente por fallo del transporte |             15 | 3             |
+    |            81 | 2009-01-18   | 2009-01-24     | NULL          | Los producto estaban en mal estado                                       |             28 | 3             |
+    |           101 | 2009-03-07   | 2009-03-27     | NULL          | El pedido fue rechazado por el cliente                                   |             16 | 3             |
+    |           105 | 2009-02-14   | 2009-02-20     | NULL          | el producto ha sido rechazado por la pesima calidad                      |             30 | 3             |
+    |           113 | 2008-10-28   | 2008-11-09     | 2009-01-09    | El producto ha sido rechazado por la tardanza de el envio                |             36 | 3             |
+    |           120 | 2009-03-07   | 2009-03-27     | NULL          | El pedido fue rechazado por el cliente                                   |             16 | 3             |
+    |           125 | 2009-02-14   | 2009-02-20     | NULL          | el producto ha sido rechazado por la pesima calidad                      |             30 | 3             |
+    +---------------+--------------+----------------+---------------+--------------------------------------------------------------------------+----------------+---------------+
     ```
 
     
@@ -1602,7 +1867,38 @@ VALUES
 12. Devuelve un listado de todos los pedidos que han sido entregados en el mes de enero de cualquier año.
 
     ```sql
+    SELECT p.codigo_pedido, p.fecha_pedido, p.fecha_esperada, p.fecha_entrega, p.comentarios, p.codigo_cliente, p.codigo_estado
+    FROM pedido AS p
+    WHERE MONTH(p.fecha_entrega) = '01';
     
+    +---------------+--------------+----------------+---------------+-----------------------------------------------------------+----------------+---------------+
+    | codigo_pedido | fecha_pedido | fecha_esperada | fecha_entrega | comentarios                                               | codigo_cliente | codigo_estado |
+    +---------------+--------------+----------------+---------------+-----------------------------------------------------------+----------------+---------------+
+    |             1 | 2006-01-17   | 2006-01-19     | 2006-01-19    | Pagado a plazos                                           |              5 | 1             |
+    |            13 | 2009-01-12   | 2009-01-14     | 2009-01-15    | NULL                                                      |              7 | 1             |
+    |            15 | 2009-01-09   | 2009-01-12     | 2009-01-11    | NULL                                                      |              7 | 1             |
+    |            16 | 2009-01-06   | 2009-01-07     | 2009-01-15    | NULL                                                      |              7 | 1             |
+    |            17 | 2009-01-08   | 2009-01-09     | 2009-01-11    | mal estado                                                |              7 | 1             |
+    |            18 | 2009-01-05   | 2009-01-06     | 2009-01-07    | NULL                                                      |              9 | 1             |
+    |            21 | 2009-01-09   | 2009-01-09     | 2009-01-09    | mal pago                                                  |              9 | 3             |
+    |            22 | 2009-01-11   | 2009-01-11     | 2009-01-13    | NULL                                                      |              9 | 1             |
+    |            32 | 2007-01-07   | 2007-01-19     | 2007-01-27    | Entrega tardia, el cliente puso reclamacion               |              4 | 1             |
+    |            55 | 2008-12-10   | 2009-01-10     | 2009-01-11    | Retrasado 1 dia por problemas de transporte               |             14 | 1             |
+    |            58 | 2009-01-24   | 2009-01-31     | 2009-01-30    | Todo correcto                                             |              3 | 1             |
+    |            64 | 2009-01-24   | 2009-01-31     | 2009-01-30    | Todo correcto                                             |              1 | 1             |
+    |            75 | 2009-01-11   | 2009-01-13     | 2009-01-13    | El pedido llego perfectamente                             |             15 | 1             |
+    |            79 | 2009-01-12   | 2009-01-13     | 2009-01-13    | NULL                                                      |             28 | 1             |
+    |            82 | 2009-01-20   | 2009-01-29     | 2009-01-29    | El pedido llego un poco mas tarde de la hora fijada       |             28 | 1             |
+    |            95 | 2008-01-04   | 2008-01-19     | 2008-01-19    | NULL                                                      |             35 | 1             |
+    |           100 | 2009-01-10   | 2009-01-15     | 2009-01-15    | El pedido llego perfectamente                             |             16 | 1             |
+    |           102 | 2008-12-28   | 2009-01-08     | 2009-01-08    | Pago pendiente                                            |             16 | 1             |
+    |           103 | 2009-01-15   | 2009-01-20     | 2009-01-24    | NULL                                                      |             30 | 2             |
+    |           113 | 2008-10-28   | 2008-11-09     | 2009-01-09    | El producto ha sido rechazado por la tardanza de el envio |             36 | 3             |
+    |           114 | 2009-01-15   | 2009-01-29     | 2009-01-31    | El envio llego dos dias más tarde debido al mal tiempo    |             36 | 1             |
+    |           119 | 2009-01-10   | 2009-01-15     | 2009-01-15    | El pedido llego perfectamente                             |             16 | 1             |
+    |           121 | 2008-12-28   | 2009-01-08     | 2009-01-08    | Pago pendiente                                            |             16 | 1             |
+    |           123 | 2009-01-15   | 2009-01-20     | 2009-01-24    | NULL                                                      |             30 | 2             |
+    +---------------+--------------+----------------+---------------+-----------------------------------------------------------+----------------+---------------+
     ```
 
     
@@ -1610,7 +1906,20 @@ VALUES
 13. Devuelve un listado con todos los pagos que se realizaron en el año 2008 mediante Paypal. Ordene el resultado de mayor a menor.
 
     ```sql
+    SELECT p.id_transaccion, p.fecha_pago, p.total, p.codigo_cliente, p.codigo_forma
+    FROM pago AS p, forma_pago AS f
+    WHERE p.codigo_forma = f.codigo_forma AND f.nombre_forma = 'Paypal' AND YEAR(p.fecha_pago) = '2008'
+    ORDER BY p.total DESC;
     
+    +----------------+------------+----------+----------------+--------------+
+    | id_transaccion | fecha_pago | total    | codigo_cliente | codigo_forma |
+    +----------------+------------+----------+----------------+--------------+
+    | ak-std-000020  | 2008-03-18 | 18846.00 |             26 | 1            |
+    | ak-std-000015  | 2008-07-15 |  4160.00 |             14 | 1            |
+    | ak-std-000014  | 2008-08-04 |  2246.00 |             13 | 1            |
+    | ak-std-000001  | 2008-11-10 |  2000.00 |              1 | 1            |
+    | ak-std-000002  | 2008-12-10 |  2000.00 |              1 | 1            |
+    +----------------+------------+----------+----------------+--------------+
     ```
 
     
@@ -1618,7 +1927,16 @@ VALUES
 14. Devuelve un listado con todas las formas de pago que aparecen en la tabla pago. Tenga en cuenta que no deben aparecer formas de pago repetidas.
 
     ```sql
+    SELECT f.nombre_forma
+    FROM forma_pago AS f;
     
+    +---------------+
+    | nombre_forma  |
+    +---------------+
+    | PayPal        |
+    | Transferencia |
+    | Cheque        |
+    +---------------+
     ```
 
     
@@ -1626,7 +1944,30 @@ VALUES
 15. Devuelve un listado con todos los productos que pertenecen a la gama Ornamentales y que tienen más de 100 unidades en stock. El listado deberá estar ordenado por su precio de venta, mostrando en primer lugar los de mayor precio.
 
     ```sql
+    SELECT p.codigo_producto, p.nombre, p.gama, p.descripcion, p.cantidad_en_stock, p.precio_venta, p.precio_proveedor, p.codigo_dimension, p.codigo_proveedor
+    FROM producto AS p
+    WHERE p.gama = 'Ornamentales' AND p.cantidad_en_stock > 100
+    ORDER BY p.precio_venta DESC;
     
+    +-----------------+--------------------------------------------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+--------------+------------------+------------------+------------------+
+    | codigo_producto | nombre                                     | gama         | descripcion                                                                                                                                                                                                                                                                                                                                                                     | cantidad_en_stock | precio_venta | precio_proveedor | codigo_dimension | codigo_proveedor |
+    +-----------------+--------------------------------------------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+--------------+------------------+------------------+------------------+
+    | OR-115          | Forsytia Intermedia "Lynwood"              | Ornamentales |                                                                                                                                                                                                                                                                                                                                                                                 |               120 |         7.00 |             5.00 | 27               |                8 |
+    | OR-116          | Hibiscus Syriacus  "Diana" -Blanco Puro    | Ornamentales | Por su capacidad de soportar podas, pueden ser fácilmente moldeadas como bonsái en el transcurso de pocos años. Flores de muchos colores según la variedad, desde el blanco puro al rojo intenso, del amarillo al anaranjado. La flor apenas dura 1 día, pero continuamente aparecen nuevas y la floración se prolonga durante todo el periodo de crecimiento vegetativo.       |               120 |         7.00 |             5.00 | 29               |                8 |
+    | OR-117          | Hibiscus Syriacus  "Helene" -Blanco-C.rojo | Ornamentales | Por su capacidad de soportar podas, pueden ser fácilmente moldeadas como bonsái en el transcurso de pocos años. Flores de muchos colores según la variedad, desde el blanco puro al rojo intenso, del amarillo al anaranjado. La flor apenas dura 1 día, pero continuamente aparecen nuevas y la floración se prolonga durante todo el periodo de crecimiento vegetativo.       |               120 |         7.00 |             5.00 | 4                |                8 |
+    | OR-118          | Hibiscus Syriacus "Pink Giant" Rosa        | Ornamentales | Por su capacidad de soportar podas, pueden ser fácilmente moldeadas como bonsái en el transcurso de pocos años. Flores de muchos colores según la variedad, desde el blanco puro al rojo intenso, del amarillo al anaranjado. La flor apenas dura 1 día, pero continuamente aparecen nuevas y la floración se prolonga durante todo el periodo de crecimiento vegetativo.       |               120 |         7.00 |             5.00 | 14               |                8 |
+    | OR-112          | Escallonia (Mix)                           | Ornamentales |                                                                                                                                                                                                                                                                                                                                                                                 |               120 |         5.00 |             4.00 | 24               |                8 |
+    | OR-113          | Evonimus Emerald Gayeti                    | Ornamentales |                                                                                                                                                                                                                                                                                                                                                                                 |               120 |         5.00 |             4.00 | 25               |                8 |
+    | OR-114          | Evonimus Pulchellus                        | Ornamentales |                                                                                                                                                                                                                                                                                                                                                                                 |               120 |         5.00 |             4.00 | 26               |                8 |
+    | OR-119          | Laurus Nobilis Arbusto - Ramificado Bajo   | Ornamentales |                                                                                                                                                                                                                                                                                                                                                                                 |               120 |         5.00 |             4.00 | 14               |                8 |
+    | OR-120          | Lonicera Nitida                            | Ornamentales |                                                                                                                                                                                                                                                                                                                                                                                 |               120 |         5.00 |             4.00 | 6                |                8 |
+    | OR-121          | Lonicera Nitida "Maigrum"                  | Ornamentales |                                                                                                                                                                                                                                                                                                                                                                                 |               120 |         5.00 |             4.00 | 4                |                8 |
+    | OR-122          | Lonicera Pileata                           | Ornamentales |                                                                                                                                                                                                                                                                                                                                                                                 |               120 |         5.00 |             4.00 | 23               |                8 |
+    | OR-123          | Philadelphus "Virginal"                    | Ornamentales |                                                                                                                                                                                                                                                                                                                                                                                 |               120 |         5.00 |             4.00 | 12               |                8 |
+    | OR-124          | Prunus pisardii                            | Ornamentales |                                                                                                                                                                                                                                                                                                                                                                                 |               120 |         5.00 |             4.00 | 15               |                8 |
+    | OR-125          | Viburnum Tinus "Eve Price"                 | Ornamentales |                                                                                                                                                                                                                                                                                                                                                                                 |               120 |         5.00 |             4.00 | 14               |                8 |
+    | OR-126          | Weigelia "Bristol Ruby"                    | Ornamentales |                                                                                                                                                                                                                                                                                                                                                                                 |               120 |         5.00 |             4.00 | 13               |                8 |
+    +-----------------+--------------------------------------------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+--------------+------------------+------------------+------------------+
     ```
 
     
@@ -1634,9 +1975,26 @@ VALUES
 16. Devuelve un listado con todos los clientes que sean de la ciudad de Madrid y cuyo representante de ventas tenga el código de empleado 11 o 30.
 
     ```sql
-    
+    SELECT c.codigo_cliente, c.nombre_cliente, ci.nombre_ciudad, c.codigo_empleado_rep_ventas, c.limite_credito
+    FROM cliente AS c, direccion AS d, ciudad AS ci
+    WHERE c.codigo_cliente = d.codigo_cliente 
+    	AND d.codigo_ciudad = ci.codigo_ciudad 
+    	AND ci.nombre_ciudad = 'Madrid' 
+    	AND c.codigo_empleado_rep_ventas IN (11, 30);
+    	
+    +----------------+-----------------------------+---------------+----------------------------+----------------+
+    | codigo_cliente | nombre_cliente              | nombre_ciudad | codigo_empleado_rep_ventas | limite_credito |
+    +----------------+-----------------------------+---------------+----------------------------+----------------+
+    |             11 | Madrileña de riegos         | Madrid        |                         11 |       20000.00 |
+    |             15 | Jardin de Flores            | Madrid        |                         30 |       40000.00 |
+    |             18 | Naturajardin                | Madrid        |                         30 |        5050.00 |
+    |              7 | Beragua                     | Madrid        |                         11 |       20000.00 |
+    |              8 | Club Golf Puerta del hierro | Madrid        |                         11 |       40000.00 |
+    |              9 | Naturagua                   | Madrid        |                         11 |       32000.00 |
+    |             10 | DaraDistribuciones          | Madrid        |                         11 |       50000.00 |
+    +----------------+-----------------------------+---------------+----------------------------+----------------+
     ```
-
+    
     
 
 ##### Consultas multitabla (Composición interna)
@@ -1644,7 +2002,51 @@ VALUES
 1. Obtén un listado con el nombre de cada cliente y el nombre y apellido de su representante de ventas.
 
    ```sql
+   SELECT c.nombre_cliente, e.nombre AS nombre_representante, e.apellido1 AS primer_apellido, e.apellido2 AS segundo_apellido
+   FROM cliente AS c
+   INNER JOIN empleado AS e
+   ON c.codigo_empleado_rep_ventas = e.codigo_empleado;
    
+   +--------------------------------+----------------------+-----------------+------------------+
+   | nombre_cliente                 | nombre_representante | primer_apellido | segundo_apellido |
+   +--------------------------------+----------------------+-----------------+------------------+
+   | Flores Marivi                  | Felipe               | Rosas           | Marquez          |
+   | Flowers, S.A                   | Felipe               | Rosas           | Marquez          |
+   | Fuenla City                    | Felipe               | Rosas           | Marquez          |
+   | Top Campo                      | Felipe               | Rosas           | Marquez          |
+   | Jardineria Sara                | Felipe               | Rosas           | Marquez          |
+   | Lasas S.A.                     | Mariano              | López           | Murcia           |
+   | Lasas S.A.                     | Mariano              | López           | Murcia           |
+   | Camunas Jardines S.L.          | Mariano              | López           | Murcia           |
+   | Dardena S.A.                   | Mariano              | López           | Murcia           |
+   | Jardines y Mansiones Cactus SL | Lucio                | Campoamor       | Martín           |
+   | Jardinerías Matías SL          | Lucio                | Campoamor       | Martín           |
+   | Beragua                        | Emmanuel             | Magaña          | Perez            |
+   | Club Golf Puerta del hierro    | Emmanuel             | Magaña          | Perez            |
+   | Naturagua                      | Emmanuel             | Magaña          | Perez            |
+   | DaraDistribuciones             | Emmanuel             | Magaña          | Perez            |
+   | Madrileña de riegos            | Emmanuel             | Magaña          | Perez            |
+   | Golf S.A.                      | José Manuel          | Martinez        | De la Osa        |
+   | Americh Golf Management SL     | José Manuel          | Martinez        | De la Osa        |
+   | Aloha                          | José Manuel          | Martinez        | De la Osa        |
+   | El Prat                        | José Manuel          | Martinez        | De la Osa        |
+   | Sotogrande                     | José Manuel          | Martinez        | De la Osa        |
+   | france telecom                 | Lionel               | Narvaez         |                  |
+   | Musée du Louvre                | Lionel               | Narvaez         |                  |
+   | Flores S.L.                    | Michael              | Bolton          |                  |
+   | The Magic Garden               | Michael              | Bolton          |                  |
+   | GoldFish Garden                | Walter Santiago      | Sanchez         | Lopez            |
+   | Gardening Associates           | Walter Santiago      | Sanchez         | Lopez            |
+   | Gerudo Valley                  | Lorena               | Paxton          |                  |
+   | Tendo Garden                   | Lorena               | Paxton          |                  |
+   | Jardin de Flores               | Julian               | Bellinelli      |                  |
+   | Naturajardin                   | Julian               | Bellinelli      |                  |
+   | Vivero Humanes                 | Julian               | Bellinelli      |                  |
+   | Agrojardin                     | Julian               | Bellinelli      |                  |
+   | Campohermoso                   | Julian               | Bellinelli      |                  |
+   | Tutifruti S.A                  | Mariko               | Kishi           |                  |
+   | El Jardin Viviente S.L         | Mariko               | Kishi           |                  |
+   +--------------------------------+----------------------+-----------------+------------------+
    ```
 
    
@@ -1652,7 +2054,35 @@ VALUES
 2. Muestra el nombre de los clientes que hayan realizado pagos junto con el nombre de sus representantes de ventas.
 
   ```sql
+  SELECT DISTINCT(c.nombre_cliente), e.nombre AS nombre_representante
+  FROM cliente AS c
+  INNER JOIN empleado AS e
+  ON c.codigo_empleado_rep_ventas = e.codigo_empleado
+  INNER JOIN pago AS p
+  ON p.codigo_cliente = c.codigo_cliente;
   
+  +--------------------------------+----------------------+
+  | nombre_cliente                 | nombre_representante |
+  +--------------------------------+----------------------+
+  | GoldFish Garden                | Walter Santiago      |
+  | Gardening Associates           | Walter Santiago      |
+  | Gerudo Valley                  | Lorena               |
+  | Tendo Garden                   | Lorena               |
+  | Beragua                        | Emmanuel             |
+  | Naturagua                      | Emmanuel             |
+  | Camunas Jardines S.L.          | Mariano              |
+  | Dardena S.A.                   | Mariano              |
+  | Jardin de Flores               | Julian               |
+  | Flores Marivi                  | Felipe               |
+  | Golf S.A.                      | José Manuel          |
+  | Sotogrande                     | José Manuel          |
+  | Jardines y Mansiones Cactus SL | Lucio                |
+  | Jardinerías Matías SL          | Lucio                |
+  | Agrojardin                     | Julian               |
+  | Jardineria Sara                | Felipe               |
+  | Tutifruti S.A                  | Mariko               |
+  | El Jardin Viviente S.L         | Mariko               |
+  +--------------------------------+----------------------+
   ```
 
   
@@ -1660,7 +2090,33 @@ VALUES
 3. Muestra el nombre de los clientes que no hayan realizado pagos junto con el nombre de sus representantes de ventas.
 
   ```sql
+  SELECT DISTINCT(c.nombre_cliente), e.nombre AS nombre_representante
+  FROM cliente AS c
+  INNER JOIN empleado AS e
+  ON c.codigo_empleado_rep_ventas = e.codigo_empleado
+  WHERE c.codigo_cliente NOT IN (SELECT p.codigo_cliente FROM pago AS p);
   
+  +-----------------------------+----------------------+
+  | nombre_cliente              | nombre_representante |
+  +-----------------------------+----------------------+
+  | Flowers, S.A                | Felipe               |
+  | Fuenla City                 | Felipe               |
+  | Top Campo                   | Felipe               |
+  | Lasas S.A.                  | Mariano              |
+  | Club Golf Puerta del hierro | Emmanuel             |
+  | DaraDistribuciones          | Emmanuel             |
+  | Madrileña de riegos         | Emmanuel             |
+  | Americh Golf Management SL  | José Manuel          |
+  | Aloha                       | José Manuel          |
+  | El Prat                     | José Manuel          |
+  | france telecom              | Lionel               |
+  | Musée du Louvre             | Lionel               |
+  | Flores S.L.                 | Michael              |
+  | The Magic Garden            | Michael              |
+  | Naturajardin                | Julian               |
+  | Vivero Humanes              | Julian               |
+  | Campohermoso                | Julian               |
+  +-----------------------------+----------------------+
   ```
 
   
@@ -1668,7 +2124,41 @@ VALUES
 4. Devuelve el nombre de los clientes que han hecho pagos y el nombre de sus representantes junto con la ciudad de la oficina a la que pertenece el representante.
 
   ```sql
+  SELECT DISTINCT(c.nombre_cliente), e.nombre AS nombre_representante, ci.nombre_ciudad
+  FROM cliente AS c
+  INNER JOIN empleado AS e
+  ON c.codigo_empleado_rep_ventas = e.codigo_empleado
+  INNER JOIN pago AS p
+  ON p.codigo_cliente = c.codigo_cliente
+  INNER JOIN oficina AS o
+  ON o.codigo_oficina = e.codigo_oficina
+  INNER JOIN direccion AS d
+  ON d.codigo_oficina = o.codigo_oficina
+  INNER JOIN ciudad AS ci
+  ON ci.codigo_ciudad = d.codigo_ciudad;
   
+  +--------------------------------+----------------------+----------------------+
+  | nombre_cliente                 | nombre_representante | nombre_ciudad        |
+  +--------------------------------+----------------------+----------------------+
+  | Beragua                        | Emmanuel             | Barcelona            |
+  | Naturagua                      | Emmanuel             | Barcelona            |
+  | Golf S.A.                      | José Manuel          | Barcelona            |
+  | Sotogrande                     | José Manuel          | Barcelona            |
+  | Gerudo Valley                  | Lorena               | Boston               |
+  | Tendo Garden                   | Lorena               | Boston               |
+  | Camunas Jardines S.L.          | Mariano              | Madrid               |
+  | Dardena S.A.                   | Mariano              | Madrid               |
+  | Jardines y Mansiones Cactus SL | Lucio                | Madrid               |
+  | Jardinerías Matías SL          | Lucio                | Madrid               |
+  | GoldFish Garden                | Walter Santiago      | San Francisco        |
+  | Gardening Associates           | Walter Santiago      | San Francisco        |
+  | Jardin de Flores               | Julian               | Sydney               |
+  | Agrojardin                     | Julian               | Sydney               |
+  | Tutifruti S.A                  | Mariko               | Sydney               |
+  | El Jardin Viviente S.L         | Mariko               | Sydney               |
+  | Flores Marivi                  | Felipe               | Talavera de la Reina |
+  | Jardineria Sara                | Felipe               | Talavera de la Reina |
+  +--------------------------------+----------------------+----------------------+
   ```
 
   
@@ -1676,7 +2166,39 @@ VALUES
 5. Devuelve el nombre de los clientes que no hayan hecho pagos y el nombre de sus representantes junto con la ciudad de la oficina a la que pertenece el representante.
 
   ```sql
+  SELECT DISTINCT(c.nombre_cliente), e.nombre AS nombre_representante, ci.nombre_ciudad
+  FROM cliente AS c
+  INNER JOIN empleado AS e
+  ON c.codigo_empleado_rep_ventas = e.codigo_empleado
+  INNER JOIN oficina AS o
+  ON o.codigo_oficina = e.codigo_oficina
+  INNER JOIN direccion AS d
+  ON d.codigo_oficina = o.codigo_oficina
+  INNER JOIN ciudad AS ci
+  ON ci.codigo_ciudad = d.codigo_ciudad
+  WHERE c.codigo_cliente NOT IN (SELECT p.codigo_cliente FROM pago AS p);
   
+  +-----------------------------+----------------------+----------------------+
+  | nombre_cliente              | nombre_representante | nombre_ciudad        |
+  +-----------------------------+----------------------+----------------------+
+  | Club Golf Puerta del hierro | Emmanuel             | Barcelona            |
+  | DaraDistribuciones          | Emmanuel             | Barcelona            |
+  | Madrileña de riegos         | Emmanuel             | Barcelona            |
+  | Americh Golf Management SL  | José Manuel          | Barcelona            |
+  | Aloha                       | José Manuel          | Barcelona            |
+  | El Prat                     | José Manuel          | Barcelona            |
+  | Lasas S.A.                  | Mariano              | Madrid               |
+  | france telecom              | Lionel               | Paris                |
+  | Musée du Louvre             | Lionel               | Paris                |
+  | Flores S.L.                 | Michael              | San Francisco        |
+  | The Magic Garden            | Michael              | San Francisco        |
+  | Naturajardin                | Julian               | Sydney               |
+  | Vivero Humanes              | Julian               | Sydney               |
+  | Campohermoso                | Julian               | Sydney               |
+  | Flowers, S.A                | Felipe               | Talavera de la Reina |
+  | Fuenla City                 | Felipe               | Talavera de la Reina |
+  | Top Campo                   | Felipe               | Talavera de la Reina |
+  +-----------------------------+----------------------+----------------------+
   ```
 
   
@@ -1684,7 +2206,18 @@ VALUES
 6. Lista la dirección de las oficinas que tengan clientes en Fuenlabrada.
 
   ```sql
-  
+  /* RESIGNACIÓN */
+  SELECT d.linea_direccion1, d.linea_direccion2, c.nombre_ciudad
+  FROM cliente AS cl
+  INNER JOIN empleado AS e
+  ON cl.codigo_empleado_rep_ventas = e.codigo_empleado
+  INNER JOIN oficina AS o
+  ON o.codigo_oficina = e.codigo_oficina
+  INNER JOIN direccion AS d
+  ON d.codigo_oficina = o.codigo_oficina
+  INNER JOIN ciudad AS c
+  ON c.codigo_ciudad = d.codigo_ciudad
+  WHERE c.nombre_ciudad = 'Fuenlabrada';
   ```
 
   
@@ -1692,7 +2225,57 @@ VALUES
 7. Devuelve el nombre de los clientes y el nombre de sus representantes junto con la ciudad de la oficina a la que pertenece el representante.
 
   ```sql
+  SELECT c.nombre_cliente, e.nombre, e.apellido1, ci.nombre_ciudad AS nombre_ciudad_oficina
+  FROM cliente AS c
+  INNER JOIN empleado AS e
+  ON e.codigo_empleado = c.codigo_empleado_rep_ventas
+  INNER JOIN oficina AS o
+  ON o.codigo_oficina = e.codigo_oficina
+  INNER JOIN direccion AS d
+  ON d.codigo_oficina = o.codigo_oficina
+  INNER JOIN ciudad AS ci
+  ON ci.codigo_ciudad = d.codigo_ciudad;
   
+  +--------------------------------+-----------------+------------+-----------------------+
+  | nombre_cliente                 | nombre          | apellido1  | nombre_ciudad_oficina |
+  +--------------------------------+-----------------+------------+-----------------------+
+  | Beragua                        | Emmanuel        | Magaña     | Barcelona             |
+  | Club Golf Puerta del hierro    | Emmanuel        | Magaña     | Barcelona             |
+  | Naturagua                      | Emmanuel        | Magaña     | Barcelona             |
+  | DaraDistribuciones             | Emmanuel        | Magaña     | Barcelona             |
+  | Madrileña de riegos            | Emmanuel        | Magaña     | Barcelona             |
+  | Golf S.A.                      | José Manuel     | Martinez   | Barcelona             |
+  | Americh Golf Management SL     | José Manuel     | Martinez   | Barcelona             |
+  | Aloha                          | José Manuel     | Martinez   | Barcelona             |
+  | El Prat                        | José Manuel     | Martinez   | Barcelona             |
+  | Sotogrande                     | José Manuel     | Martinez   | Barcelona             |
+  | Gerudo Valley                  | Lorena          | Paxton     | Boston                |
+  | Tendo Garden                   | Lorena          | Paxton     | Boston                |
+  | Lasas S.A.                     | Mariano         | López      | Madrid                |
+  | Lasas S.A.                     | Mariano         | López      | Madrid                |
+  | Camunas Jardines S.L.          | Mariano         | López      | Madrid                |
+  | Dardena S.A.                   | Mariano         | López      | Madrid                |
+  | Jardines y Mansiones Cactus SL | Lucio           | Campoamor  | Madrid                |
+  | Jardinerías Matías SL          | Lucio           | Campoamor  | Madrid                |
+  | france telecom                 | Lionel          | Narvaez    | Paris                 |
+  | Musée du Louvre                | Lionel          | Narvaez    | Paris                 |
+  | Flores S.L.                    | Michael         | Bolton     | San Francisco         |
+  | The Magic Garden               | Michael         | Bolton     | San Francisco         |
+  | GoldFish Garden                | Walter Santiago | Sanchez    | San Francisco         |
+  | Gardening Associates           | Walter Santiago | Sanchez    | San Francisco         |
+  | Jardin de Flores               | Julian          | Bellinelli | Sydney                |
+  | Naturajardin                   | Julian          | Bellinelli | Sydney                |
+  | Vivero Humanes                 | Julian          | Bellinelli | Sydney                |
+  | Agrojardin                     | Julian          | Bellinelli | Sydney                |
+  | Campohermoso                   | Julian          | Bellinelli | Sydney                |
+  | Tutifruti S.A                  | Mariko          | Kishi      | Sydney                |
+  | El Jardin Viviente S.L         | Mariko          | Kishi      | Sydney                |
+  | Flores Marivi                  | Felipe          | Rosas      | Talavera de la Reina  |
+  | Flowers, S.A                   | Felipe          | Rosas      | Talavera de la Reina  |
+  | Fuenla City                    | Felipe          | Rosas      | Talavera de la Reina  |
+  | Top Campo                      | Felipe          | Rosas      | Talavera de la Reina  |
+  | Jardineria Sara                | Felipe          | Rosas      | Talavera de la Reina  |
+  +--------------------------------+-----------------+------------+-----------------------+
   ```
 
   
@@ -1700,15 +2283,92 @@ VALUES
 8. Devuelve un listado con el nombre de los empleados junto con el nombre de sus jefes.
 
   ```sql
+  SELECT e1.nombre AS nombre_empleado, e1.apellido1 AS apellido_empleado, e2.nombre AS nombre_jefe, e2.apellido1 AS apellido_jefe
+  FROM empleado AS e1
+  INNER JOIN empleado AS e2
+  ON e1.codigo_jefe = e2.codigo_empleado;
   
+  +-----------------+-------------------+-------------+---------------+
+  | nombre_empleado | apellido_empleado | nombre_jefe | apellido_jefe |
+  +-----------------+-------------------+-------------+---------------+
+  | Ruben           | López             | Marcos      | Magaña        |
+  | Alberto         | Soria             | Ruben       | López         |
+  | Maria           | Solís             | Ruben       | López         |
+  | Felipe          | Rosas             | Alberto     | Soria         |
+  | Juan Carlos     | Ortiz             | Alberto     | Soria         |
+  | Carlos          | Soria             | Alberto     | Soria         |
+  | Mariano         | López             | Carlos      | Soria         |
+  | Lucio           | Campoamor         | Carlos      | Soria         |
+  | Hilario         | Rodriguez         | Carlos      | Soria         |
+  | Emmanuel        | Magaña            | Alberto     | Soria         |
+  | José Manuel     | Martinez          | Emmanuel    | Magaña        |
+  | David           | Palma             | Emmanuel    | Magaña        |
+  | Oscar           | Palma             | Emmanuel    | Magaña        |
+  | Francois        | Fignon            | Alberto     | Soria         |
+  | Lionel          | Narvaez           | Francois    | Fignon        |
+  | Laurent         | Serra             | Francois    | Fignon        |
+  | Michael         | Bolton            | Alberto     | Soria         |
+  | Walter Santiago | Sanchez           | Michael     | Bolton        |
+  | Hilary          | Washington        | Alberto     | Soria         |
+  | Marcus          | Paxton            | Hilary      | Washington    |
+  | Lorena          | Paxton            | Hilary      | Washington    |
+  | Nei             | Nishikori         | Alberto     | Soria         |
+  | Narumi          | Riko              | Nei         | Nishikori     |
+  | Takuma          | Nomura            | Nei         | Nishikori     |
+  | Amy             | Johnson           | Alberto     | Soria         |
+  | Larry           | Westfalls         | Amy         | Johnson       |
+  | John            | Walton            | Amy         | Johnson       |
+  | Kevin           | Fallmer           | Alberto     | Soria         |
+  | Julian          | Bellinelli        | Kevin       | Fallmer       |
+  | Mariko          | Kishi             | Kevin       | Fallmer       |
+  +-----------------+-------------------+-------------+---------------+
   ```
 
   
 
-9. Devuelve un listado que muestre el nombre de cada empleados, el nombre de su jefe y el nombre del jefe de sus jefe.
+9. Devuelve un listado que muestre el nombre de cada empleado, el nombre de su jefe y el nombre del jefe de sus jefe.
 
   ```sql
+  SELECT e1.nombre AS nombre_empleado, e1.apellido1 AS apellido_empleado, e2.nombre AS nombre_jefe, e2.apellido1 AS apellido_jefe, e3.nombre AS nombre_jefe_jefe, e3.apellido1 AS apellido_jefe_jefe
+  FROM empleado AS e1
+  INNER JOIN empleado AS e2
+  ON e1.codigo_jefe = e2.codigo_empleado
+  INNER JOIN empleado AS e3
+  ON e2.codigo_jefe = e3.codigo_empleado;
   
+  +-----------------+-------------------+-------------+---------------+------------------+--------------------+
+  | nombre_empleado | apellido_empleado | nombre_jefe | apellido_jefe | nombre_jefe_jefe | apellido_jefe_jefe |
+  +-----------------+-------------------+-------------+---------------+------------------+--------------------+
+  | Alberto         | Soria             | Ruben       | López         | Marcos           | Magaña             |
+  | Maria           | Solís             | Ruben       | López         | Marcos           | Magaña             |
+  | Felipe          | Rosas             | Alberto     | Soria         | Ruben            | López              |
+  | Juan Carlos     | Ortiz             | Alberto     | Soria         | Ruben            | López              |
+  | Carlos          | Soria             | Alberto     | Soria         | Ruben            | López              |
+  | Mariano         | López             | Carlos      | Soria         | Alberto          | Soria              |
+  | Lucio           | Campoamor         | Carlos      | Soria         | Alberto          | Soria              |
+  | Hilario         | Rodriguez         | Carlos      | Soria         | Alberto          | Soria              |
+  | Emmanuel        | Magaña            | Alberto     | Soria         | Ruben            | López              |
+  | José Manuel     | Martinez          | Emmanuel    | Magaña        | Alberto          | Soria              |
+  | David           | Palma             | Emmanuel    | Magaña        | Alberto          | Soria              |
+  | Oscar           | Palma             | Emmanuel    | Magaña        | Alberto          | Soria              |
+  | Francois        | Fignon            | Alberto     | Soria         | Ruben            | López              |
+  | Lionel          | Narvaez           | Francois    | Fignon        | Alberto          | Soria              |
+  | Laurent         | Serra             | Francois    | Fignon        | Alberto          | Soria              |
+  | Michael         | Bolton            | Alberto     | Soria         | Ruben            | López              |
+  | Walter Santiago | Sanchez           | Michael     | Bolton        | Alberto          | Soria              |
+  | Hilary          | Washington        | Alberto     | Soria         | Ruben            | López              |
+  | Marcus          | Paxton            | Hilary      | Washington    | Alberto          | Soria              |
+  | Lorena          | Paxton            | Hilary      | Washington    | Alberto          | Soria              |
+  | Nei             | Nishikori         | Alberto     | Soria         | Ruben            | López              |
+  | Narumi          | Riko              | Nei         | Nishikori     | Alberto          | Soria              |
+  | Takuma          | Nomura            | Nei         | Nishikori     | Alberto          | Soria              |
+  | Amy             | Johnson           | Alberto     | Soria         | Ruben            | López              |
+  | Larry           | Westfalls         | Amy         | Johnson       | Alberto          | Soria              |
+  | John            | Walton            | Amy         | Johnson       | Alberto          | Soria              |
+  | Kevin           | Fallmer           | Alberto     | Soria         | Ruben            | López              |
+  | Julian          | Bellinelli        | Kevin       | Fallmer       | Alberto          | Soria              |
+  | Mariko          | Kishi             | Kevin       | Fallmer       | Alberto          | Soria              |
+  +-----------------+-------------------+-------------+---------------+------------------+--------------------+
   ```
 
   
@@ -1716,7 +2376,31 @@ VALUES
 10. Devuelve el nombre de los clientes a los que no se les ha entregado a tiempo un pedido.
 
   ```sql
+  SELECT DISTINCT(c.nombre_cliente)
+  FROM cliente AS c
+  INNER JOIN pedido AS p
+  ON p.codigo_cliente = c.codigo_cliente
+  WHERE (p.fecha_entrega > p.fecha_esperada);
   
+  +--------------------------------+
+  | nombre_cliente                 |
+  +--------------------------------+
+  | GoldFish Garden                |
+  | Gardening Associates           |
+  | Gerudo Valley                  |
+  | Beragua                        |
+  | Naturagua                      |
+  | Camunas Jardines S.L.          |
+  | Dardena S.A.                   |
+  | Golf S.A.                      |
+  | Sotogrande                     |
+  | Jardines y Mansiones Cactus SL |
+  | Jardinerías Matías SL          |
+  | Jardineria Sara                |
+  | Tutifruti S.A                  |
+  | Flores S.L.                    |
+  | El Jardin Viviente S.L         |
+  +--------------------------------+
   ```
 
   
@@ -1724,7 +2408,74 @@ VALUES
 11. Devuelve un listado de las diferentes gamas de producto que ha comprado cada cliente.
 
    ```sql
+   SELECT DISTINCT(c.nombre_cliente), g.gama
+   FROM gama_producto AS g
+   INNER JOIN producto AS p
+   ON p.gama = g.gama
+   INNER JOIN detalle_pedido AS dp
+   ON dp.producto_codigo_producto = p.codigo_producto
+   INNER JOIN pedido AS pe
+   ON pe.codigo_pedido = dp.pedido_codigo_pedido
+   INNER JOIN cliente AS c
+   ON c.codigo_cliente = pe.codigo_cliente;
    
+   +--------------------------------+--------------+
+   | nombre_cliente                 | gama         |
+   +--------------------------------+--------------+
+   | GoldFish Garden                | Aromáticas   |
+   | Golf S.A.                      | Aromáticas   |
+   | Jardinerías Matías SL          | Aromáticas   |
+   | El Jardin Viviente S.L         | Aromáticas   |
+   | Tendo Garden                   | Aromáticas   |
+   | Camunas Jardines S.L.          | Aromáticas   |
+   | Jardin de Flores               | Aromáticas   |
+   | Flores Marivi                  | Aromáticas   |
+   | Sotogrande                     | Aromáticas   |
+   | Jardineria Sara                | Aromáticas   |
+   | Dardena S.A.                   | Frutales     |
+   | Sotogrande                     | Frutales     |
+   | El Jardin Viviente S.L         | Frutales     |
+   | Tutifruti S.A                  | Frutales     |
+   | Beragua                        | Frutales     |
+   | Jardinerías Matías SL          | Frutales     |
+   | Camunas Jardines S.L.          | Frutales     |
+   | Jardines y Mansiones Cactus SL | Frutales     |
+   | Gerudo Valley                  | Frutales     |
+   | GoldFish Garden                | Frutales     |
+   | Tendo Garden                   | Frutales     |
+   | Gardening Associates           | Frutales     |
+   | Agrojardin                     | Frutales     |
+   | Jardineria Sara                | Frutales     |
+   | Naturagua                      | Frutales     |
+   | Jardin de Flores               | Frutales     |
+   | Flores Marivi                  | Frutales     |
+   | Flores S.L.                    | Frutales     |
+   | Beragua                        | Herramientas |
+   | Naturagua                      | Herramientas |
+   | Gerudo Valley                  | Herramientas |
+   | Golf S.A.                      | Herramientas |
+   | Dardena S.A.                   | Herramientas |
+   | Jardinerías Matías SL          | Herramientas |
+   | El Jardin Viviente S.L         | Herramientas |
+   | Jardin de Flores               | Herramientas |
+   | Flores Marivi                  | Herramientas |
+   | Jardineria Sara                | Herramientas |
+   | Beragua                        | Ornamentales |
+   | Gardening Associates           | Ornamentales |
+   | El Jardin Viviente S.L         | Ornamentales |
+   | Dardena S.A.                   | Ornamentales |
+   | Camunas Jardines S.L.          | Ornamentales |
+   | Tendo Garden                   | Ornamentales |
+   | Gerudo Valley                  | Ornamentales |
+   | Agrojardin                     | Ornamentales |
+   | Jardineria Sara                | Ornamentales |
+   | Tutifruti S.A                  | Ornamentales |
+   | Jardin de Flores               | Ornamentales |
+   | Flores Marivi                  | Ornamentales |
+   | Naturagua                      | Ornamentales |
+   | Jardines y Mansiones Cactus SL | Ornamentales |
+   | GoldFish Garden                | Ornamentales |
+   +--------------------------------+--------------+
    ```
 
    
