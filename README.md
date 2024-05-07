@@ -2053,430 +2053,431 @@ VALUES
 
 2. Muestra el nombre de los clientes que hayan realizado pagos junto con el nombre de sus representantes de ventas.
 
-  ```sql
-  SELECT DISTINCT(c.nombre_cliente), e.nombre AS nombre_representante
-  FROM cliente AS c
-  INNER JOIN empleado AS e
-  ON c.codigo_empleado_rep_ventas = e.codigo_empleado
-  INNER JOIN pago AS p
-  ON p.codigo_cliente = c.codigo_cliente;
-  
-  +--------------------------------+----------------------+
-  | nombre_cliente                 | nombre_representante |
-  +--------------------------------+----------------------+
-  | GoldFish Garden                | Walter Santiago      |
-  | Gardening Associates           | Walter Santiago      |
-  | Gerudo Valley                  | Lorena               |
-  | Tendo Garden                   | Lorena               |
-  | Beragua                        | Emmanuel             |
-  | Naturagua                      | Emmanuel             |
-  | Camunas Jardines S.L.          | Mariano              |
-  | Dardena S.A.                   | Mariano              |
-  | Jardin de Flores               | Julian               |
-  | Flores Marivi                  | Felipe               |
-  | Golf S.A.                      | José Manuel          |
-  | Sotogrande                     | José Manuel          |
-  | Jardines y Mansiones Cactus SL | Lucio                |
-  | Jardinerías Matías SL          | Lucio                |
-  | Agrojardin                     | Julian               |
-  | Jardineria Sara                | Felipe               |
-  | Tutifruti S.A                  | Mariko               |
-  | El Jardin Viviente S.L         | Mariko               |
-  +--------------------------------+----------------------+
-  ```
+   ```sql
+   SELECT DISTINCT(c.nombre_cliente), e.nombre AS nombre_representante
+   FROM cliente AS c
+   INNER JOIN empleado AS e
+   ON c.codigo_empleado_rep_ventas = e.codigo_empleado
+   INNER JOIN pago AS p
+   ON p.codigo_cliente = c.codigo_cliente;
+   
+   +--------------------------------+----------------------+
+   | nombre_cliente                 | nombre_representante |
+   +--------------------------------+----------------------+
+   | GoldFish Garden                | Walter Santiago      |
+   | Gardening Associates           | Walter Santiago      |
+   | Gerudo Valley                  | Lorena               |
+   | Tendo Garden                   | Lorena               |
+   | Beragua                        | Emmanuel             |
+   | Naturagua                      | Emmanuel             |
+   | Camunas Jardines S.L.          | Mariano              |
+   | Dardena S.A.                   | Mariano              |
+   | Jardin de Flores               | Julian               |
+   | Flores Marivi                  | Felipe               |
+   | Golf S.A.                      | José Manuel          |
+   | Sotogrande                     | José Manuel          |
+   | Jardines y Mansiones Cactus SL | Lucio                |
+   | Jardinerías Matías SL          | Lucio                |
+   | Agrojardin                     | Julian               |
+   | Jardineria Sara                | Felipe               |
+   | Tutifruti S.A                  | Mariko               |
+   | El Jardin Viviente S.L         | Mariko               |
+   +--------------------------------+----------------------+
+   ```
+
 
   
 
 3. Muestra el nombre de los clientes que no hayan realizado pagos junto con el nombre de sus representantes de ventas.
 
-  ```sql
-  SELECT DISTINCT(c.nombre_cliente), e.nombre AS nombre_representante
-  FROM cliente AS c
-  INNER JOIN empleado AS e
-  ON c.codigo_empleado_rep_ventas = e.codigo_empleado
-  WHERE c.codigo_cliente NOT IN (SELECT p.codigo_cliente FROM pago AS p);
-  
-  +-----------------------------+----------------------+
-  | nombre_cliente              | nombre_representante |
-  +-----------------------------+----------------------+
-  | Flowers, S.A                | Felipe               |
-  | Fuenla City                 | Felipe               |
-  | Top Campo                   | Felipe               |
-  | Lasas S.A.                  | Mariano              |
-  | Club Golf Puerta del hierro | Emmanuel             |
-  | DaraDistribuciones          | Emmanuel             |
-  | Madrileña de riegos         | Emmanuel             |
-  | Americh Golf Management SL  | José Manuel          |
-  | Aloha                       | José Manuel          |
-  | El Prat                     | José Manuel          |
-  | france telecom              | Lionel               |
-  | Musée du Louvre             | Lionel               |
-  | Flores S.L.                 | Michael              |
-  | The Magic Garden            | Michael              |
-  | Naturajardin                | Julian               |
-  | Vivero Humanes              | Julian               |
-  | Campohermoso                | Julian               |
-  +-----------------------------+----------------------+
-  ```
+   ```sql
+   SELECT DISTINCT(c.nombre_cliente), e.nombre AS nombre_representante
+   FROM cliente AS c
+   INNER JOIN empleado AS e
+   ON c.codigo_empleado_rep_ventas = e.codigo_empleado
+   WHERE c.codigo_cliente NOT IN (SELECT p.codigo_cliente FROM pago AS p);
+   
+   +-----------------------------+----------------------+
+   | nombre_cliente              | nombre_representante |
+   +-----------------------------+----------------------+
+   | Flowers, S.A                | Felipe               |
+   | Fuenla City                 | Felipe               |
+   | Top Campo                   | Felipe               |
+   | Lasas S.A.                  | Mariano              |
+   | Club Golf Puerta del hierro | Emmanuel             |
+   | DaraDistribuciones          | Emmanuel             |
+   | Madrileña de riegos         | Emmanuel             |
+   | Americh Golf Management SL  | José Manuel          |
+   | Aloha                       | José Manuel          |
+   | El Prat                     | José Manuel          |
+   | france telecom              | Lionel               |
+   | Musée du Louvre             | Lionel               |
+   | Flores S.L.                 | Michael              |
+   | The Magic Garden            | Michael              |
+   | Naturajardin                | Julian               |
+   | Vivero Humanes              | Julian               |
+   | Campohermoso                | Julian               |
+   +-----------------------------+----------------------+
+   ```
 
   
 
 4. Devuelve el nombre de los clientes que han hecho pagos y el nombre de sus representantes junto con la ciudad de la oficina a la que pertenece el representante.
 
-  ```sql
-  SELECT DISTINCT(c.nombre_cliente), e.nombre AS nombre_representante, ci.nombre_ciudad
-  FROM cliente AS c
-  INNER JOIN empleado AS e
-  ON c.codigo_empleado_rep_ventas = e.codigo_empleado
-  INNER JOIN pago AS p
-  ON p.codigo_cliente = c.codigo_cliente
-  INNER JOIN oficina AS o
-  ON o.codigo_oficina = e.codigo_oficina
-  INNER JOIN direccion AS d
-  ON d.codigo_oficina = o.codigo_oficina
-  INNER JOIN ciudad AS ci
-  ON ci.codigo_ciudad = d.codigo_ciudad;
-  
-  +--------------------------------+----------------------+----------------------+
-  | nombre_cliente                 | nombre_representante | nombre_ciudad        |
-  +--------------------------------+----------------------+----------------------+
-  | Beragua                        | Emmanuel             | Barcelona            |
-  | Naturagua                      | Emmanuel             | Barcelona            |
-  | Golf S.A.                      | José Manuel          | Barcelona            |
-  | Sotogrande                     | José Manuel          | Barcelona            |
-  | Gerudo Valley                  | Lorena               | Boston               |
-  | Tendo Garden                   | Lorena               | Boston               |
-  | Camunas Jardines S.L.          | Mariano              | Madrid               |
-  | Dardena S.A.                   | Mariano              | Madrid               |
-  | Jardines y Mansiones Cactus SL | Lucio                | Madrid               |
-  | Jardinerías Matías SL          | Lucio                | Madrid               |
-  | GoldFish Garden                | Walter Santiago      | San Francisco        |
-  | Gardening Associates           | Walter Santiago      | San Francisco        |
-  | Jardin de Flores               | Julian               | Sydney               |
-  | Agrojardin                     | Julian               | Sydney               |
-  | Tutifruti S.A                  | Mariko               | Sydney               |
-  | El Jardin Viviente S.L         | Mariko               | Sydney               |
-  | Flores Marivi                  | Felipe               | Talavera de la Reina |
-  | Jardineria Sara                | Felipe               | Talavera de la Reina |
-  +--------------------------------+----------------------+----------------------+
-  ```
+   ```sql
+   SELECT DISTINCT(c.nombre_cliente), e.nombre AS nombre_representante, ci.nombre_ciudad
+   FROM cliente AS c
+   INNER JOIN empleado AS e
+   ON c.codigo_empleado_rep_ventas = e.codigo_empleado
+   INNER JOIN pago AS p
+   ON p.codigo_cliente = c.codigo_cliente
+   INNER JOIN oficina AS o
+   ON o.codigo_oficina = e.codigo_oficina
+   INNER JOIN direccion AS d
+   ON d.codigo_oficina = o.codigo_oficina
+   INNER JOIN ciudad AS ci
+   ON ci.codigo_ciudad = d.codigo_ciudad;
+   
+   +--------------------------------+----------------------+----------------------+
+   | nombre_cliente                 | nombre_representante | nombre_ciudad        |
+   +--------------------------------+----------------------+----------------------+
+   | Beragua                        | Emmanuel             | Barcelona            |
+   | Naturagua                      | Emmanuel             | Barcelona            |
+   | Golf S.A.                      | José Manuel          | Barcelona            |
+   | Sotogrande                     | José Manuel          | Barcelona            |
+   | Gerudo Valley                  | Lorena               | Boston               |
+   | Tendo Garden                   | Lorena               | Boston               |
+   | Camunas Jardines S.L.          | Mariano              | Madrid               |
+   | Dardena S.A.                   | Mariano              | Madrid               |
+   | Jardines y Mansiones Cactus SL | Lucio                | Madrid               |
+   | Jardinerías Matías SL          | Lucio                | Madrid               |
+   | GoldFish Garden                | Walter Santiago      | San Francisco        |
+   | Gardening Associates           | Walter Santiago      | San Francisco        |
+   | Jardin de Flores               | Julian               | Sydney               |
+   | Agrojardin                     | Julian               | Sydney               |
+   | Tutifruti S.A                  | Mariko               | Sydney               |
+   | El Jardin Viviente S.L         | Mariko               | Sydney               |
+   | Flores Marivi                  | Felipe               | Talavera de la Reina |
+   | Jardineria Sara                | Felipe               | Talavera de la Reina |
+   +--------------------------------+----------------------+----------------------+
+   ```
 
   
 
 5. Devuelve el nombre de los clientes que no hayan hecho pagos y el nombre de sus representantes junto con la ciudad de la oficina a la que pertenece el representante.
 
-  ```sql
-  SELECT DISTINCT(c.nombre_cliente), e.nombre AS nombre_representante, ci.nombre_ciudad
-  FROM cliente AS c
-  INNER JOIN empleado AS e
-  ON c.codigo_empleado_rep_ventas = e.codigo_empleado
-  INNER JOIN oficina AS o
-  ON o.codigo_oficina = e.codigo_oficina
-  INNER JOIN direccion AS d
-  ON d.codigo_oficina = o.codigo_oficina
-  INNER JOIN ciudad AS ci
-  ON ci.codigo_ciudad = d.codigo_ciudad
-  WHERE c.codigo_cliente NOT IN (SELECT p.codigo_cliente FROM pago AS p);
-  
-  +-----------------------------+----------------------+----------------------+
-  | nombre_cliente              | nombre_representante | nombre_ciudad        |
-  +-----------------------------+----------------------+----------------------+
-  | Club Golf Puerta del hierro | Emmanuel             | Barcelona            |
-  | DaraDistribuciones          | Emmanuel             | Barcelona            |
-  | Madrileña de riegos         | Emmanuel             | Barcelona            |
-  | Americh Golf Management SL  | José Manuel          | Barcelona            |
-  | Aloha                       | José Manuel          | Barcelona            |
-  | El Prat                     | José Manuel          | Barcelona            |
-  | Lasas S.A.                  | Mariano              | Madrid               |
-  | france telecom              | Lionel               | Paris                |
-  | Musée du Louvre             | Lionel               | Paris                |
-  | Flores S.L.                 | Michael              | San Francisco        |
-  | The Magic Garden            | Michael              | San Francisco        |
-  | Naturajardin                | Julian               | Sydney               |
-  | Vivero Humanes              | Julian               | Sydney               |
-  | Campohermoso                | Julian               | Sydney               |
-  | Flowers, S.A                | Felipe               | Talavera de la Reina |
-  | Fuenla City                 | Felipe               | Talavera de la Reina |
-  | Top Campo                   | Felipe               | Talavera de la Reina |
-  +-----------------------------+----------------------+----------------------+
-  ```
+   ```sql
+   SELECT DISTINCT(c.nombre_cliente), e.nombre AS nombre_representante, ci.nombre_ciudad
+   FROM cliente AS c
+   INNER JOIN empleado AS e
+   ON c.codigo_empleado_rep_ventas = e.codigo_empleado
+   INNER JOIN oficina AS o
+   ON o.codigo_oficina = e.codigo_oficina
+   INNER JOIN direccion AS d
+   ON d.codigo_oficina = o.codigo_oficina
+   INNER JOIN ciudad AS ci
+   ON ci.codigo_ciudad = d.codigo_ciudad
+   WHERE c.codigo_cliente NOT IN (SELECT p.codigo_cliente FROM pago AS p);
+   
+   +-----------------------------+----------------------+----------------------+
+   | nombre_cliente              | nombre_representante | nombre_ciudad        |
+   +-----------------------------+----------------------+----------------------+
+   | Club Golf Puerta del hierro | Emmanuel             | Barcelona            |
+   | DaraDistribuciones          | Emmanuel             | Barcelona            |
+   | Madrileña de riegos         | Emmanuel             | Barcelona            |
+   | Americh Golf Management SL  | José Manuel          | Barcelona            |
+   | Aloha                       | José Manuel          | Barcelona            |
+   | El Prat                     | José Manuel          | Barcelona            |
+   | Lasas S.A.                  | Mariano              | Madrid               |
+   | france telecom              | Lionel               | Paris                |
+   | Musée du Louvre             | Lionel               | Paris                |
+   | Flores S.L.                 | Michael              | San Francisco        |
+   | The Magic Garden            | Michael              | San Francisco        |
+   | Naturajardin                | Julian               | Sydney               |
+   | Vivero Humanes              | Julian               | Sydney               |
+   | Campohermoso                | Julian               | Sydney               |
+   | Flowers, S.A                | Felipe               | Talavera de la Reina |
+   | Fuenla City                 | Felipe               | Talavera de la Reina |
+   | Top Campo                   | Felipe               | Talavera de la Reina |
+   +-----------------------------+----------------------+----------------------+
+   ```
 
-  
+     
 
 6. Lista la dirección de las oficinas que tengan clientes en Fuenlabrada.
 
-  ```sql
-  /* RESIGNACIÓN */
-  SELECT d.linea_direccion1, d.linea_direccion2, c.nombre_ciudad
-  FROM cliente AS cl
-  INNER JOIN empleado AS e
-  ON cl.codigo_empleado_rep_ventas = e.codigo_empleado
-  INNER JOIN oficina AS o
-  ON o.codigo_oficina = e.codigo_oficina
-  INNER JOIN direccion AS d
-  ON d.codigo_oficina = o.codigo_oficina
-  INNER JOIN ciudad AS c
-  ON c.codigo_ciudad = d.codigo_ciudad
-  WHERE c.nombre_ciudad = 'Fuenlabrada';
-  ```
+   ```sql
+   /* RESIGNACIÓN */
+   SELECT d.linea_direccion1, d.linea_direccion2, c.nombre_ciudad
+   FROM cliente AS cl
+   INNER JOIN empleado AS e
+   ON cl.codigo_empleado_rep_ventas = e.codigo_empleado
+   INNER JOIN oficina AS o
+   ON o.codigo_oficina = e.codigo_oficina
+   INNER JOIN direccion AS d
+   ON d.codigo_oficina = o.codigo_oficina
+   INNER JOIN ciudad AS c
+   ON c.codigo_ciudad = d.codigo_ciudad
+   WHERE c.nombre_ciudad = 'Fuenlabrada';
+   ```
 
-  
+     
 
 7. Devuelve el nombre de los clientes y el nombre de sus representantes junto con la ciudad de la oficina a la que pertenece el representante.
 
-  ```sql
-  SELECT c.nombre_cliente, e.nombre, e.apellido1, ci.nombre_ciudad AS nombre_ciudad_oficina
-  FROM cliente AS c
-  INNER JOIN empleado AS e
-  ON e.codigo_empleado = c.codigo_empleado_rep_ventas
-  INNER JOIN oficina AS o
-  ON o.codigo_oficina = e.codigo_oficina
-  INNER JOIN direccion AS d
-  ON d.codigo_oficina = o.codigo_oficina
-  INNER JOIN ciudad AS ci
-  ON ci.codigo_ciudad = d.codigo_ciudad;
-  
-  +--------------------------------+-----------------+------------+-----------------------+
-  | nombre_cliente                 | nombre          | apellido1  | nombre_ciudad_oficina |
-  +--------------------------------+-----------------+------------+-----------------------+
-  | Beragua                        | Emmanuel        | Magaña     | Barcelona             |
-  | Club Golf Puerta del hierro    | Emmanuel        | Magaña     | Barcelona             |
-  | Naturagua                      | Emmanuel        | Magaña     | Barcelona             |
-  | DaraDistribuciones             | Emmanuel        | Magaña     | Barcelona             |
-  | Madrileña de riegos            | Emmanuel        | Magaña     | Barcelona             |
-  | Golf S.A.                      | José Manuel     | Martinez   | Barcelona             |
-  | Americh Golf Management SL     | José Manuel     | Martinez   | Barcelona             |
-  | Aloha                          | José Manuel     | Martinez   | Barcelona             |
-  | El Prat                        | José Manuel     | Martinez   | Barcelona             |
-  | Sotogrande                     | José Manuel     | Martinez   | Barcelona             |
-  | Gerudo Valley                  | Lorena          | Paxton     | Boston                |
-  | Tendo Garden                   | Lorena          | Paxton     | Boston                |
-  | Lasas S.A.                     | Mariano         | López      | Madrid                |
-  | Lasas S.A.                     | Mariano         | López      | Madrid                |
-  | Camunas Jardines S.L.          | Mariano         | López      | Madrid                |
-  | Dardena S.A.                   | Mariano         | López      | Madrid                |
-  | Jardines y Mansiones Cactus SL | Lucio           | Campoamor  | Madrid                |
-  | Jardinerías Matías SL          | Lucio           | Campoamor  | Madrid                |
-  | france telecom                 | Lionel          | Narvaez    | Paris                 |
-  | Musée du Louvre                | Lionel          | Narvaez    | Paris                 |
-  | Flores S.L.                    | Michael         | Bolton     | San Francisco         |
-  | The Magic Garden               | Michael         | Bolton     | San Francisco         |
-  | GoldFish Garden                | Walter Santiago | Sanchez    | San Francisco         |
-  | Gardening Associates           | Walter Santiago | Sanchez    | San Francisco         |
-  | Jardin de Flores               | Julian          | Bellinelli | Sydney                |
-  | Naturajardin                   | Julian          | Bellinelli | Sydney                |
-  | Vivero Humanes                 | Julian          | Bellinelli | Sydney                |
-  | Agrojardin                     | Julian          | Bellinelli | Sydney                |
-  | Campohermoso                   | Julian          | Bellinelli | Sydney                |
-  | Tutifruti S.A                  | Mariko          | Kishi      | Sydney                |
-  | El Jardin Viviente S.L         | Mariko          | Kishi      | Sydney                |
-  | Flores Marivi                  | Felipe          | Rosas      | Talavera de la Reina  |
-  | Flowers, S.A                   | Felipe          | Rosas      | Talavera de la Reina  |
-  | Fuenla City                    | Felipe          | Rosas      | Talavera de la Reina  |
-  | Top Campo                      | Felipe          | Rosas      | Talavera de la Reina  |
-  | Jardineria Sara                | Felipe          | Rosas      | Talavera de la Reina  |
-  +--------------------------------+-----------------+------------+-----------------------+
-  ```
+   ```sql
+   SELECT c.nombre_cliente, e.nombre, e.apellido1, ci.nombre_ciudad AS nombre_ciudad_oficina
+   FROM cliente AS c
+   INNER JOIN empleado AS e
+   ON e.codigo_empleado = c.codigo_empleado_rep_ventas
+   INNER JOIN oficina AS o
+   ON o.codigo_oficina = e.codigo_oficina
+   INNER JOIN direccion AS d
+   ON d.codigo_oficina = o.codigo_oficina
+   INNER JOIN ciudad AS ci
+   ON ci.codigo_ciudad = d.codigo_ciudad;
+   
+   +--------------------------------+-----------------+------------+-----------------------+
+   | nombre_cliente                 | nombre          | apellido1  | nombre_ciudad_oficina |
+   +--------------------------------+-----------------+------------+-----------------------+
+   | Beragua                        | Emmanuel        | Magaña     | Barcelona             |
+   | Club Golf Puerta del hierro    | Emmanuel        | Magaña     | Barcelona             |
+   | Naturagua                      | Emmanuel        | Magaña     | Barcelona             |
+   | DaraDistribuciones             | Emmanuel        | Magaña     | Barcelona             |
+   | Madrileña de riegos            | Emmanuel        | Magaña     | Barcelona             |
+   | Golf S.A.                      | José Manuel     | Martinez   | Barcelona             |
+   | Americh Golf Management SL     | José Manuel     | Martinez   | Barcelona             |
+   | Aloha                          | José Manuel     | Martinez   | Barcelona             |
+   | El Prat                        | José Manuel     | Martinez   | Barcelona             |
+   | Sotogrande                     | José Manuel     | Martinez   | Barcelona             |
+   | Gerudo Valley                  | Lorena          | Paxton     | Boston                |
+   | Tendo Garden                   | Lorena          | Paxton     | Boston                |
+   | Lasas S.A.                     | Mariano         | López      | Madrid                |
+   | Lasas S.A.                     | Mariano         | López      | Madrid                |
+   | Camunas Jardines S.L.          | Mariano         | López      | Madrid                |
+   | Dardena S.A.                   | Mariano         | López      | Madrid                |
+   | Jardines y Mansiones Cactus SL | Lucio           | Campoamor  | Madrid                |
+   | Jardinerías Matías SL          | Lucio           | Campoamor  | Madrid                |
+   | france telecom                 | Lionel          | Narvaez    | Paris                 |
+   | Musée du Louvre                | Lionel          | Narvaez    | Paris                 |
+   | Flores S.L.                    | Michael         | Bolton     | San Francisco         |
+   | The Magic Garden               | Michael         | Bolton     | San Francisco         |
+   | GoldFish Garden                | Walter Santiago | Sanchez    | San Francisco         |
+   | Gardening Associates           | Walter Santiago | Sanchez    | San Francisco         |
+   | Jardin de Flores               | Julian          | Bellinelli | Sydney                |
+   | Naturajardin                   | Julian          | Bellinelli | Sydney                |
+   | Vivero Humanes                 | Julian          | Bellinelli | Sydney                |
+   | Agrojardin                     | Julian          | Bellinelli | Sydney                |
+   | Campohermoso                   | Julian          | Bellinelli | Sydney                |
+   | Tutifruti S.A                  | Mariko          | Kishi      | Sydney                |
+   | El Jardin Viviente S.L         | Mariko          | Kishi      | Sydney                |
+   | Flores Marivi                  | Felipe          | Rosas      | Talavera de la Reina  |
+   | Flowers, S.A                   | Felipe          | Rosas      | Talavera de la Reina  |
+   | Fuenla City                    | Felipe          | Rosas      | Talavera de la Reina  |
+   | Top Campo                      | Felipe          | Rosas      | Talavera de la Reina  |
+   | Jardineria Sara                | Felipe          | Rosas      | Talavera de la Reina  |
+   +--------------------------------+-----------------+------------+-----------------------+
+   ```
 
-  
+     
 
 8. Devuelve un listado con el nombre de los empleados junto con el nombre de sus jefes.
 
-  ```sql
-  SELECT e1.nombre AS nombre_empleado, e1.apellido1 AS apellido_empleado, e2.nombre AS nombre_jefe, e2.apellido1 AS apellido_jefe
-  FROM empleado AS e1
-  INNER JOIN empleado AS e2
-  ON e1.codigo_jefe = e2.codigo_empleado;
-  
-  +-----------------+-------------------+-------------+---------------+
-  | nombre_empleado | apellido_empleado | nombre_jefe | apellido_jefe |
-  +-----------------+-------------------+-------------+---------------+
-  | Ruben           | López             | Marcos      | Magaña        |
-  | Alberto         | Soria             | Ruben       | López         |
-  | Maria           | Solís             | Ruben       | López         |
-  | Felipe          | Rosas             | Alberto     | Soria         |
-  | Juan Carlos     | Ortiz             | Alberto     | Soria         |
-  | Carlos          | Soria             | Alberto     | Soria         |
-  | Mariano         | López             | Carlos      | Soria         |
-  | Lucio           | Campoamor         | Carlos      | Soria         |
-  | Hilario         | Rodriguez         | Carlos      | Soria         |
-  | Emmanuel        | Magaña            | Alberto     | Soria         |
-  | José Manuel     | Martinez          | Emmanuel    | Magaña        |
-  | David           | Palma             | Emmanuel    | Magaña        |
-  | Oscar           | Palma             | Emmanuel    | Magaña        |
-  | Francois        | Fignon            | Alberto     | Soria         |
-  | Lionel          | Narvaez           | Francois    | Fignon        |
-  | Laurent         | Serra             | Francois    | Fignon        |
-  | Michael         | Bolton            | Alberto     | Soria         |
-  | Walter Santiago | Sanchez           | Michael     | Bolton        |
-  | Hilary          | Washington        | Alberto     | Soria         |
-  | Marcus          | Paxton            | Hilary      | Washington    |
-  | Lorena          | Paxton            | Hilary      | Washington    |
-  | Nei             | Nishikori         | Alberto     | Soria         |
-  | Narumi          | Riko              | Nei         | Nishikori     |
-  | Takuma          | Nomura            | Nei         | Nishikori     |
-  | Amy             | Johnson           | Alberto     | Soria         |
-  | Larry           | Westfalls         | Amy         | Johnson       |
-  | John            | Walton            | Amy         | Johnson       |
-  | Kevin           | Fallmer           | Alberto     | Soria         |
-  | Julian          | Bellinelli        | Kevin       | Fallmer       |
-  | Mariko          | Kishi             | Kevin       | Fallmer       |
-  +-----------------+-------------------+-------------+---------------+
-  ```
+   ```sql
+   SELECT e1.nombre AS nombre_empleado, e1.apellido1 AS apellido_empleado, e2.nombre AS nombre_jefe, e2.apellido1 AS apellido_jefe
+   FROM empleado AS e1
+   INNER JOIN empleado AS e2
+   ON e1.codigo_jefe = e2.codigo_empleado;
+   
+   +-----------------+-------------------+-------------+---------------+
+   | nombre_empleado | apellido_empleado | nombre_jefe | apellido_jefe |
+   +-----------------+-------------------+-------------+---------------+
+   | Ruben           | López             | Marcos      | Magaña        |
+   | Alberto         | Soria             | Ruben       | López         |
+   | Maria           | Solís             | Ruben       | López         |
+   | Felipe          | Rosas             | Alberto     | Soria         |
+   | Juan Carlos     | Ortiz             | Alberto     | Soria         |
+   | Carlos          | Soria             | Alberto     | Soria         |
+   | Mariano         | López             | Carlos      | Soria         |
+   | Lucio           | Campoamor         | Carlos      | Soria         |
+   | Hilario         | Rodriguez         | Carlos      | Soria         |
+   | Emmanuel        | Magaña            | Alberto     | Soria         |
+   | José Manuel     | Martinez          | Emmanuel    | Magaña        |
+   | David           | Palma             | Emmanuel    | Magaña        |
+   | Oscar           | Palma             | Emmanuel    | Magaña        |
+   | Francois        | Fignon            | Alberto     | Soria         |
+   | Lionel          | Narvaez           | Francois    | Fignon        |
+   | Laurent         | Serra             | Francois    | Fignon        |
+   | Michael         | Bolton            | Alberto     | Soria         |
+   | Walter Santiago | Sanchez           | Michael     | Bolton        |
+   | Hilary          | Washington        | Alberto     | Soria         |
+   | Marcus          | Paxton            | Hilary      | Washington    |
+   | Lorena          | Paxton            | Hilary      | Washington    |
+   | Nei             | Nishikori         | Alberto     | Soria         |
+   | Narumi          | Riko              | Nei         | Nishikori     |
+   | Takuma          | Nomura            | Nei         | Nishikori     |
+   | Amy             | Johnson           | Alberto     | Soria         |
+   | Larry           | Westfalls         | Amy         | Johnson       |
+   | John            | Walton            | Amy         | Johnson       |
+   | Kevin           | Fallmer           | Alberto     | Soria         |
+   | Julian          | Bellinelli        | Kevin       | Fallmer       |
+   | Mariko          | Kishi             | Kevin       | Fallmer       |
+   +-----------------+-------------------+-------------+---------------+
+   ```
 
   
 
 9. Devuelve un listado que muestre el nombre de cada empleado, el nombre de su jefe y el nombre del jefe de sus jefe.
 
-  ```sql
-  SELECT e1.nombre AS nombre_empleado, e1.apellido1 AS apellido_empleado, e2.nombre AS nombre_jefe, e2.apellido1 AS apellido_jefe, e3.nombre AS nombre_jefe_jefe, e3.apellido1 AS apellido_jefe_jefe
-  FROM empleado AS e1
-  INNER JOIN empleado AS e2
-  ON e1.codigo_jefe = e2.codigo_empleado
-  INNER JOIN empleado AS e3
-  ON e2.codigo_jefe = e3.codigo_empleado;
-  
-  +-----------------+-------------------+-------------+---------------+------------------+--------------------+
-  | nombre_empleado | apellido_empleado | nombre_jefe | apellido_jefe | nombre_jefe_jefe | apellido_jefe_jefe |
-  +-----------------+-------------------+-------------+---------------+------------------+--------------------+
-  | Alberto         | Soria             | Ruben       | López         | Marcos           | Magaña             |
-  | Maria           | Solís             | Ruben       | López         | Marcos           | Magaña             |
-  | Felipe          | Rosas             | Alberto     | Soria         | Ruben            | López              |
-  | Juan Carlos     | Ortiz             | Alberto     | Soria         | Ruben            | López              |
-  | Carlos          | Soria             | Alberto     | Soria         | Ruben            | López              |
-  | Mariano         | López             | Carlos      | Soria         | Alberto          | Soria              |
-  | Lucio           | Campoamor         | Carlos      | Soria         | Alberto          | Soria              |
-  | Hilario         | Rodriguez         | Carlos      | Soria         | Alberto          | Soria              |
-  | Emmanuel        | Magaña            | Alberto     | Soria         | Ruben            | López              |
-  | José Manuel     | Martinez          | Emmanuel    | Magaña        | Alberto          | Soria              |
-  | David           | Palma             | Emmanuel    | Magaña        | Alberto          | Soria              |
-  | Oscar           | Palma             | Emmanuel    | Magaña        | Alberto          | Soria              |
-  | Francois        | Fignon            | Alberto     | Soria         | Ruben            | López              |
-  | Lionel          | Narvaez           | Francois    | Fignon        | Alberto          | Soria              |
-  | Laurent         | Serra             | Francois    | Fignon        | Alberto          | Soria              |
-  | Michael         | Bolton            | Alberto     | Soria         | Ruben            | López              |
-  | Walter Santiago | Sanchez           | Michael     | Bolton        | Alberto          | Soria              |
-  | Hilary          | Washington        | Alberto     | Soria         | Ruben            | López              |
-  | Marcus          | Paxton            | Hilary      | Washington    | Alberto          | Soria              |
-  | Lorena          | Paxton            | Hilary      | Washington    | Alberto          | Soria              |
-  | Nei             | Nishikori         | Alberto     | Soria         | Ruben            | López              |
-  | Narumi          | Riko              | Nei         | Nishikori     | Alberto          | Soria              |
-  | Takuma          | Nomura            | Nei         | Nishikori     | Alberto          | Soria              |
-  | Amy             | Johnson           | Alberto     | Soria         | Ruben            | López              |
-  | Larry           | Westfalls         | Amy         | Johnson       | Alberto          | Soria              |
-  | John            | Walton            | Amy         | Johnson       | Alberto          | Soria              |
-  | Kevin           | Fallmer           | Alberto     | Soria         | Ruben            | López              |
-  | Julian          | Bellinelli        | Kevin       | Fallmer       | Alberto          | Soria              |
-  | Mariko          | Kishi             | Kevin       | Fallmer       | Alberto          | Soria              |
-  +-----------------+-------------------+-------------+---------------+------------------+--------------------+
-  ```
+   ```sql
+   SELECT e1.nombre AS nombre_empleado, e1.apellido1 AS apellido_empleado, e2.nombre AS nombre_jefe, e2.apellido1 AS apellido_jefe, e3.nombre AS nombre_jefe_jefe, e3.apellido1 AS apellido_jefe_jefe
+   FROM empleado AS e1
+   INNER JOIN empleado AS e2
+   ON e1.codigo_jefe = e2.codigo_empleado
+   INNER JOIN empleado AS e3
+   ON e2.codigo_jefe = e3.codigo_empleado;
+   
+   +-----------------+-------------------+-------------+---------------+------------------+--------------------+
+   | nombre_empleado | apellido_empleado | nombre_jefe | apellido_jefe | nombre_jefe_jefe | apellido_jefe_jefe |
+   +-----------------+-------------------+-------------+---------------+------------------+--------------------+
+   | Alberto         | Soria             | Ruben       | López         | Marcos           | Magaña             |
+   | Maria           | Solís             | Ruben       | López         | Marcos           | Magaña             |
+   | Felipe          | Rosas             | Alberto     | Soria         | Ruben            | López              |
+   | Juan Carlos     | Ortiz             | Alberto     | Soria         | Ruben            | López              |
+   | Carlos          | Soria             | Alberto     | Soria         | Ruben            | López              |
+   | Mariano         | López             | Carlos      | Soria         | Alberto          | Soria              |
+   | Lucio           | Campoamor         | Carlos      | Soria         | Alberto          | Soria              |
+   | Hilario         | Rodriguez         | Carlos      | Soria         | Alberto          | Soria              |
+   | Emmanuel        | Magaña            | Alberto     | Soria         | Ruben            | López              |
+   | José Manuel     | Martinez          | Emmanuel    | Magaña        | Alberto          | Soria              |
+   | David           | Palma             | Emmanuel    | Magaña        | Alberto          | Soria              |
+   | Oscar           | Palma             | Emmanuel    | Magaña        | Alberto          | Soria              |
+   | Francois        | Fignon            | Alberto     | Soria         | Ruben            | López              |
+   | Lionel          | Narvaez           | Francois    | Fignon        | Alberto          | Soria              |
+   | Laurent         | Serra             | Francois    | Fignon        | Alberto          | Soria              |
+   | Michael         | Bolton            | Alberto     | Soria         | Ruben            | López              |
+   | Walter Santiago | Sanchez           | Michael     | Bolton        | Alberto          | Soria              |
+   | Hilary          | Washington        | Alberto     | Soria         | Ruben            | López              |
+   | Marcus          | Paxton            | Hilary      | Washington    | Alberto          | Soria              |
+   | Lorena          | Paxton            | Hilary      | Washington    | Alberto          | Soria              |
+   | Nei             | Nishikori         | Alberto     | Soria         | Ruben            | López              |
+   | Narumi          | Riko              | Nei         | Nishikori     | Alberto          | Soria              |
+   | Takuma          | Nomura            | Nei         | Nishikori     | Alberto          | Soria              |
+   | Amy             | Johnson           | Alberto     | Soria         | Ruben            | López              |
+   | Larry           | Westfalls         | Amy         | Johnson       | Alberto          | Soria              |
+   | John            | Walton            | Amy         | Johnson       | Alberto          | Soria              |
+   | Kevin           | Fallmer           | Alberto     | Soria         | Ruben            | López              |
+   | Julian          | Bellinelli        | Kevin       | Fallmer       | Alberto          | Soria              |
+   | Mariko          | Kishi             | Kevin       | Fallmer       | Alberto          | Soria              |
+   +-----------------+-------------------+-------------+---------------+------------------+--------------------+
+   ```
 
   
 
 10. Devuelve el nombre de los clientes a los que no se les ha entregado a tiempo un pedido.
 
-  ```sql
-  SELECT DISTINCT(c.nombre_cliente)
-  FROM cliente AS c
-  INNER JOIN pedido AS p
-  ON p.codigo_cliente = c.codigo_cliente
-  WHERE (p.fecha_entrega > p.fecha_esperada);
-  
-  +--------------------------------+
-  | nombre_cliente                 |
-  +--------------------------------+
-  | GoldFish Garden                |
-  | Gardening Associates           |
-  | Gerudo Valley                  |
-  | Beragua                        |
-  | Naturagua                      |
-  | Camunas Jardines S.L.          |
-  | Dardena S.A.                   |
-  | Golf S.A.                      |
-  | Sotogrande                     |
-  | Jardines y Mansiones Cactus SL |
-  | Jardinerías Matías SL          |
-  | Jardineria Sara                |
-  | Tutifruti S.A                  |
-  | Flores S.L.                    |
-  | El Jardin Viviente S.L         |
-  +--------------------------------+
-  ```
+    ```sql
+    SELECT DISTINCT(c.nombre_cliente)
+    FROM cliente AS c
+    INNER JOIN pedido AS p
+    ON p.codigo_cliente = c.codigo_cliente
+    WHERE (p.fecha_entrega > p.fecha_esperada);
+    
+    +--------------------------------+
+    | nombre_cliente                 |
+    +--------------------------------+
+    | GoldFish Garden                |
+    | Gardening Associates           |
+    | Gerudo Valley                  |
+    | Beragua                        |
+    | Naturagua                      |
+    | Camunas Jardines S.L.          |
+    | Dardena S.A.                   |
+    | Golf S.A.                      |
+    | Sotogrande                     |
+    | Jardines y Mansiones Cactus SL |
+    | Jardinerías Matías SL          |
+    | Jardineria Sara                |
+    | Tutifruti S.A                  |
+    | Flores S.L.                    |
+    | El Jardin Viviente S.L         |
+    +--------------------------------+
+    ```
 
   
 
 11. Devuelve un listado de las diferentes gamas de producto que ha comprado cada cliente.
 
-   ```sql
-   SELECT DISTINCT(c.nombre_cliente), g.gama
-   FROM gama_producto AS g
-   INNER JOIN producto AS p
-   ON p.gama = g.gama
-   INNER JOIN detalle_pedido AS dp
-   ON dp.producto_codigo_producto = p.codigo_producto
-   INNER JOIN pedido AS pe
-   ON pe.codigo_pedido = dp.pedido_codigo_pedido
-   INNER JOIN cliente AS c
-   ON c.codigo_cliente = pe.codigo_cliente;
-   
-   +--------------------------------+--------------+
-   | nombre_cliente                 | gama         |
-   +--------------------------------+--------------+
-   | GoldFish Garden                | Frutales     |
-   | GoldFish Garden                | Aromáticas   |
-   | GoldFish Garden                | Ornamentales |
-   | Gardening Associates           | Frutales     |
-   | Gardening Associates           | Ornamentales |
-   | Gerudo Valley                  | Herramientas |
-   | Gerudo Valley                  | Ornamentales |
-   | Gerudo Valley                  | Frutales     |
-   | Tendo Garden                   | Frutales     |
-   | Tendo Garden                   | Ornamentales |
-   | Tendo Garden                   | Aromáticas   |
-   | Beragua                        | Herramientas |
-   | Beragua                        | Frutales     |
-   | Beragua                        | Ornamentales |
-   | Naturagua                      | Herramientas |
-   | Naturagua                      | Frutales     |
-   | Naturagua                      | Ornamentales |
-   | Camunas Jardines S.L.          | Aromáticas   |
-   | Camunas Jardines S.L.          | Frutales     |
-   | Camunas Jardines S.L.          | Ornamentales |
-   | Dardena S.A.                   | Herramientas |
-   | Dardena S.A.                   | Frutales     |
-   | Dardena S.A.                   | Ornamentales |
-   | Jardin de Flores               | Frutales     |
-   | Jardin de Flores               | Ornamentales |
-   | Jardin de Flores               | Aromáticas   |
-   | Jardin de Flores               | Herramientas |
-   | Flores Marivi                  | Ornamentales |
-   | Flores Marivi                  | Frutales     |
-   | Flores Marivi                  | Aromáticas   |
-   | Flores Marivi                  | Herramientas |
-   | Golf S.A.                      | Herramientas |
-   | Golf S.A.                      | Aromáticas   |
-   | Sotogrande                     | Aromáticas   |
-   | Sotogrande                     | Frutales     |
-   | Jardines y Mansiones Cactus SL | Frutales     |
-   | Jardines y Mansiones Cactus SL | Ornamentales |
-   | Jardinerías Matías SL          | Aromáticas   |
-   | Jardinerías Matías SL          | Frutales     |
-   | Jardinerías Matías SL          | Herramientas |
-   | Agrojardin                     | Ornamentales |
-   | Agrojardin                     | Frutales     |
-   | Jardineria Sara                | Frutales     |
-   | Jardineria Sara                | Ornamentales |
-   | Jardineria Sara                | Aromáticas   |
-   | Jardineria Sara                | Herramientas |
-   | Tutifruti S.A                  | Frutales     |
-   | Tutifruti S.A                  | Ornamentales |
-   | Flores S.L.                    | Frutales     |
-   | El Jardin Viviente S.L         | Frutales     |
-   | El Jardin Viviente S.L         | Ornamentales |
-   | El Jardin Viviente S.L         | Aromáticas   |
-   | El Jardin Viviente S.L         | Herramientas |
-   +--------------------------------+--------------+
-   ```
+    ```sql
+    SELECT DISTINCT(c.nombre_cliente), g.gama
+    FROM gama_producto AS g
+    INNER JOIN producto AS p
+    ON p.gama = g.gama
+    INNER JOIN detalle_pedido AS dp
+    ON dp.producto_codigo_producto = p.codigo_producto
+    INNER JOIN pedido AS pe
+    ON pe.codigo_pedido = dp.pedido_codigo_pedido
+    INNER JOIN cliente AS c
+    ON c.codigo_cliente = pe.codigo_cliente;
+    
+    +--------------------------------+--------------+
+    | nombre_cliente                 | gama         |
+    +--------------------------------+--------------+
+    | GoldFish Garden                | Frutales     |
+    | GoldFish Garden                | Aromáticas   |
+    | GoldFish Garden                | Ornamentales |
+    | Gardening Associates           | Frutales     |
+    | Gardening Associates           | Ornamentales |
+    | Gerudo Valley                  | Herramientas |
+    | Gerudo Valley                  | Ornamentales |
+    | Gerudo Valley                  | Frutales     |
+    | Tendo Garden                   | Frutales     |
+    | Tendo Garden                   | Ornamentales |
+    | Tendo Garden                   | Aromáticas   |
+    | Beragua                        | Herramientas |
+    | Beragua                        | Frutales     |
+    | Beragua                        | Ornamentales |
+    | Naturagua                      | Herramientas |
+    | Naturagua                      | Frutales     |
+    | Naturagua                      | Ornamentales |
+    | Camunas Jardines S.L.          | Aromáticas   |
+    | Camunas Jardines S.L.          | Frutales     |
+    | Camunas Jardines S.L.          | Ornamentales |
+    | Dardena S.A.                   | Herramientas |
+    | Dardena S.A.                   | Frutales     |
+    | Dardena S.A.                   | Ornamentales |
+    | Jardin de Flores               | Frutales     |
+    | Jardin de Flores               | Ornamentales |
+    | Jardin de Flores               | Aromáticas   |
+    | Jardin de Flores               | Herramientas |
+    | Flores Marivi                  | Ornamentales |
+    | Flores Marivi                  | Frutales     |
+    | Flores Marivi                  | Aromáticas   |
+    | Flores Marivi                  | Herramientas |
+    | Golf S.A.                      | Herramientas |
+    | Golf S.A.                      | Aromáticas   |
+    | Sotogrande                     | Aromáticas   |
+    | Sotogrande                     | Frutales     |
+    | Jardines y Mansiones Cactus SL | Frutales     |
+    | Jardines y Mansiones Cactus SL | Ornamentales |
+    | Jardinerías Matías SL          | Aromáticas   |
+    | Jardinerías Matías SL          | Frutales     |
+    | Jardinerías Matías SL          | Herramientas |
+    | Agrojardin                     | Ornamentales |
+    | Agrojardin                     | Frutales     |
+    | Jardineria Sara                | Frutales     |
+    | Jardineria Sara                | Ornamentales |
+    | Jardineria Sara                | Aromáticas   |
+    | Jardineria Sara                | Herramientas |
+    | Tutifruti S.A                  | Frutales     |
+    | Tutifruti S.A                  | Ornamentales |
+    | Flores S.L.                    | Frutales     |
+    | El Jardin Viviente S.L         | Frutales     |
+    | El Jardin Viviente S.L         | Ornamentales |
+    | El Jardin Viviente S.L         | Aromáticas   |
+    | El Jardin Viviente S.L         | Herramientas |
+    +--------------------------------+--------------+
+    ```
 
    
 
@@ -2519,433 +2520,451 @@ VALUES
 
 2. Devuelve un listado que muestre solamente los clientes que no han realizado ningún pedido.
 
-  ```sql
-  SELECT c.nombre_cliente
-  FROM cliente AS c
-  LEFT JOIN pedido AS p
-  ON c.codigo_cliente = p.codigo_cliente
-  WHERE p.codigo_cliente IS NULL;
-  
-  +-----------------------------+
-  | nombre_cliente              |
-  +-----------------------------+
-  | Lasas S.A.                  |
-  | Club Golf Puerta del hierro |
-  | DaraDistribuciones          |
-  | Madrileña de riegos         |
-  | Lasas S.A.                  |
-  | Flowers, S.A                |
-  | Naturajardin                |
-  | Americh Golf Management SL  |
-  | Aloha                       |
-  | El Prat                     |
-  | Vivero Humanes              |
-  | Fuenla City                 |
-  | Top Campo                   |
-  | Campohermoso                |
-  | france telecom              |
-  | Musée du Louvre             |
-  | The Magic Garden            |
-  +-----------------------------+
-  ```
+   ```sql
+   SELECT c.nombre_cliente
+   FROM cliente AS c
+   LEFT JOIN pedido AS p
+   ON c.codigo_cliente = p.codigo_cliente
+   WHERE p.codigo_cliente IS NULL;
+   
+   +-----------------------------+
+   | nombre_cliente              |
+   +-----------------------------+
+   | Lasas S.A.                  |
+   | Club Golf Puerta del hierro |
+   | DaraDistribuciones          |
+   | Madrileña de riegos         |
+   | Lasas S.A.                  |
+   | Flowers, S.A                |
+   | Naturajardin                |
+   | Americh Golf Management SL  |
+   | Aloha                       |
+   | El Prat                     |
+   | Vivero Humanes              |
+   | Fuenla City                 |
+   | Top Campo                   |
+   | Campohermoso                |
+   | france telecom              |
+   | Musée du Louvre             |
+   | The Magic Garden            |
+   +-----------------------------+
+   ```
+
+   
 
 
 3. Devuelve un listado que muestre los clientes que no han realizado ningún pago y los que no han realizado ningún pedido.
 
-  ```sql
-  SELECT c.nombre_cliente
-  FROM cliente AS c
-  LEFT JOIN pago AS pa
-  ON c.codigo_cliente = pa.codigo_cliente
-  LEFT JOIN pedido AS p
-  ON c.codigo_cliente = p.codigo_cliente
-  WHERE pa.codigo_cliente IS NULL AND p.codigo_cliente IS NULL;
-  
-  +-----------------------------+
-  | nombre_cliente              |
-  +-----------------------------+
-  | Lasas S.A.                  |
-  | Club Golf Puerta del hierro |
-  | DaraDistribuciones          |
-  | Madrileña de riegos         |
-  | Lasas S.A.                  |
-  | Flowers, S.A                |
-  | Naturajardin                |
-  | Americh Golf Management SL  |
-  | Aloha                       |
-  | El Prat                     |
-  | Vivero Humanes              |
-  | Fuenla City                 |
-  | Top Campo                   |
-  | Campohermoso                |
-  | france telecom              |
-  | Musée du Louvre             |
-  | The Magic Garden            |
-  +-----------------------------+
-  ```
+   ```sql
+   SELECT c.nombre_cliente
+   FROM cliente AS c
+   LEFT JOIN pago AS pa
+   ON c.codigo_cliente = pa.codigo_cliente
+   LEFT JOIN pedido AS p
+   ON c.codigo_cliente = p.codigo_cliente
+   WHERE pa.codigo_cliente IS NULL AND p.codigo_cliente IS NULL;
+   
+   +-----------------------------+
+   | nombre_cliente              |
+   +-----------------------------+
+   | Lasas S.A.                  |
+   | Club Golf Puerta del hierro |
+   | DaraDistribuciones          |
+   | Madrileña de riegos         |
+   | Lasas S.A.                  |
+   | Flowers, S.A                |
+   | Naturajardin                |
+   | Americh Golf Management SL  |
+   | Aloha                       |
+   | El Prat                     |
+   | Vivero Humanes              |
+   | Fuenla City                 |
+   | Top Campo                   |
+   | Campohermoso                |
+   | france telecom              |
+   | Musée du Louvre             |
+   | The Magic Garden            |
+   +-----------------------------+
+   ```
+
+   
 
 
 4. Devuelve un listado que muestre solamente los empleados que no tienen una oficina asociada.
 
-  ```sql
-  SELECT e.nombre
-  FROM empleado AS e
-  LEFT JOIN oficina AS o
-  ON e.codigo_oficina = o.codigo_oficina
-  WHERE o.codigo_oficina IS NULL;
-  
-  Empty set (0,00 sec)
-  ```
+   ```sql
+   SELECT e.nombre
+   FROM empleado AS e
+   LEFT JOIN oficina AS o
+   ON e.codigo_oficina = o.codigo_oficina
+   WHERE o.codigo_oficina IS NULL;
+   
+   Empty set (0,00 sec)
+   ```
+
+   
 
 
 5. Devuelve un listado que muestre solamente los empleados que no tienen un cliente asociado.
 
-  ```sql
-  SELECT e.nombre, e.apellido1
-  FROM empleado AS e
-  LEFT JOIN cliente AS c
-  ON e.codigo_empleado = c.codigo_empleado_rep_ventas
-  WHERE c.codigo_empleado_rep_ventas IS NULL;
-  
-  +-------------+------------+
-  | nombre      | apellido1  |
-  +-------------+------------+
-  | Marcos      | Magaña     |
-  | Ruben       | López      |
-  | Alberto     | Soria      |
-  | Maria       | Solís      |
-  | Juan Carlos | Ortiz      |
-  | Carlos      | Soria      |
-  | Hilario     | Rodriguez  |
-  | David       | Palma      |
-  | Oscar       | Palma      |
-  | Francois    | Fignon     |
-  | Laurent     | Serra      |
-  | Hilary      | Washington |
-  | Marcus      | Paxton     |
-  | Nei         | Nishikori  |
-  | Narumi      | Riko       |
-  | Takuma      | Nomura     |
-  | Amy         | Johnson    |
-  | Larry       | Westfalls  |
-  | John        | Walton     |
-  | Kevin       | Fallmer    |
-  +-------------+------------+
-  ```
+   ```sql
+   SELECT e.nombre, e.apellido1
+   FROM empleado AS e
+   LEFT JOIN cliente AS c
+   ON e.codigo_empleado = c.codigo_empleado_rep_ventas
+   WHERE c.codigo_empleado_rep_ventas IS NULL;
+   
+   +-------------+------------+
+   | nombre      | apellido1  |
+   +-------------+------------+
+   | Marcos      | Magaña     |
+   | Ruben       | López      |
+   | Alberto     | Soria      |
+   | Maria       | Solís      |
+   | Juan Carlos | Ortiz      |
+   | Carlos      | Soria      |
+   | Hilario     | Rodriguez  |
+   | David       | Palma      |
+   | Oscar       | Palma      |
+   | Francois    | Fignon     |
+   | Laurent     | Serra      |
+   | Hilary      | Washington |
+   | Marcus      | Paxton     |
+   | Nei         | Nishikori  |
+   | Narumi      | Riko       |
+   | Takuma      | Nomura     |
+   | Amy         | Johnson    |
+   | Larry       | Westfalls  |
+   | John        | Walton     |
+   | Kevin       | Fallmer    |
+   +-------------+------------+
+   ```
+
+   
 
 
 6. Devuelve un listado que muestre solamente los empleados que no tienen un cliente asociado junto con los datos de la oficina donde trabajan.
 
-  ```sql
-  SELECT e.nombre, e.apellido1, o.nombre_oficina
-  FROM empleado AS e
-  LEFT JOIN cliente AS c
-  ON e.codigo_empleado = c.codigo_empleado_rep_ventas
-  LEFT JOIN oficina AS o
-  ON e.codigo_oficina = o.codigo_oficina
-  WHERE c.codigo_empleado_rep_ventas IS NULL;
-  
-  +-------------+------------+--------------------+
-  | nombre      | apellido1  | nombre_oficina     |
-  +-------------+------------+--------------------+
-  | Marcos      | Magaña     | Talavera-España    |
-  | Ruben       | López      | Talavera-España    |
-  | Alberto     | Soria      | Talavera-España    |
-  | Maria       | Solís      | Talavera-España    |
-  | Juan Carlos | Ortiz      | Talavera-España    |
-  | Carlos      | Soria      | Madrid-España      |
-  | Hilario     | Rodriguez  | Madrid-España      |
-  | David       | Palma      | Barcelona-España   |
-  | Oscar       | Palma      | Barcelona-España   |
-  | Francois    | Fignon     | Paris-Francia      |
-  | Laurent     | Serra      | Paris-Francia      |
-  | Hilary      | Washington | Boston-EEUU        |
-  | Marcus      | Paxton     | Boston-EEUU        |
-  | Nei         | Nishikori  | Tokyo-Japón        |
-  | Narumi      | Riko       | Tokyo-Japón        |
-  | Takuma      | Nomura     | Tokyo-Japón        |
-  | Amy         | Johnson    | Londres-Inglaterra |
-  | Larry       | Westfalls  | Londres-Inglaterra |
-  | John        | Walton     | Londres-Inglaterra |
-  | Kevin       | Fallmer    | Sydney-Australia   |
-  +-------------+------------+--------------------+
-  ```
+   ```sql
+   SELECT e.nombre, e.apellido1, o.nombre_oficina
+   FROM empleado AS e
+   LEFT JOIN cliente AS c
+   ON e.codigo_empleado = c.codigo_empleado_rep_ventas
+   LEFT JOIN oficina AS o
+   ON e.codigo_oficina = o.codigo_oficina
+   WHERE c.codigo_empleado_rep_ventas IS NULL;
+   
+   +-------------+------------+--------------------+
+   | nombre      | apellido1  | nombre_oficina     |
+   +-------------+------------+--------------------+
+   | Marcos      | Magaña     | Talavera-España    |
+   | Ruben       | López      | Talavera-España    |
+   | Alberto     | Soria      | Talavera-España    |
+   | Maria       | Solís      | Talavera-España    |
+   | Juan Carlos | Ortiz      | Talavera-España    |
+   | Carlos      | Soria      | Madrid-España      |
+   | Hilario     | Rodriguez  | Madrid-España      |
+   | David       | Palma      | Barcelona-España   |
+   | Oscar       | Palma      | Barcelona-España   |
+   | Francois    | Fignon     | Paris-Francia      |
+   | Laurent     | Serra      | Paris-Francia      |
+   | Hilary      | Washington | Boston-EEUU        |
+   | Marcus      | Paxton     | Boston-EEUU        |
+   | Nei         | Nishikori  | Tokyo-Japón        |
+   | Narumi      | Riko       | Tokyo-Japón        |
+   | Takuma      | Nomura     | Tokyo-Japón        |
+   | Amy         | Johnson    | Londres-Inglaterra |
+   | Larry       | Westfalls  | Londres-Inglaterra |
+   | John        | Walton     | Londres-Inglaterra |
+   | Kevin       | Fallmer    | Sydney-Australia   |
+   +-------------+------------+--------------------+
+   ```
+
+   
 
 
 7. Devuelve un listado que muestre los empleados que no tienen una oficina asociada y los que no tienen un cliente asociado.
 
-  ```sql
-  SELECT e.nombre
-  FROM empleado AS e
-  LEFT JOIN oficina AS o
-  ON e.codigo_oficina = o.codigo_oficina
-  LEFT JOIN cliente AS c
-  ON e.codigo_empleado = c.codigo_empleado_rep_ventas
-  WHERE o.codigo_oficina IS NULL;
-  
-  Empty set (0,00 sec)
-  ```
+   ```sql
+   SELECT e.nombre
+   FROM empleado AS e
+   LEFT JOIN oficina AS o
+   ON e.codigo_oficina = o.codigo_oficina
+   LEFT JOIN cliente AS c
+   ON e.codigo_empleado = c.codigo_empleado_rep_ventas
+   WHERE o.codigo_oficina IS NULL;
+   
+   Empty set (0,00 sec)
+   ```
+
+   
 
 
 8. Devuelve un listado de los productos que nunca han aparecido en un pedido.
 
-  ```sql
-  SELECT DISTINCT(p.nombre)
-  FROM producto AS p
-  LEFT JOIN detalle_pedido AS dp
-  ON p.codigo_producto = dp.producto_codigo_producto
-  WHERE dp.producto_codigo_producto IS NULL;
-  
-  +-------------------------------------------------------------+
-  | nombre                                                      |
-  +-------------------------------------------------------------+
-  | Olea-Olivos                                                 |
-  | Calamondin Mini                                             |
-  | Camelia Blanco, Chrysler Rojo, Soraya Naranja,              |
-  | Landora Amarillo, Rose Gaujard bicolor blanco-rojo          |
-  | Kordes Perfect bicolor rojo-amarillo, Roundelay rojo fuerte |
-  | Albaricoquero Corbato                                       |
-  | Albaricoquero Moniqui                                       |
-  | Albaricoquero Kurrot                                        |
-  | Cerezo Burlat                                               |
-  | Cerezo Picota                                               |
-  | Ciruelo R. Claudia Verde                                    |
-  | Ciruelo Golden Japan                                        |
-  | Ciruelo Claudia Negra                                       |
-  | Higuera Verdal                                              |
-  | Higuera Breva                                               |
-  | Melocotonero Spring Crest                                   |
-  | Melocotonero Federica                                       |
-  | Parra Uva de Mesa                                           |
-  | Mandarino -Plantón joven                                    |
-  | Peral Castell                                               |
-  | Peral Williams                                              |
-  | Peral Conference                                            |
-  | Olivo Cipresino                                             |
-  | Albaricoquero                                               |
-  | Cerezo                                                      |
-  | Ciruelo                                                     |
-  | Granado                                                     |
-  | Higuera                                                     |
-  | Manzano                                                     |
-  | Melocotonero                                                |
-  | Membrillero                                                 |
-  | Arbustos Mix Maceta                                         |
-  | Mimosa Injerto CLASICA Dealbata                             |
-  | Mimosa Semilla Bayleyana                                    |
-  | Mimosa Semilla Espectabilis                                 |
-  | Mimosa Semilla Longifolia                                   |
-  | Mimosa Semilla Floribunda 4 estaciones                      |
-  | Abelia Floribunda                                           |
-  | Callistemom (Mix)                                           |
-  | Corylus Avellana "Contorta"                                 |
-  | Escallonia (Mix)                                            |
-  | Evonimus Emerald Gayeti                                     |
-  | Evonimus Pulchellus                                         |
-  | Hibiscus Syriacus  "Helene" -Blanco-C.rojo                  |
-  | Hibiscus Syriacus "Pink Giant" Rosa                         |
-  | Lonicera Nitida "Maigrum"                                   |
-  | Prunus pisardii                                             |
-  | Weigelia "Bristol Ruby"                                     |
-  | Leptospermum formado PIRAMIDE                               |
-  | Leptospermum COPA                                           |
-  | Nerium oleander-CALIDAD "GARDEN"                            |
-  | Nerium Oleander Arbusto GRANDE                              |
-  | Nerium oleander COPA  Calibre 6/8                           |
-  | ROSAL TREPADOR                                              |
-  | Solanum Jazminoide                                          |
-  | Wisteria Sinensis  azul, rosa, blanca                       |
-  | Wisteria Sinensis INJERTADAS DECÃ“                          |
-  | Bougamvillea Sanderiana Tutor                               |
-  | Bougamvillea Sanderiana Espaldera                           |
-  | Bougamvillea Sanderiana, 3 tut. piramide                    |
-  | Expositor Árboles clima mediterráneo                        |
-  | Expositor Árboles borde del mar                             |
-  | Brachychiton Acerifolius                                    |
-  | Cassia Corimbosa                                            |
-  | Cassia Corimbosa                                            |
-  | Chitalpa Summer Bells                                       |
-  | Erytrina Kafra                                              |
-  | Eucalyptus Citriodora                                       |
-  | Eucalyptus Ficifolia                                        |
-  | Hibiscus Syriacus  Var. Injertadas 1 Tallo                  |
-  | Lagunaria Patersonii                                        |
-  | Lagunaria Patersonii                                        |
-  | Morus Alba                                                  |
-  | Platanus Acerifolia                                         |
-  | Salix Babylonica  Pendula                                   |
-  | Tamarix  Ramosissima Pink Cascade                           |
-  | Tecoma Stands                                               |
-  | Tecoma Stands                                               |
-  | Tipuana Tipu                                                |
-  | Pleioblastus distichus-Bambú enano                          |
-  | Sasa palmata                                                |
-  | Phylostachys aurea                                          |
-  | Phylostachys Bambusa Spectabilis                            |
-  | Phylostachys biseti                                         |
-  | Pseudosasa japonica (Metake)                                |
-  | Pseudosasa japonica (Metake)                                |
-  | Cedrus Deodara "Feeling Blue" Novedad                       |
-  | Juniperus chinensis "Blue Alps"                             |
-  | Juniperus Chinensis Stricta                                 |
-  | Juniperus squamata "Blue Star"                              |
-  | Juniperus x media Phitzeriana verde                         |
-  | Bismarckia Nobilis                                          |
-  | Brahea Armata                                               |
-  | Brahea Edulis                                               |
-  | Butia Capitata                                              |
-  | Chamaerops Humilis                                          |
-  | Chamaerops Humilis "Cerifera"                               |
-  | Chrysalidocarpus Lutescens -ARECA                           |
-  | Cordyline Australis -DRACAENA                               |
-  | Cycas Revoluta                                              |
-  | Dracaena Drago                                              |
-  | Livistonia Decipiens                                        |
-  | Rhaphis Excelsa                                             |
-  | Sabal Minor                                                 |
-  | Trachycarpus Fortunei                                       |
-  | Washingtonia Robusta                                        |
-  | Zamia Furfuracaea                                           |
-  +-------------------------------------------------------------+
-  ```
+   ```sql
+   SELECT DISTINCT(p.nombre)
+   FROM producto AS p
+   LEFT JOIN detalle_pedido AS dp
+   ON p.codigo_producto = dp.producto_codigo_producto
+   WHERE dp.producto_codigo_producto IS NULL;
+   
+   +-------------------------------------------------------------+
+   | nombre                                                      |
+   +-------------------------------------------------------------+
+   | Olea-Olivos                                                 |
+   | Calamondin Mini                                             |
+   | Camelia Blanco, Chrysler Rojo, Soraya Naranja,              |
+   | Landora Amarillo, Rose Gaujard bicolor blanco-rojo          |
+   | Kordes Perfect bicolor rojo-amarillo, Roundelay rojo fuerte |
+   | Albaricoquero Corbato                                       |
+   | Albaricoquero Moniqui                                       |
+   | Albaricoquero Kurrot                                        |
+   | Cerezo Burlat                                               |
+   | Cerezo Picota                                               |
+   | Ciruelo R. Claudia Verde                                    |
+   | Ciruelo Golden Japan                                        |
+   | Ciruelo Claudia Negra                                       |
+   | Higuera Verdal                                              |
+   | Higuera Breva                                               |
+   | Melocotonero Spring Crest                                   |
+   | Melocotonero Federica                                       |
+   | Parra Uva de Mesa                                           |
+   | Mandarino -Plantón joven                                    |
+   | Peral Castell                                               |
+   | Peral Williams                                              |
+   | Peral Conference                                            |
+   | Olivo Cipresino                                             |
+   | Albaricoquero                                               |
+   | Cerezo                                                      |
+   | Ciruelo                                                     |
+   | Granado                                                     |
+   | Higuera                                                     |
+   | Manzano                                                     |
+   | Melocotonero                                                |
+   | Membrillero                                                 |
+   | Arbustos Mix Maceta                                         |
+   | Mimosa Injerto CLASICA Dealbata                             |
+   | Mimosa Semilla Bayleyana                                    |
+   | Mimosa Semilla Espectabilis                                 |
+   | Mimosa Semilla Longifolia                                   |
+   | Mimosa Semilla Floribunda 4 estaciones                      |
+   | Abelia Floribunda                                           |
+   | Callistemom (Mix)                                           |
+   | Corylus Avellana "Contorta"                                 |
+   | Escallonia (Mix)                                            |
+   | Evonimus Emerald Gayeti                                     |
+   | Evonimus Pulchellus                                         |
+   | Hibiscus Syriacus  "Helene" -Blanco-C.rojo                  |
+   | Hibiscus Syriacus "Pink Giant" Rosa                         |
+   | Lonicera Nitida "Maigrum"                                   |
+   | Prunus pisardii                                             |
+   | Weigelia "Bristol Ruby"                                     |
+   | Leptospermum formado PIRAMIDE                               |
+   | Leptospermum COPA                                           |
+   | Nerium oleander-CALIDAD "GARDEN"                            |
+   | Nerium Oleander Arbusto GRANDE                              |
+   | Nerium oleander COPA  Calibre 6/8                           |
+   | ROSAL TREPADOR                                              |
+   | Solanum Jazminoide                                          |
+   | Wisteria Sinensis  azul, rosa, blanca                       |
+   | Wisteria Sinensis INJERTADAS DECÃ“                          |
+   | Bougamvillea Sanderiana Tutor                               |
+   | Bougamvillea Sanderiana Espaldera                           |
+   | Bougamvillea Sanderiana, 3 tut. piramide                    |
+   | Expositor Árboles clima mediterráneo                        |
+   | Expositor Árboles borde del mar                             |
+   | Brachychiton Acerifolius                                    |
+   | Cassia Corimbosa                                            |
+   | Cassia Corimbosa                                            |
+   | Chitalpa Summer Bells                                       |
+   | Erytrina Kafra                                              |
+   | Eucalyptus Citriodora                                       |
+   | Eucalyptus Ficifolia                                        |
+   | Hibiscus Syriacus  Var. Injertadas 1 Tallo                  |
+   | Lagunaria Patersonii                                        |
+   | Lagunaria Patersonii                                        |
+   | Morus Alba                                                  |
+   | Platanus Acerifolia                                         |
+   | Salix Babylonica  Pendula                                   |
+   | Tamarix  Ramosissima Pink Cascade                           |
+   | Tecoma Stands                                               |
+   | Tecoma Stands                                               |
+   | Tipuana Tipu                                                |
+   | Pleioblastus distichus-Bambú enano                          |
+   | Sasa palmata                                                |
+   | Phylostachys aurea                                          |
+   | Phylostachys Bambusa Spectabilis                            |
+   | Phylostachys biseti                                         |
+   | Pseudosasa japonica (Metake)                                |
+   | Pseudosasa japonica (Metake)                                |
+   | Cedrus Deodara "Feeling Blue" Novedad                       |
+   | Juniperus chinensis "Blue Alps"                             |
+   | Juniperus Chinensis Stricta                                 |
+   | Juniperus squamata "Blue Star"                              |
+   | Juniperus x media Phitzeriana verde                         |
+   | Bismarckia Nobilis                                          |
+   | Brahea Armata                                               |
+   | Brahea Edulis                                               |
+   | Butia Capitata                                              |
+   | Chamaerops Humilis                                          |
+   | Chamaerops Humilis "Cerifera"                               |
+   | Chrysalidocarpus Lutescens -ARECA                           |
+   | Cordyline Australis -DRACAENA                               |
+   | Cycas Revoluta                                              |
+   | Dracaena Drago                                              |
+   | Livistonia Decipiens                                        |
+   | Rhaphis Excelsa                                             |
+   | Sabal Minor                                                 |
+   | Trachycarpus Fortunei                                       |
+   | Washingtonia Robusta                                        |
+   | Zamia Furfuracaea                                           |
+   +-------------------------------------------------------------+
+   ```
+
+   
 
 9. Devuelve un listado de los productos que nunca han aparecido en un pedido. El resultado debe mostrar el nombre, la descripción y la imagen del producto.
 
-  ```sql
-  SELECT DISTINCT(p.nombre), p.descripcion, gp.imagen
-  FROM detalle_pedido AS dp
-  RIGHT JOIN producto AS p
-  ON dp.producto_codigo_producto = p.codigo_producto
-  RIGHT JOIN gama_producto AS gp
-  ON p.gama = gp.gama
-  WHERE dp.producto_codigo_producto IS NULL;
-  
-  +-------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+
-  | nombre                                                      | descripcion                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | imagen |
-  +-------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+
-  | Olea-Olivos                                                 | Existen dos hipótesis sobre el origen del olivo, una que postula que proviene de las costas de Siria, Líbano e Israel y otra que considera que lo considera originario de Asia menor. La llegada a Europa probablemente tuvo lugar de mano de los Fenicios, en transito por Chipre, Creta, e Islas del Mar Egeo, pasando a Grecia y más tarde a Italia. Los primeros indicios de la presencia del olivo en las costas mediterráneas españolas coinciden con el dominio romano, aunque fueron posteriormente los árabes los que impulsaron su cultivo en Andalucía, convirtiendo a España en el primer país productor de aceite de oliva a nivel mundial.                                                                                           | NULL   |
-  | Calamondin Mini                                             | Se trata de un pequeño arbolito de copa densa, con tendencia a la verticalidad, inerme o con cortas espinas. Sus hojas son pequeñas, elípticas de 5-10 cm de longitud, con los pecíolos estrechamente alados.Posee 1 o 2 flores en situación axilar, al final de las ramillas.Sus frutos son muy pequeños (3-3,5 cm de diámetro), con pocas semillas, esféricos u ovales, con la zona apical aplanada; corteza de color naranja-rojizo, muy fina y fácilmente separable de la pulpa, que es dulce, ácida y comestible..                                                                                                                                                                                                                            | NULL   |
-  | Camelia Blanco, Chrysler Rojo, Soraya Naranja,              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Landora Amarillo, Rose Gaujard bicolor blanco-rojo          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Kordes Perfect bicolor rojo-amarillo, Roundelay rojo fuerte |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Albaricoquero Corbato                                       | árbol que puede pasar de los 6 m de altura, en la región mediterránea con ramas formando una copa redondeada. La corteza del tronco es pardo-violácea, agrietada; las ramas son rojizas y extendidas cuando jóvenes y las ramas secundarias son cortas, divergentes y escasas. Las yemas latentes son frecuentes especialmente sobre las ramas viejas.                                                                                                                                                                                                                                                                                                                                                                                             | NULL   |
-  | Albaricoquero Moniqui                                       | árbol que puede pasar de los 6 m de altura, en la región mediterránea con ramas formando una copa redondeada. La corteza del tronco es pardo-violácea, agrietada; las ramas son rojizas y extendidas cuando jóvenes y las ramas secundarias son cortas, divergentes y escasas. Las yemas latentes son frecuentes especialmente sobre las ramas viejas.                                                                                                                                                                                                                                                                                                                                                                                             | NULL   |
-  | Albaricoquero Kurrot                                        | árbol que puede pasar de los 6 m de altura, en la región mediterránea con ramas formando una copa redondeada. La corteza del tronco es pardo-violácea, agrietada; las ramas son rojizas y extendidas cuando jóvenes y las ramas secundarias son cortas, divergentes y escasas. Las yemas latentes son frecuentes especialmente sobre las ramas viejas.                                                                                                                                                                                                                                                                                                                                                                                             | NULL   |
-  | Cerezo Burlat                                               | Las principales especies de cerezo cultivadas en el mundo son el cerezo dulce (Prunus avium), el guindo (P. cerasus) y el cerezo "Duke", híbrido de los anteriores. Ambas especies son naturales del sureste de Europa y oeste de Asia. El cerezo dulce tuvo su origen probablemente en el mar Negro y en el mar Caspio, difundiéndose después hacia Europa y Asia, llevado por los pájaros y las migraciones humanas. Fue uno de los frutales más apreciados por los griegos y con el Imperio Romano se extendió a regiones muy diversas. En la actualidad, el cerezo se encuentra difundido por numerosas regiones y países del mundo con clima templado                                                                                         | NULL   |
-  | Cerezo Picota                                               | Las principales especies de cerezo cultivadas en el mundo son el cerezo dulce (Prunus avium), el guindo (P. cerasus) y el cerezo "Duke", híbrido de los anteriores. Ambas especies son naturales del sureste de Europa y oeste de Asia. El cerezo dulce tuvo su origen probablemente en el mar Negro y en el mar Caspio, difundiéndose después hacia Europa y Asia, llevado por los pájaros y las migraciones humanas. Fue uno de los frutales más apreciados por los griegos y con el Imperio Romano se extendió a regiones muy diversas. En la actualidad, el cerezo se encuentra difundido por numerosas regiones y países del mundo con clima templado                                                                                         | NULL   |
-  | Ciruelo R. Claudia Verde                                    | árbol de tamaño mediano que alcanza una altura máxima de 5-6 m. Tronco de corteza pardo-azulada, brillante, lisa o agrietada longitudinalmente. Produce ramas alternas, pequeñas, delgadas, unas veces lisas, glabras y otras pubescentes y vellosas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | NULL   |
-  | Ciruelo Golden Japan                                        | árbol de tamaño mediano que alcanza una altura máxima de 5-6 m. Tronco de corteza pardo-azulada, brillante, lisa o agrietada longitudinalmente. Produce ramas alternas, pequeñas, delgadas, unas veces lisas, glabras y otras pubescentes y vellosas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | NULL   |
-  | Ciruelo Claudia Negra                                       | árbol de tamaño mediano que alcanza una altura máxima de 5-6 m. Tronco de corteza pardo-azulada, brillante, lisa o agrietada longitudinalmente. Produce ramas alternas, pequeñas, delgadas, unas veces lisas, glabras y otras pubescentes y vellosas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | NULL   |
-  | Higuera Verdal                                              | La higuera (Ficus carica L.) es un árbol típico de secano en los países mediterráneos. Su rusticidad y su fácil multiplicación hacen de la higuera un frutal muy apropiado para el cultivo extensivo.. Siempre ha sido considerado como árbol que no requiere cuidado alguno una vez plantado y arraigado, limitándose el hombre a recoger de él los frutos cuando maduran, unos para consumo en fresco y otros para conserva. Las únicas higueras con cuidados culturales esmerados, en muchas comarcas, son las brevales, por el interés económico de su primera cosecha, la de brevas.                                                                                                                                                          | NULL   |
-  | Higuera Breva                                               | La higuera (Ficus carica L.) es un árbol típico de secano en los países mediterráneos. Su rusticidad y su fácil multiplicación hacen de la higuera un frutal muy apropiado para el cultivo extensivo.. Siempre ha sido considerado como árbol que no requiere cuidado alguno una vez plantado y arraigado, limitándose el hombre a recoger de él los frutos cuando maduran, unos para consumo en fresco y otros para conserva. Las únicas higueras con cuidados culturales esmerados, en muchas comarcas, son las brevales, por el interés económico de su primera cosecha, la de brevas.                                                                                                                                                          | NULL   |
-  | Melocotonero Spring Crest                                   | Árbol caducifolio de porte bajo con corteza lisa, de color ceniciento. Sus hojas son alargadas con el margen ligeramente aserrado, de color verde brillante, algo más claras por el envés. El melocotonero está muy arraigado en la cultura asiática.
-  En Japón, el noble heroe Momotaro, una especie de Cid japonés, nació del interior de un enorme melocotón que flotaba río abajo.
-  En China se piensa que comer melocotón confiere longevidad al ser humano, ya que formaba parte de la dieta de sus dioses inmortales.                                                                                                                                                                                                                       | NULL   |
-  | Melocotonero Federica                                       | Árbol caducifolio de porte bajo con corteza lisa, de color ceniciento. Sus hojas son alargadas con el margen ligeramente aserrado, de color verde brillante, algo más claras por el envés. El melocotonero está muy arraigado en la cultura asiática.
-  En Japón, el noble heroe Momotaro, una especie de Cid japonés, nació del interior de un enorme melocotón que flotaba río abajo.
-  En China se piensa que comer melocotón confiere longevidad al ser humano, ya que formaba parte de la dieta de sus dioses inmortales.                                                                                                                                                                                                                       | NULL   |
-  | Parra Uva de Mesa                                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Mandarino -Plantón joven                                    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Peral Castell                                               | Árbol piramidal, redondeado en su juventud, luego oval, que llega hasta 20 metros de altura y por término medio vive 65 años.Tronco alto, grueso, de corteza agrietada, gris, de la cual se destacan con frecuencia placas lenticulares.Las ramas se insertan formando ángulo agudo con el tronco (45º), de corteza lisa, primero verde y luego gris-violácea, con numerosas lenticelas.                                                                                                                                                                                                                                                                                                                                                           | NULL   |
-  | Peral Williams                                              | Árbol piramidal, redondeado en su juventud, luego oval, que llega hasta 20 metros de altura y por término medio vive 65 años.Tronco alto, grueso, de corteza agrietada, gris, de la cual se destacan con frecuencia placas lenticulares.Las ramas se insertan formando ángulo agudo con el tronco (45º), de corteza lisa, primero verde y luego gris-violácea, con numerosas lenticelas.                                                                                                                                                                                                                                                                                                                                                           | NULL   |
-  | Peral Conference                                            | Árbol piramidal, redondeado en su juventud, luego oval, que llega hasta 20 metros de altura y por término medio vive 65 años.Tronco alto, grueso, de corteza agrietada, gris, de la cual se destacan con frecuencia placas lenticulares.Las ramas se insertan formando ángulo agudo con el tronco (45º), de corteza lisa, primero verde y luego gris-violácea, con numerosas lenticelas.                                                                                                                                                                                                                                                                                                                                                           | NULL   |
-  | Olivo Cipresino                                             | Existen dos hipótesis sobre el origen del olivo, una que postula que proviene de las costas de Siria, Líbano e Israel y otra que considera que lo considera originario de Asia menor. La llegada a Europa probablemente tuvo lugar de mano de los Fenicios, en transito por Chipre, Creta, e Islas del Mar Egeo, pasando a Grecia y más tarde a Italia. Los primeros indicios de la presencia del olivo en las costas mediterráneas españolas coinciden con el dominio romano, aunque fueron posteriormente los árabes los que impulsaron su cultivo en Andalucía, convirtiendo a España en el primer país productor de aceite de oliva a nivel mundial.                                                                                           | NULL   |
-  | Albaricoquero                                               | árbol que puede pasar de los 6 m de altura, en la región mediterránea con ramas formando una copa redondeada. La corteza del tronco es pardo-violácea, agrietada; las ramas son rojizas y extendidas cuando jóvenes y las ramas secundarias son cortas, divergentes y escasas. Las yemas latentes son frecuentes especialmente sobre las ramas viejas.                                                                                                                                                                                                                                                                                                                                                                                             | NULL   |
-  | Cerezo                                                      | Las principales especies de cerezo cultivadas en el mundo son el cerezo dulce (Prunus avium), el guindo (P. cerasus) y el cerezo "Duke", híbrido de los anteriores. Ambas especies son naturales del sureste de Europa y oeste de Asia. El cerezo dulce tuvo su origen probablemente en el mar Negro y en el mar Caspio, difundiéndose después hacia Europa y Asia, llevado por los pájaros y las migraciones humanas. Fue uno de los frutales más apreciados por los griegos y con el Imperio Romano se extendió a regiones muy diversas. En la actualidad, el cerezo se encuentra difundido por numerosas regiones y países del mundo con clima templado                                                                                         | NULL   |
-  | Ciruelo                                                     | árbol de tamaño mediano que alcanza una altura máxima de 5-6 m. Tronco de corteza pardo-azulada, brillante, lisa o agrietada longitudinalmente. Produce ramas alternas, pequeñas, delgadas, unas veces lisas, glabras y otras pubescentes y vellosas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | NULL   |
-  | Granado                                                     | pequeño árbol caducifolio, a veces con porte arbustivo, de 3 a 6 m de altura, con el tronco retorcido. Madera dura y corteza escamosa de color grisáceo. Las ramitas jóvenes son más o menos cuadrangulares o angostas y de cuatro alas, posteriormente se vuelven redondas con corteza de color café grisáceo, la mayoría de las ramas, pero especialmente las pequeñas ramitas axilares, son en forma de espina o terminan en una espina aguda; la copa es extendida.                                                                                                                                                                                                                                                                            | NULL   |
-  | Higuera                                                     | La higuera (Ficus carica L.) es un árbol típico de secano en los países mediterráneos. Su rusticidad y su fácil multiplicación hacen de la higuera un frutal muy apropiado para el cultivo extensivo.. Siempre ha sido considerado como árbol que no requiere cuidado alguno una vez plantado y arraigado, limitándose el hombre a recoger de él los frutos cuando maduran, unos para consumo en fresco y otros para conserva. Las únicas higueras con cuidados culturales esmerados, en muchas comarcas, son las brevales, por el interés económico de su primera cosecha, la de brevas.                                                                                                                                                          | NULL   |
-  | Manzano                                                     | alcanza como máximo 10 m. de altura y tiene una copa globosa. Tronco derecho que normalmente alcanza de 2 a 2,5 m. de altura, con corteza cubierta de lenticelas, lisa, adherida, de color ceniciento verdoso sobre los ramos y escamosa y gris parda sobre las partes viejas del árbol. Tiene una vida de unos 60-80 años. Las ramas se insertan en ángulo abierto sobre el tallo, de color verde oscuro, a veces tendiendo a negruzco o violáceo. Los brotes jóvenes terminan con frecuencia en una espina                                                                                                                                                                                                                                       | NULL   |
-  | Melocotonero                                                | Árbol caducifolio de porte bajo con corteza lisa, de color ceniciento. Sus hojas son alargadas con el margen ligeramente aserrado, de color verde brillante, algo más claras por el envés. El melocotonero está muy arraigado en la cultura asiática.
-  En Japón, el noble heroe Momotaro, una especie de Cid japonés, nació del interior de un enorme melocotón que flotaba río abajo.
-  En China se piensa que comer melocotón confiere longevidad al ser humano, ya que formaba parte de la dieta de sus dioses inmortales.                                                                                                                                                                                                                       | NULL   |
-  | Membrillero                                                 | arbolito caducifolio de 4-6 m de altura con el tronco tortuoso y la corteza lisa, grisácea, que se desprende en escamas con la edad. Copa irregular, con ramas inermes, flexuosas, parduzcas, punteadas. Ramillas jóvenes tomentosas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | NULL   |
-  | NULL                                                        | NULL                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | NULL   |
-  | Arbustos Mix Maceta                                         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Mimosa Injerto CLASICA Dealbata                             | Acacia dealbata. Nombre común o vulgar: Mimosa fina, Mimosa, Mimosa común, Mimosa plateada, Aromo francés. Familia: Mimosaceae. Origen: Australia, Sureste, (N. G. del Sur y Victoria). Arbol de follaje persistente muy usado en parques por su atractiva floración amarilla hacia fines del invierno. Altura: de 3 a 10 metros generalmente. Crecimiento rápido. Follaje perenne de tonos plateados, muy ornamental. Sus hojas son de textura fina, de color verde y sus flores amarillas que aparecen en racimos grandes. Florece de Enero a Marzo (Hemisferio Norte). Legumbre de 5-9 cm de longitud, recta o ligeramente curvada, con los bordes algo constreñidos entre las semillas, que se disponen en el fruto longitudinalmente...       | NULL   |
-  | Mimosa Semilla Bayleyana                                    | Acacia dealbata. Nombre común o vulgar: Mimosa fina, Mimosa, Mimosa común, Mimosa plateada, Aromo francés. Familia: Mimosaceae. Origen: Australia, Sureste, (N. G. del Sur y Victoria). Arbol de follaje persistente muy usado en parques por su atractiva floración amarilla hacia fines del invierno. Altura: de 3 a 10 metros generalmente. Crecimiento rápido. Follaje perenne de tonos plateados, muy ornamental. Sus hojas son de textura fina, de color verde y sus flores amarillas que aparecen en racimos grandes. Florece de Enero a Marzo (Hemisferio Norte). Legumbre de 5-9 cm de longitud, recta o ligeramente curvada, con los bordes algo constreñidos entre las semillas, que se disponen en el fruto longitudinalmente...       | NULL   |
-  | Mimosa Semilla Espectabilis                                 | Acacia dealbata. Nombre común o vulgar: Mimosa fina, Mimosa, Mimosa común, Mimosa plateada, Aromo francés. Familia: Mimosaceae. Origen: Australia, Sureste, (N. G. del Sur y Victoria). Arbol de follaje persistente muy usado en parques por su atractiva floración amarilla hacia fines del invierno. Altura: de 3 a 10 metros generalmente. Crecimiento rápido. Follaje perenne de tonos plateados, muy ornamental. Sus hojas son de textura fina, de color verde y sus flores amarillas que aparecen en racimos grandes. Florece de Enero a Marzo (Hemisferio Norte). Legumbre de 5-9 cm de longitud, recta o ligeramente curvada, con los bordes algo constreñidos entre las semillas, que se disponen en el fruto longitudinalmente...       | NULL   |
-  | Mimosa Semilla Longifolia                                   | Acacia dealbata. Nombre común o vulgar: Mimosa fina, Mimosa, Mimosa común, Mimosa plateada, Aromo francés. Familia: Mimosaceae. Origen: Australia, Sureste, (N. G. del Sur y Victoria). Arbol de follaje persistente muy usado en parques por su atractiva floración amarilla hacia fines del invierno. Altura: de 3 a 10 metros generalmente. Crecimiento rápido. Follaje perenne de tonos plateados, muy ornamental. Sus hojas son de textura fina, de color verde y sus flores amarillas que aparecen en racimos grandes. Florece de Enero a Marzo (Hemisferio Norte). Legumbre de 5-9 cm de longitud, recta o ligeramente curvada, con los bordes algo constreñidos entre las semillas, que se disponen en el fruto longitudinalmente...       | NULL   |
-  | Mimosa Semilla Floribunda 4 estaciones                      | Acacia dealbata. Nombre común o vulgar: Mimosa fina, Mimosa, Mimosa común, Mimosa plateada, Aromo francés. Familia: Mimosaceae. Origen: Australia, Sureste, (N. G. del Sur y Victoria). Arbol de follaje persistente muy usado en parques por su atractiva floración amarilla hacia fines del invierno. Altura: de 3 a 10 metros generalmente. Crecimiento rápido. Follaje perenne de tonos plateados, muy ornamental. Sus hojas son de textura fina, de color verde y sus flores amarillas que aparecen en racimos grandes. Florece de Enero a Marzo (Hemisferio Norte). Legumbre de 5-9 cm de longitud, recta o ligeramente curvada, con los bordes algo constreñidos entre las semillas, que se disponen en el fruto longitudinalmente...       | NULL   |
-  | Abelia Floribunda                                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Callistemom (Mix)                                           | Limpitatubos. arbolito de 6-7 m de altura. Ramas flexibles y colgantes (de ahí lo de "llorón")..                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | NULL   |
-  | Corylus Avellana "Contorta"                                 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Escallonia (Mix)                                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Evonimus Emerald Gayeti                                     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Evonimus Pulchellus                                         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Hibiscus Syriacus  "Helene" -Blanco-C.rojo                  | Por su capacidad de soportar podas, pueden ser fácilmente moldeadas como bonsái en el transcurso de pocos años. Flores de muchos colores según la variedad, desde el blanco puro al rojo intenso, del amarillo al anaranjado. La flor apenas dura 1 día, pero continuamente aparecen nuevas y la floración se prolonga durante todo el periodo de crecimiento vegetativo.                                                                                                                                                                                                                                                                                                                                                                          | NULL   |
-  | Hibiscus Syriacus "Pink Giant" Rosa                         | Por su capacidad de soportar podas, pueden ser fácilmente moldeadas como bonsái en el transcurso de pocos años. Flores de muchos colores según la variedad, desde el blanco puro al rojo intenso, del amarillo al anaranjado. La flor apenas dura 1 día, pero continuamente aparecen nuevas y la floración se prolonga durante todo el periodo de crecimiento vegetativo.                                                                                                                                                                                                                                                                                                                                                                          | NULL   |
-  | Lonicera Nitida "Maigrum"                                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Prunus pisardii                                             |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Weigelia "Bristol Ruby"                                     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Leptospermum formado PIRAMIDE                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Leptospermum COPA                                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Nerium oleander-CALIDAD "GARDEN"                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Nerium Oleander Arbusto GRANDE                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Nerium oleander COPA  Calibre 6/8                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | ROSAL TREPADOR                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Solanum Jazminoide                                          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Wisteria Sinensis  azul, rosa, blanca                       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Wisteria Sinensis INJERTADAS DECÃ“                          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Bougamvillea Sanderiana Tutor                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Bougamvillea Sanderiana Espaldera                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Bougamvillea Sanderiana, 3 tut. piramide                    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Expositor Árboles clima mediterráneo                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Expositor Árboles borde del mar                             |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Brachychiton Acerifolius                                    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Cassia Corimbosa                                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Cassia Corimbosa                                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Chitalpa Summer Bells                                       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Erytrina Kafra                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Eucalyptus Citriodora                                       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Eucalyptus Ficifolia                                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Hibiscus Syriacus  Var. Injertadas 1 Tallo                  |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Lagunaria Patersonii                                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Lagunaria Patersonii                                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Morus Alba                                                  |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Platanus Acerifolia                                         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Salix Babylonica  Pendula                                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Tamarix  Ramosissima Pink Cascade                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Tecoma Stands                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Tecoma Stands                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Tipuana Tipu                                                |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Pleioblastus distichus-Bambú enano                          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Sasa palmata                                                |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Phylostachys aurea                                          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Phylostachys Bambusa Spectabilis                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Phylostachys biseti                                         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Pseudosasa japonica (Metake)                                |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Pseudosasa japonica (Metake)                                |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Cedrus Deodara "Feeling Blue" Novedad                       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Juniperus chinensis "Blue Alps"                             |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Juniperus Chinensis Stricta                                 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Juniperus squamata "Blue Star"                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Juniperus x media Phitzeriana verde                         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Bismarckia Nobilis                                          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Brahea Armata                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Brahea Edulis                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Butia Capitata                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Chamaerops Humilis                                          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Chamaerops Humilis "Cerifera"                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Chrysalidocarpus Lutescens -ARECA                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Cordyline Australis -DRACAENA                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Cycas Revoluta                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Dracaena Drago                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Livistonia Decipiens                                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Rhaphis Excelsa                                             |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Sabal Minor                                                 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Trachycarpus Fortunei                                       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Washingtonia Robusta                                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  | Zamia Furfuracaea                                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
-  +-------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+
-  ```
+   ```sql
+   SELECT DISTINCT(p.nombre), p.descripcion, gp.imagen
+   FROM detalle_pedido AS dp
+   RIGHT JOIN producto AS p
+   ON dp.producto_codigo_producto = p.codigo_producto
+   RIGHT JOIN gama_producto AS gp
+   ON p.gama = gp.gama
+   WHERE dp.producto_codigo_producto IS NULL;
+   
+   +-------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+
+   | nombre                                                      | descripcion                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | imagen |
+   +-------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+
+   | Olea-Olivos                                                 | Existen dos hipótesis sobre el origen del olivo, una que postula que proviene de las costas de Siria, Líbano e Israel y otra que considera que lo considera originario de Asia menor. La llegada a Europa probablemente tuvo lugar de mano de los Fenicios, en transito por Chipre, Creta, e Islas del Mar Egeo, pasando a Grecia y más tarde a Italia. Los primeros indicios de la presencia del olivo en las costas mediterráneas españolas coinciden con el dominio romano, aunque fueron posteriormente los árabes los que impulsaron su cultivo en Andalucía, convirtiendo a España en el primer país productor de aceite de oliva a nivel mundial.                                                                                           | NULL   |
+   | Calamondin Mini                                             | Se trata de un pequeño arbolito de copa densa, con tendencia a la verticalidad, inerme o con cortas espinas. Sus hojas son pequeñas, elípticas de 5-10 cm de longitud, con los pecíolos estrechamente alados.Posee 1 o 2 flores en situación axilar, al final de las ramillas.Sus frutos son muy pequeños (3-3,5 cm de diámetro), con pocas semillas, esféricos u ovales, con la zona apical aplanada; corteza de color naranja-rojizo, muy fina y fácilmente separable de la pulpa, que es dulce, ácida y comestible..                                                                                                                                                                                                                            | NULL   |
+   | Camelia Blanco, Chrysler Rojo, Soraya Naranja,              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Landora Amarillo, Rose Gaujard bicolor blanco-rojo          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Kordes Perfect bicolor rojo-amarillo, Roundelay rojo fuerte |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Albaricoquero Corbato                                       | árbol que puede pasar de los 6 m de altura, en la región mediterránea con ramas formando una copa redondeada. La corteza del tronco es pardo-violácea, agrietada; las ramas son rojizas y extendidas cuando jóvenes y las ramas secundarias son cortas, divergentes y escasas. Las yemas latentes son frecuentes especialmente sobre las ramas viejas.                                                                                                                                                                                                                                                                                                                                                                                             | NULL   |
+   | Albaricoquero Moniqui                                       | árbol que puede pasar de los 6 m de altura, en la región mediterránea con ramas formando una copa redondeada. La corteza del tronco es pardo-violácea, agrietada; las ramas son rojizas y extendidas cuando jóvenes y las ramas secundarias son cortas, divergentes y escasas. Las yemas latentes son frecuentes especialmente sobre las ramas viejas.                                                                                                                                                                                                                                                                                                                                                                                             | NULL   |
+   | Albaricoquero Kurrot                                        | árbol que puede pasar de los 6 m de altura, en la región mediterránea con ramas formando una copa redondeada. La corteza del tronco es pardo-violácea, agrietada; las ramas son rojizas y extendidas cuando jóvenes y las ramas secundarias son cortas, divergentes y escasas. Las yemas latentes son frecuentes especialmente sobre las ramas viejas.                                                                                                                                                                                                                                                                                                                                                                                             | NULL   |
+   | Cerezo Burlat                                               | Las principales especies de cerezo cultivadas en el mundo son el cerezo dulce (Prunus avium), el guindo (P. cerasus) y el cerezo "Duke", híbrido de los anteriores. Ambas especies son naturales del sureste de Europa y oeste de Asia. El cerezo dulce tuvo su origen probablemente en el mar Negro y en el mar Caspio, difundiéndose después hacia Europa y Asia, llevado por los pájaros y las migraciones humanas. Fue uno de los frutales más apreciados por los griegos y con el Imperio Romano se extendió a regiones muy diversas. En la actualidad, el cerezo se encuentra difundido por numerosas regiones y países del mundo con clima templado                                                                                         | NULL   |
+   | Cerezo Picota                                               | Las principales especies de cerezo cultivadas en el mundo son el cerezo dulce (Prunus avium), el guindo (P. cerasus) y el cerezo "Duke", híbrido de los anteriores. Ambas especies son naturales del sureste de Europa y oeste de Asia. El cerezo dulce tuvo su origen probablemente en el mar Negro y en el mar Caspio, difundiéndose después hacia Europa y Asia, llevado por los pájaros y las migraciones humanas. Fue uno de los frutales más apreciados por los griegos y con el Imperio Romano se extendió a regiones muy diversas. En la actualidad, el cerezo se encuentra difundido por numerosas regiones y países del mundo con clima templado                                                                                         | NULL   |
+   | Ciruelo R. Claudia Verde                                    | árbol de tamaño mediano que alcanza una altura máxima de 5-6 m. Tronco de corteza pardo-azulada, brillante, lisa o agrietada longitudinalmente. Produce ramas alternas, pequeñas, delgadas, unas veces lisas, glabras y otras pubescentes y vellosas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | NULL   |
+   | Ciruelo Golden Japan                                        | árbol de tamaño mediano que alcanza una altura máxima de 5-6 m. Tronco de corteza pardo-azulada, brillante, lisa o agrietada longitudinalmente. Produce ramas alternas, pequeñas, delgadas, unas veces lisas, glabras y otras pubescentes y vellosas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | NULL   |
+   | Ciruelo Claudia Negra                                       | árbol de tamaño mediano que alcanza una altura máxima de 5-6 m. Tronco de corteza pardo-azulada, brillante, lisa o agrietada longitudinalmente. Produce ramas alternas, pequeñas, delgadas, unas veces lisas, glabras y otras pubescentes y vellosas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | NULL   |
+   | Higuera Verdal                                              | La higuera (Ficus carica L.) es un árbol típico de secano en los países mediterráneos. Su rusticidad y su fácil multiplicación hacen de la higuera un frutal muy apropiado para el cultivo extensivo.. Siempre ha sido considerado como árbol que no requiere cuidado alguno una vez plantado y arraigado, limitándose el hombre a recoger de él los frutos cuando maduran, unos para consumo en fresco y otros para conserva. Las únicas higueras con cuidados culturales esmerados, en muchas comarcas, son las brevales, por el interés económico de su primera cosecha, la de brevas.                                                                                                                                                          | NULL   |
+   | Higuera Breva                                               | La higuera (Ficus carica L.) es un árbol típico de secano en los países mediterráneos. Su rusticidad y su fácil multiplicación hacen de la higuera un frutal muy apropiado para el cultivo extensivo.. Siempre ha sido considerado como árbol que no requiere cuidado alguno una vez plantado y arraigado, limitándose el hombre a recoger de él los frutos cuando maduran, unos para consumo en fresco y otros para conserva. Las únicas higueras con cuidados culturales esmerados, en muchas comarcas, son las brevales, por el interés económico de su primera cosecha, la de brevas.                                                                                                                                                          | NULL   |
+   | Melocotonero Spring Crest                                   | Árbol caducifolio de porte bajo con corteza lisa, de color ceniciento. Sus hojas son alargadas con el margen ligeramente aserrado, de color verde brillante, algo más claras por el envés. El melocotonero está muy arraigado en la cultura asiática.
+   En Japón, el noble heroe Momotaro, una especie de Cid japonés, nació del interior de un enorme melocotón que flotaba río abajo.
+   En China se piensa que comer melocotón confiere longevidad al ser humano, ya que formaba parte de la dieta de sus dioses inmortales.                                                                                                                                                                                                                       | NULL   |
+   | Melocotonero Federica                                       | Árbol caducifolio de porte bajo con corteza lisa, de color ceniciento. Sus hojas son alargadas con el margen ligeramente aserrado, de color verde brillante, algo más claras por el envés. El melocotonero está muy arraigado en la cultura asiática.
+   En Japón, el noble heroe Momotaro, una especie de Cid japonés, nació del interior de un enorme melocotón que flotaba río abajo.
+   En China se piensa que comer melocotón confiere longevidad al ser humano, ya que formaba parte de la dieta de sus dioses inmortales.                                                                                                                                                                                                                       | NULL   |
+   | Parra Uva de Mesa                                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Mandarino -Plantón joven                                    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Peral Castell                                               | Árbol piramidal, redondeado en su juventud, luego oval, que llega hasta 20 metros de altura y por término medio vive 65 años.Tronco alto, grueso, de corteza agrietada, gris, de la cual se destacan con frecuencia placas lenticulares.Las ramas se insertan formando ángulo agudo con el tronco (45º), de corteza lisa, primero verde y luego gris-violácea, con numerosas lenticelas.                                                                                                                                                                                                                                                                                                                                                           | NULL   |
+   | Peral Williams                                              | Árbol piramidal, redondeado en su juventud, luego oval, que llega hasta 20 metros de altura y por término medio vive 65 años.Tronco alto, grueso, de corteza agrietada, gris, de la cual se destacan con frecuencia placas lenticulares.Las ramas se insertan formando ángulo agudo con el tronco (45º), de corteza lisa, primero verde y luego gris-violácea, con numerosas lenticelas.                                                                                                                                                                                                                                                                                                                                                           | NULL   |
+   | Peral Conference                                            | Árbol piramidal, redondeado en su juventud, luego oval, que llega hasta 20 metros de altura y por término medio vive 65 años.Tronco alto, grueso, de corteza agrietada, gris, de la cual se destacan con frecuencia placas lenticulares.Las ramas se insertan formando ángulo agudo con el tronco (45º), de corteza lisa, primero verde y luego gris-violácea, con numerosas lenticelas.                                                                                                                                                                                                                                                                                                                                                           | NULL   |
+   | Olivo Cipresino                                             | Existen dos hipótesis sobre el origen del olivo, una que postula que proviene de las costas de Siria, Líbano e Israel y otra que considera que lo considera originario de Asia menor. La llegada a Europa probablemente tuvo lugar de mano de los Fenicios, en transito por Chipre, Creta, e Islas del Mar Egeo, pasando a Grecia y más tarde a Italia. Los primeros indicios de la presencia del olivo en las costas mediterráneas españolas coinciden con el dominio romano, aunque fueron posteriormente los árabes los que impulsaron su cultivo en Andalucía, convirtiendo a España en el primer país productor de aceite de oliva a nivel mundial.                                                                                           | NULL   |
+   | Albaricoquero                                               | árbol que puede pasar de los 6 m de altura, en la región mediterránea con ramas formando una copa redondeada. La corteza del tronco es pardo-violácea, agrietada; las ramas son rojizas y extendidas cuando jóvenes y las ramas secundarias son cortas, divergentes y escasas. Las yemas latentes son frecuentes especialmente sobre las ramas viejas.                                                                                                                                                                                                                                                                                                                                                                                             | NULL   |
+   | Cerezo                                                      | Las principales especies de cerezo cultivadas en el mundo son el cerezo dulce (Prunus avium), el guindo (P. cerasus) y el cerezo "Duke", híbrido de los anteriores. Ambas especies son naturales del sureste de Europa y oeste de Asia. El cerezo dulce tuvo su origen probablemente en el mar Negro y en el mar Caspio, difundiéndose después hacia Europa y Asia, llevado por los pájaros y las migraciones humanas. Fue uno de los frutales más apreciados por los griegos y con el Imperio Romano se extendió a regiones muy diversas. En la actualidad, el cerezo se encuentra difundido por numerosas regiones y países del mundo con clima templado                                                                                         | NULL   |
+   | Ciruelo                                                     | árbol de tamaño mediano que alcanza una altura máxima de 5-6 m. Tronco de corteza pardo-azulada, brillante, lisa o agrietada longitudinalmente. Produce ramas alternas, pequeñas, delgadas, unas veces lisas, glabras y otras pubescentes y vellosas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | NULL   |
+   | Granado                                                     | pequeño árbol caducifolio, a veces con porte arbustivo, de 3 a 6 m de altura, con el tronco retorcido. Madera dura y corteza escamosa de color grisáceo. Las ramitas jóvenes son más o menos cuadrangulares o angostas y de cuatro alas, posteriormente se vuelven redondas con corteza de color café grisáceo, la mayoría de las ramas, pero especialmente las pequeñas ramitas axilares, son en forma de espina o terminan en una espina aguda; la copa es extendida.                                                                                                                                                                                                                                                                            | NULL   |
+   | Higuera                                                     | La higuera (Ficus carica L.) es un árbol típico de secano en los países mediterráneos. Su rusticidad y su fácil multiplicación hacen de la higuera un frutal muy apropiado para el cultivo extensivo.. Siempre ha sido considerado como árbol que no requiere cuidado alguno una vez plantado y arraigado, limitándose el hombre a recoger de él los frutos cuando maduran, unos para consumo en fresco y otros para conserva. Las únicas higueras con cuidados culturales esmerados, en muchas comarcas, son las brevales, por el interés económico de su primera cosecha, la de brevas.                                                                                                                                                          | NULL   |
+   | Manzano                                                     | alcanza como máximo 10 m. de altura y tiene una copa globosa. Tronco derecho que normalmente alcanza de 2 a 2,5 m. de altura, con corteza cubierta de lenticelas, lisa, adherida, de color ceniciento verdoso sobre los ramos y escamosa y gris parda sobre las partes viejas del árbol. Tiene una vida de unos 60-80 años. Las ramas se insertan en ángulo abierto sobre el tallo, de color verde oscuro, a veces tendiendo a negruzco o violáceo. Los brotes jóvenes terminan con frecuencia en una espina                                                                                                                                                                                                                                       | NULL   |
+   | Melocotonero                                                | Árbol caducifolio de porte bajo con corteza lisa, de color ceniciento. Sus hojas son alargadas con el margen ligeramente aserrado, de color verde brillante, algo más claras por el envés. El melocotonero está muy arraigado en la cultura asiática.
+   En Japón, el noble heroe Momotaro, una especie de Cid japonés, nació del interior de un enorme melocotón que flotaba río abajo.
+   En China se piensa que comer melocotón confiere longevidad al ser humano, ya que formaba parte de la dieta de sus dioses inmortales.                                                                                                                                                                                                                       | NULL   |
+   | Membrillero                                                 | arbolito caducifolio de 4-6 m de altura con el tronco tortuoso y la corteza lisa, grisácea, que se desprende en escamas con la edad. Copa irregular, con ramas inermes, flexuosas, parduzcas, punteadas. Ramillas jóvenes tomentosas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | NULL   |
+   | NULL                                                        | NULL                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | NULL   |
+   | Arbustos Mix Maceta                                         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Mimosa Injerto CLASICA Dealbata                             | Acacia dealbata. Nombre común o vulgar: Mimosa fina, Mimosa, Mimosa común, Mimosa plateada, Aromo francés. Familia: Mimosaceae. Origen: Australia, Sureste, (N. G. del Sur y Victoria). Arbol de follaje persistente muy usado en parques por su atractiva floración amarilla hacia fines del invierno. Altura: de 3 a 10 metros generalmente. Crecimiento rápido. Follaje perenne de tonos plateados, muy ornamental. Sus hojas son de textura fina, de color verde y sus flores amarillas que aparecen en racimos grandes. Florece de Enero a Marzo (Hemisferio Norte). Legumbre de 5-9 cm de longitud, recta o ligeramente curvada, con los bordes algo constreñidos entre las semillas, que se disponen en el fruto longitudinalmente...       | NULL   |
+   | Mimosa Semilla Bayleyana                                    | Acacia dealbata. Nombre común o vulgar: Mimosa fina, Mimosa, Mimosa común, Mimosa plateada, Aromo francés. Familia: Mimosaceae. Origen: Australia, Sureste, (N. G. del Sur y Victoria). Arbol de follaje persistente muy usado en parques por su atractiva floración amarilla hacia fines del invierno. Altura: de 3 a 10 metros generalmente. Crecimiento rápido. Follaje perenne de tonos plateados, muy ornamental. Sus hojas son de textura fina, de color verde y sus flores amarillas que aparecen en racimos grandes. Florece de Enero a Marzo (Hemisferio Norte). Legumbre de 5-9 cm de longitud, recta o ligeramente curvada, con los bordes algo constreñidos entre las semillas, que se disponen en el fruto longitudinalmente...       | NULL   |
+   | Mimosa Semilla Espectabilis                                 | Acacia dealbata. Nombre común o vulgar: Mimosa fina, Mimosa, Mimosa común, Mimosa plateada, Aromo francés. Familia: Mimosaceae. Origen: Australia, Sureste, (N. G. del Sur y Victoria). Arbol de follaje persistente muy usado en parques por su atractiva floración amarilla hacia fines del invierno. Altura: de 3 a 10 metros generalmente. Crecimiento rápido. Follaje perenne de tonos plateados, muy ornamental. Sus hojas son de textura fina, de color verde y sus flores amarillas que aparecen en racimos grandes. Florece de Enero a Marzo (Hemisferio Norte). Legumbre de 5-9 cm de longitud, recta o ligeramente curvada, con los bordes algo constreñidos entre las semillas, que se disponen en el fruto longitudinalmente...       | NULL   |
+   | Mimosa Semilla Longifolia                                   | Acacia dealbata. Nombre común o vulgar: Mimosa fina, Mimosa, Mimosa común, Mimosa plateada, Aromo francés. Familia: Mimosaceae. Origen: Australia, Sureste, (N. G. del Sur y Victoria). Arbol de follaje persistente muy usado en parques por su atractiva floración amarilla hacia fines del invierno. Altura: de 3 a 10 metros generalmente. Crecimiento rápido. Follaje perenne de tonos plateados, muy ornamental. Sus hojas son de textura fina, de color verde y sus flores amarillas que aparecen en racimos grandes. Florece de Enero a Marzo (Hemisferio Norte). Legumbre de 5-9 cm de longitud, recta o ligeramente curvada, con los bordes algo constreñidos entre las semillas, que se disponen en el fruto longitudinalmente...       | NULL   |
+   | Mimosa Semilla Floribunda 4 estaciones                      | Acacia dealbata. Nombre común o vulgar: Mimosa fina, Mimosa, Mimosa común, Mimosa plateada, Aromo francés. Familia: Mimosaceae. Origen: Australia, Sureste, (N. G. del Sur y Victoria). Arbol de follaje persistente muy usado en parques por su atractiva floración amarilla hacia fines del invierno. Altura: de 3 a 10 metros generalmente. Crecimiento rápido. Follaje perenne de tonos plateados, muy ornamental. Sus hojas son de textura fina, de color verde y sus flores amarillas que aparecen en racimos grandes. Florece de Enero a Marzo (Hemisferio Norte). Legumbre de 5-9 cm de longitud, recta o ligeramente curvada, con los bordes algo constreñidos entre las semillas, que se disponen en el fruto longitudinalmente...       | NULL   |
+   | Abelia Floribunda                                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Callistemom (Mix)                                           | Limpitatubos. arbolito de 6-7 m de altura. Ramas flexibles y colgantes (de ahí lo de "llorón")..                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | NULL   |
+   | Corylus Avellana "Contorta"                                 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Escallonia (Mix)                                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Evonimus Emerald Gayeti                                     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Evonimus Pulchellus                                         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Hibiscus Syriacus  "Helene" -Blanco-C.rojo                  | Por su capacidad de soportar podas, pueden ser fácilmente moldeadas como bonsái en el transcurso de pocos años. Flores de muchos colores según la variedad, desde el blanco puro al rojo intenso, del amarillo al anaranjado. La flor apenas dura 1 día, pero continuamente aparecen nuevas y la floración se prolonga durante todo el periodo de crecimiento vegetativo.                                                                                                                                                                                                                                                                                                                                                                          | NULL   |
+   | Hibiscus Syriacus "Pink Giant" Rosa                         | Por su capacidad de soportar podas, pueden ser fácilmente moldeadas como bonsái en el transcurso de pocos años. Flores de muchos colores según la variedad, desde el blanco puro al rojo intenso, del amarillo al anaranjado. La flor apenas dura 1 día, pero continuamente aparecen nuevas y la floración se prolonga durante todo el periodo de crecimiento vegetativo.                                                                                                                                                                                                                                                                                                                                                                          | NULL   |
+   | Lonicera Nitida "Maigrum"                                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Prunus pisardii                                             |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Weigelia "Bristol Ruby"                                     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Leptospermum formado PIRAMIDE                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Leptospermum COPA                                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Nerium oleander-CALIDAD "GARDEN"                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Nerium Oleander Arbusto GRANDE                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Nerium oleander COPA  Calibre 6/8                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | ROSAL TREPADOR                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Solanum Jazminoide                                          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Wisteria Sinensis  azul, rosa, blanca                       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Wisteria Sinensis INJERTADAS DECÃ“                          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Bougamvillea Sanderiana Tutor                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Bougamvillea Sanderiana Espaldera                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Bougamvillea Sanderiana, 3 tut. piramide                    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Expositor Árboles clima mediterráneo                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Expositor Árboles borde del mar                             |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Brachychiton Acerifolius                                    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Cassia Corimbosa                                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Cassia Corimbosa                                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Chitalpa Summer Bells                                       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Erytrina Kafra                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Eucalyptus Citriodora                                       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Eucalyptus Ficifolia                                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Hibiscus Syriacus  Var. Injertadas 1 Tallo                  |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Lagunaria Patersonii                                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Lagunaria Patersonii                                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Morus Alba                                                  |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Platanus Acerifolia                                         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Salix Babylonica  Pendula                                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Tamarix  Ramosissima Pink Cascade                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Tecoma Stands                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Tecoma Stands                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Tipuana Tipu                                                |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Pleioblastus distichus-Bambú enano                          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Sasa palmata                                                |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Phylostachys aurea                                          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Phylostachys Bambusa Spectabilis                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Phylostachys biseti                                         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Pseudosasa japonica (Metake)                                |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Pseudosasa japonica (Metake)                                |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Cedrus Deodara "Feeling Blue" Novedad                       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Juniperus chinensis "Blue Alps"                             |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Juniperus Chinensis Stricta                                 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Juniperus squamata "Blue Star"                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Juniperus x media Phitzeriana verde                         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Bismarckia Nobilis                                          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Brahea Armata                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Brahea Edulis                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Butia Capitata                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Chamaerops Humilis                                          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Chamaerops Humilis "Cerifera"                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Chrysalidocarpus Lutescens -ARECA                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Cordyline Australis -DRACAENA                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Cycas Revoluta                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Dracaena Drago                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Livistonia Decipiens                                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Rhaphis Excelsa                                             |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Sabal Minor                                                 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Trachycarpus Fortunei                                       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Washingtonia Robusta                                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   | Zamia Furfuracaea                                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | NULL   |
+   +-------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+
+   ```
+
+   
 
 
 10. Devuelve las oficinas donde no trabajan ninguno de los empleados que hayan sido los representantes de ventas de algún cliente que haya realizado la compra de algún producto de la gama Frutales.
 
     ```sql
-    
+    /* RESIGNACIÓN */
     ```
+
+    
 
 11. Devuelve un listado con los clientes que han realizado algún pedido pero no han realizado ningún pago.
 
@@ -2964,6 +2983,8 @@ VALUES
     | Flores S.L.    |
     +----------------+
     ```
+
+    
 
 12. Devuelve un listado con los datos de los empleados que no tienen clientes asociados y el nombre de su jefe asociado.
 
@@ -3009,7 +3030,14 @@ VALUES
 1. ¿Cuántos empleados hay en la compañía?
 
    ```sql
+   SELECT COUNT(e.codigo_empleado) AS numero_empleados
+   FROM empleado AS e;
    
+   +------------------+
+   | numero_empleados |
+   +------------------+
+   |               31 |
+   +------------------+
    ```
 
    
@@ -3017,65 +3045,222 @@ VALUES
 2. ¿Cuántos clientes tiene cada país?
 
    ```sql
+   SELECT p.nombre_pais, COUNT(c.codigo_cliente) AS numero_clientes
+   FROM cliente AS c
+   INNER JOIN direccion AS d
+   ON d.codigo_cliente = c.codigo_cliente
+   INNER JOIN ciudad AS ci
+   ON ci.codigo_ciudad = d.codigo_ciudad
+   INNER JOIN region AS r
+   ON r.codigo_region = ci.codigo_region
+   INNER JOIN pais AS p
+   ON p.codigo_pais = r.codigo_pais
+   GROUP BY p.nombre_pais;
    
+   +-------------+-----------------+
+   | nombre_pais | numero_clientes |
+   +-------------+-----------------+
+   | EEUU        |               4 |
+   | España      |              27 |
+   | Francia     |               2 |
+   | Australia   |               2 |
+   | Inglaterra  |               1 |
+   +-------------+-----------------+
    ```
+
+   
 
 3. ¿Cuál fue el pago medio en 2009?
 
    ```sql
+   SELECT AVG(p.total) AS pago_medio_2009
+   FROM pago AS p
+   WHERE YEAR(p.fecha_pago) = '2009';
    
+   +-----------------+
+   | pago_medio_2009 |
+   +-----------------+
+   |     4504.076923 |
+   +-----------------+
    ```
+
+   
 
 4. ¿Cuántos pedidos hay en cada estado? Ordena el resultado de forma descendente por el número de pedidos.
 
-  ```sql
-  
-  ```
+   ```sql
+   SELECT e.nombre_estado, COUNT(p.codigo_pedido) AS numero_pedidos
+   FROM estado AS e
+   INNER JOIN pedido AS p
+   ON e.codigo_estado = p.codigo_estado
+   GROUP BY e.nombre_estado
+   ORDER BY COUNT(p.codigo_pedido) DESC;
+   
+   +---------------+----------------+
+   | nombre_estado | numero_pedidos |
+   +---------------+----------------+
+   | Entregado     |             61 |
+   | Pendiente     |             30 |
+   | Rechazado     |             24 |
+   +---------------+----------------+
+   ```
+
+   
 
 
 5. Calcula el precio de venta del producto más caro y más barato en una misma consulta.
 
-  ```sql
-  
-  ```
+   ```sql
+   SELECT MAX(p.precio_venta) AS precio_mayor, MIN(p.precio_venta) AS precio_menor
+   FROM producto AS p;
+   
+   +--------------+--------------+
+   | precio_mayor | precio_menor |
+   +--------------+--------------+
+   |       462.00 |         1.00 |
+   +--------------+--------------+
+   ```
+
+   
 
 
 6. Calcula el número de clientes que tiene la empresa.
 
    ```sql
+   SELECT COUNT(c.codigo_cliente) AS numero_clientes
+   FROM cliente AS c;
    
+   +-----------------+
+   | numero_clientes |
+   +-----------------+
+   |              36 |
+   +-----------------+
    ```
+
+   
 
 7. ¿Cuántos clientes existen con domicilio en la ciudad de Madrid?
 
    ```sql
+   SELECT COUNT(c.codigo_cliente) AS clientes_madrid
+   FROM cliente AS c
+   INNER JOIN direccion AS d
+   ON d.codigo_cliente = c.codigo_cliente
+   INNER JOIN ciudad AS ci
+   ON ci.codigo_ciudad = d.codigo_ciudad
+   WHERE ci.nombre_ciudad = 'Madrid';
    
+   +-----------------+
+   | clientes_madrid |
+   +-----------------+
+   |              11 |
+   +-----------------+
    ```
+
+   
 
 8. ¿Calcula cuántos clientes tiene cada una de las ciudades que empiezan por M?
 
-  ```sql
-  
-  ```
+   ```sql
+   SELECT ci.nombre_ciudad, COUNT(c.codigo_cliente) AS numero_clientes
+   FROM cliente AS c
+   INNER JOIN direccion AS d
+   ON d.codigo_cliente = c.codigo_cliente
+   INNER JOIN ciudad AS ci
+   ON ci.codigo_ciudad = d.codigo_ciudad
+   WHERE ci.nombre_ciudad LIKE 'M%'
+   GROUP BY ci.nombre_ciudad;
+   
+   +----------------------+-----------------+
+   | nombre_ciudad        | numero_clientes |
+   +----------------------+-----------------+
+   | Miami                |               2 |
+   | Madrid               |              11 |
+   | Montornes del valles |               1 |
+   +----------------------+-----------------+
+   ```
+
+   
 
 
 9. Devuelve el nombre de los representantes de ventas y el número de clientes al que atiende cada uno.
 
-  ```sql
-  
-  ```
+   ```sql
+   SELECT e.nombre AS nombre_representante, e.apellido1 AS apellido_representante, COUNT(c.codigo_cliente) AS numero_clientes
+   FROM empleado AS e
+   INNER JOIN cliente AS c
+   ON c.codigo_empleado_rep_ventas = e.codigo_empleado
+   GROUP BY e.nombre, e.apellido1;
+   
+   +----------------------+------------------------+-----------------+
+   | nombre_representante | apellido_representante | numero_clientes |
+   +----------------------+------------------------+-----------------+
+   | Felipe               | Rosas                  |               5 |
+   | Mariano              | López                  |               4 |
+   | Lucio                | Campoamor              |               2 |
+   | Emmanuel             | Magaña                 |               5 |
+   | José Manuel          | Martinez               |               5 |
+   | Lionel               | Narvaez                |               2 |
+   | Michael              | Bolton                 |               2 |
+   | Walter Santiago      | Sanchez                |               2 |
+   | Lorena               | Paxton                 |               2 |
+   | Julian               | Bellinelli             |               5 |
+   | Mariko               | Kishi                  |               2 |
+   +----------------------+------------------------+-----------------+
+   ```
+
+   
 
 
 10. Calcula el número de clientes que no tiene asignado representante de ventas.
 
     ```sql
+    SELECT COUNT(c.codigo_cliente) AS clientes_sin_representante
+    FROM cliente AS c
+    WHERE c.codigo_empleado_rep_ventas IS NULL;
     
+    +----------------------------+
+    | clientes_sin_representante |
+    +----------------------------+
+    |                          0 |
+    +----------------------------+
     ```
+
+    
 
 11. Calcula la fecha del primer y último pago realizado por cada uno de los clientes. El listado deberá mostrar el nombre y los apellidos de cada cliente.
 
     ```sql
+    SELECT c.nombre_contacto, c.apellido_contacto, MIN(p.fecha_pago) AS primer_pago, MAX(p.fecha_pago) AS ultimo_pago
+    FROM contacto AS c
+    INNER JOIN cliente AS cl
+    ON cl.codigo_cliente = c.codigo_cliente
+    INNER JOIN pago AS p
+    ON p.codigo_cliente = cl.codigo_cliente
+    GROUP BY c.nombre_contacto, c.apellido_contacto;
     
+    +-----------------+-------------------+-------------+-------------+
+    | nombre_contacto | apellido_contacto | primer_pago | ultimo_pago |
+    +-----------------+-------------------+-------------+-------------+
+    | Daniel G        | GoldFish          | 2008-11-10  | 2008-12-10  |
+    | Anne            | Wright            | 2009-01-16  | 2009-02-19  |
+    | Link            | Flaute            | 2007-01-08  | 2007-01-08  |
+    | Akane           | Tendo             | 2006-01-18  | 2006-01-18  |
+    | Jose            | Bermejo           | 2009-01-13  | 2009-01-13  |
+    | Guillermo       | Rengifo           | 2009-01-06  | 2009-01-06  |
+    | Pedro           | Camunas           | 2008-08-04  | 2008-08-04  |
+    | Juan            | Rodriguez         | 2008-07-15  | 2008-07-15  |
+    | Javier          | Villar            | 2009-01-15  | 2009-02-15  |
+    | Maria           | Rodriguez         | 2009-02-16  | 2009-02-16  |
+    | Luis            | Martinez          | 2009-03-06  | 2009-03-06  |
+    | Maria           | Santillana        | 2009-03-26  | 2009-03-26  |
+    | Eva María       | Sánchez           | 2008-03-18  | 2008-03-18  |
+    | Matías          | San Martín        | 2009-02-08  | 2009-02-08  |
+    | Benito          | Lopez             | 2009-01-13  | 2009-01-13  |
+    | Sara            | Marquez           | 2009-01-16  | 2009-01-16  |
+    | Jacob           | Jones             | 2007-10-06  | 2007-10-06  |
+    | Justin          | Smith             | 2006-05-26  | 2006-05-26  |
+    +-----------------+-------------------+-------------+-------------+
     ```
 
     
@@ -3083,51 +3268,607 @@ VALUES
 12. Calcula el número de productos diferentes que hay en cada uno de los pedidos.
 
     ```sql
-    
+    /* RESIGNACIÓN */
+    SELECT DISTINCT(dp.pedido_codigo_pedido), COUNT(DISTINCT(p.codigo_producto)) AS cantidad_productos_dif
+    FROM producto AS p
+    INNER JOIN detalle_pedido AS dp
+    ON dp.producto_codigo_producto = p.codigo_producto
+    GROUP BY dp.pedido_codigo_pedido;
     ```
+
+    
 
 13. Calcula la suma de la cantidad total de todos los productos que aparecen en cada uno de los pedidos.
 
     ```sql
+    SELECT p.codigo_pedido, COUNT(dp.cantidad) AS total_productos
+    FROM detalle_pedido AS dp
+    INNER JOIN pedido AS p
+    ON p.codigo_pedido = dp.pedido_codigo_pedido
+    GROUP BY p.codigo_pedido;
     
+    +---------------+-----------------+
+    | codigo_pedido | total_productos |
+    +---------------+-----------------+
+    |             1 |               5 |
+    |             2 |               7 |
+    |             3 |               6 |
+    |             4 |               8 |
+    |             8 |               3 |
+    |             9 |               4 |
+    |            10 |               3 |
+    |            11 |               2 |
+    |            12 |               1 |
+    |            13 |               3 |
+    |            14 |               2 |
+    |            15 |               4 |
+    |            16 |               2 |
+    |            17 |               5 |
+    |            18 |               3 |
+    |            19 |               5 |
+    |            20 |               2 |
+    |            21 |               3 |
+    |            22 |               1 |
+    |            23 |               4 |
+    |            24 |               4 |
+    |            25 |               3 |
+    |            26 |               3 |
+    |            27 |               3 |
+    |            28 |               3 |
+    |            29 |               5 |
+    |            30 |               6 |
+    |            31 |               3 |
+    |            32 |               5 |
+    |            33 |               4 |
+    |            34 |               4 |
+    |            35 |               5 |
+    |            36 |               5 |
+    |            37 |               3 |
+    |            38 |               2 |
+    |            39 |               2 |
+    |            40 |               2 |
+    |            41 |               2 |
+    |            42 |               2 |
+    |            43 |               1 |
+    |            44 |               1 |
+    |            45 |               2 |
+    |            46 |               2 |
+    |            47 |               2 |
+    |            48 |               5 |
+    |            49 |               3 |
+    |            50 |               3 |
+    |            51 |               3 |
+    |            52 |               1 |
+    |            53 |               4 |
+    |            54 |               7 |
+    |            55 |               5 |
+    |            56 |               6 |
+    |            57 |               4 |
+    |            58 |               4 |
+    |            59 |               1 |
+    |            60 |               1 |
+    |            61 |               1 |
+    |            62 |               1 |
+    |            63 |               1 |
+    |            64 |               1 |
+    |            65 |               1 |
+    |            66 |               1 |
+    |            67 |               1 |
+    |            68 |               1 |
+    |            74 |               3 |
+    |            75 |               3 |
+    |            76 |               5 |
+    |            77 |               2 |
+    |            78 |               4 |
+    |            79 |               1 |
+    |            80 |               3 |
+    |            81 |               1 |
+    |            82 |               1 |
+    |            83 |               1 |
+    |            89 |               6 |
+    |            90 |               3 |
+    |            91 |               3 |
+    |            92 |               3 |
+    |            93 |               3 |
+    |            94 |               3 |
+    |            95 |               3 |
+    |            96 |               4 |
+    |            97 |               3 |
+    |            98 |               5 |
+    |            99 |               2 |
+    |           100 |               2 |
+    |           101 |               2 |
+    |           102 |               2 |
+    |           103 |               2 |
+    |           104 |               2 |
+    |           105 |               2 |
+    |           106 |               2 |
+    |           107 |               2 |
+    |           108 |               2 |
+    |           109 |               7 |
+    |           110 |               3 |
+    |           111 |               1 |
+    |           112 |               1 |
+    |           113 |               1 |
+    |           114 |               1 |
+    |           115 |               1 |
+    |           116 |               5 |
+    |           117 |               4 |
+    |           118 |               1 |
+    |           119 |               1 |
+    |           120 |               1 |
+    |           121 |               1 |
+    |           122 |               1 |
+    |           123 |               1 |
+    |           124 |               1 |
+    |           125 |               1 |
+    |           126 |               1 |
+    |           127 |               1 |
+    |           128 |               2 |
+    +---------------+-----------------+
     ```
+
+    
 
 14. Devuelve un listado de los 20 productos más vendidos y el número total de unidades que se han vendido de cada uno. El listado deberá estar ordenado por el número total de unidades vendidas.
 
     ```sql
+    SELECT p.nombre, COUNT(dp.cantidad) AS cantidad_vendida
+    FROM producto AS p
+    INNER JOIN detalle_pedido AS dp
+    ON dp.producto_codigo_producto = p.codigo_producto
+    GROUP BY p.nombre
+    ORDER BY COUNT(dp.cantidad) DESC
+    LIMIT 20;
     
+    +------------------------------+------------------+
+    | nombre                       | cantidad_vendida |
+    +------------------------------+------------------+
+    | Cerezo                       |               32 |
+    | Chamaerops Humilis           |               10 |
+    | Kaki                         |                8 |
+    | Azadón                       |                8 |
+    | Higuera                      |                8 |
+    | Sierra de Poda 400MM         |                7 |
+    | Limonero 30/40               |                7 |
+    | Peral                        |                7 |
+    | Rastrillo de Jardín          |                7 |
+    | Pala                         |                6 |
+    | Manzano                      |                6 |
+    | Trachycarpus Fortunei        |                6 |
+    | Thymus Vulgaris              |                6 |
+    | Acer Pseudoplatanus          |                6 |
+    | Tuja orientalis "Aurea nana" |                6 |
+    | Olea-Olivos                  |                5 |
+    | Phoenix Canariensis          |                5 |
+    | Nectarina                    |                5 |
+    | Melocotonero                 |                5 |
+    | Pitimini rojo                |                4 |
+    +------------------------------+------------------+
     ```
+
+    
 
 15. La facturación que ha tenido la empresa en toda la historia, indicando la base imponible, el IVA y el total facturado. La base imponible se calcula sumando el coste del producto por el número de unidades vendidas de la tabla detalle_pedido. El IVA es el 21 % de la base imponible, y el total la suma de los dos campos anteriores.
 
     ```sql
+    SELECT dp.pedido_codigo_pedido, SUM((p.precio_venta*dp.cantidad)) AS base_imponible, SUM(((p.precio_venta*dp.cantidad)*0.21)) AS IVA, SUM(((p.precio_venta*dp.cantidad)+((p.precio_venta*dp.cantidad)*0.21))) AS total
+    FROM detalle_pedido AS dp, producto AS p
+    WHERE dp.producto_codigo_producto = p.codigo_producto
+    GROUP BY dp.pedido_codigo_pedido;
     
+    +----------------------+----------------+------------+------------+
+    | pedido_codigo_pedido | base_imponible | IVA        | total      |
+    +----------------------+----------------+------------+------------+
+    |                    1 |        1687.00 |   354.2700 |  2041.2700 |
+    |                    2 |        7093.00 |  1489.5300 |  8582.5300 |
+    |                    3 |       10835.00 |  2275.3500 | 13110.3500 |
+    |                    4 |        3187.00 |   669.2700 |  3856.2700 |
+    |                    8 |        1065.00 |   223.6500 |  1288.6500 |
+    |                    9 |        2775.00 |   582.7500 |  3357.7500 |
+    |                   10 |        3070.00 |   644.7000 |  3714.7000 |
+    |                   11 |       37140.00 |  7799.4000 | 44939.4000 |
+    |                   12 |         290.00 |    60.9000 |   350.9000 |
+    |                   13 |         738.00 |   154.9800 |   892.9800 |
+    |                   14 |         829.00 |   174.0900 |  1003.0900 |
+    |                   15 |         214.00 |    44.9400 |   258.9400 |
+    |                   16 |         234.00 |    49.1400 |   283.1400 |
+    |                   17 |         375.00 |    78.7500 |   453.7500 |
+    |                   18 |         116.00 |    24.3600 |   140.3600 |
+    |                   19 |         333.00 |    69.9300 |   402.9300 |
+    |                   20 |         292.00 |    61.3200 |   353.3200 |
+    |                   21 |         182.00 |    38.2200 |   220.2200 |
+    |                   22 |           6.00 |     1.2600 |     7.2600 |
+    |                   23 |        1640.00 |   344.4000 |  1984.4000 |
+    |                   24 |         270.00 |    56.7000 |   326.7000 |
+    |                   25 |        1486.00 |   312.0600 |  1798.0600 |
+    |                   26 |         675.00 |   141.7500 |   816.7500 |
+    |                   27 |         504.00 |   105.8400 |   609.8400 |
+    |                   28 |        2060.00 |   432.6000 |  2492.6000 |
+    |                   29 |        1356.00 |   284.7600 |  1640.7600 |
+    |                   30 |         759.00 |   159.3900 |   918.3900 |
+    |                   31 |         217.00 |    45.5700 |   262.5700 |
+    |                   32 |        3024.00 |   635.0400 |  3659.0400 |
+    |                   33 |       73226.00 | 15377.4600 | 88603.4600 |
+    |                   34 |        1532.00 |   321.7200 |  1853.7200 |
+    |                   35 |        1718.00 |   360.7800 |  2078.7800 |
+    |                   36 |         324.00 |    68.0400 |   392.0400 |
+    |                   37 |        2487.00 |   522.2700 |  3009.2700 |
+    |                   38 |          98.00 |    20.5800 |   118.5800 |
+    |                   39 |         108.00 |    22.6800 |   130.6800 |
+    |                   40 |          12.00 |     2.5200 |    14.5200 |
+    |                   41 |          10.00 |     2.1000 |    12.1000 |
+    |                   42 |           4.00 |     0.8400 |     4.8400 |
+    |                   43 |           9.00 |     1.8900 |    10.8900 |
+    |                   44 |           5.00 |     1.0500 |     6.0500 |
+    |                   45 |          10.00 |     2.1000 |    12.1000 |
+    |                   46 |          84.00 |    17.6400 |   101.6400 |
+    |                   47 |         164.00 |    34.4400 |   198.4400 |
+    |                   48 |        6398.00 |  1343.5800 |  7741.5800 |
+    |                   49 |         625.00 |   131.2500 |   756.2500 |
+    |                   50 |        3506.00 |   736.2600 |  4242.2600 |
+    |                   51 |        7750.00 |  1627.5000 |  9377.5000 |
+    |                   52 |         700.00 |   147.0000 |   847.0000 |
+    |                   53 |         140.00 |    29.4000 |   169.4000 |
+    |                   54 |         714.00 |   149.9400 |   863.9400 |
+    |                   55 |        1569.00 |   329.4900 |  1898.4900 |
+    |                   56 |         372.00 |    78.1200 |   450.1200 |
+    |                   57 |         911.00 |   191.3100 |  1102.3100 |
+    |                   58 |        4202.00 |   882.4200 |  5084.4200 |
+    |                   59 |         700.00 |   147.0000 |   847.0000 |
+    |                   60 |         700.00 |   147.0000 |   847.0000 |
+    |                   61 |         700.00 |   147.0000 |   847.0000 |
+    |                   62 |         700.00 |   147.0000 |   847.0000 |
+    |                   63 |         700.00 |   147.0000 |   847.0000 |
+    |                   64 |         700.00 |   147.0000 |   847.0000 |
+    |                   65 |         700.00 |   147.0000 |   847.0000 |
+    |                   66 |         700.00 |   147.0000 |   847.0000 |
+    |                   67 |         700.00 |   147.0000 |   847.0000 |
+    |                   68 |         700.00 |   147.0000 |   847.0000 |
+    |                   74 |       22630.00 |  4752.3000 | 27382.3000 |
+    |                   75 |        1048.00 |   220.0800 |  1268.0800 |
+    |                   76 |        3028.00 |   635.8800 |  3663.8800 |
+    |                   77 |         588.00 |   123.4800 |   711.4800 |
+    |                   78 |        4660.00 |   978.6000 |  5638.6000 |
+    |                   79 |         300.00 |    63.0000 |   363.0000 |
+    |                   80 |        5773.00 |  1212.3300 |  6985.3300 |
+    |                   81 |         120.00 |    25.2000 |   145.2000 |
+    |                   82 |        2176.00 |   456.9600 |  2632.9600 |
+    |                   83 |         120.00 |    25.2000 |   145.2000 |
+    |                   89 |         710.00 |   149.1000 |   859.1000 |
+    |                   90 |          41.00 |     8.6100 |    49.6100 |
+    |                   91 |        1384.00 |   290.6400 |  1674.6400 |
+    |                   92 |        3014.00 |   632.9400 |  3646.9400 |
+    |                   93 |         882.00 |   185.2200 |  1067.2200 |
+    |                   94 |        5759.00 |  1209.3900 |  6968.3900 |
+    |                   95 |         605.00 |   127.0500 |   732.0500 |
+    |                   96 |         660.00 |   138.6000 |   798.6000 |
+    |                   97 |         322.00 |    67.6200 |   389.6200 |
+    |                   98 |        1024.00 |   215.0400 |  1239.0400 |
+    |                   99 |        2070.00 |   434.7000 |  2504.7000 |
+    |                  100 |        1720.00 |   361.2000 |  2081.2000 |
+    |                  101 |         209.00 |    43.8900 |   252.8900 |
+    |                  102 |         660.00 |   138.6000 |   798.6000 |
+    |                  103 |         304.00 |    63.8400 |   367.8400 |
+    |                  104 |        1760.00 |   369.6000 |  2129.6000 |
+    |                  105 |        1506.00 |   316.2600 |  1822.2600 |
+    |                  106 |        1077.00 |   226.1700 |  1303.1700 |
+    |                  107 |        3216.00 |   675.3600 |  3891.3600 |
+    |                  108 |         660.00 |   138.6000 |   798.6000 |
+    |                  109 |         553.00 |   116.1300 |   669.1300 |
+    |                  110 |         149.00 |    31.2900 |   180.2900 |
+    |                  111 |         700.00 |   147.0000 |   847.0000 |
+    |                  112 |         700.00 |   147.0000 |   847.0000 |
+    |                  113 |         700.00 |   147.0000 |   847.0000 |
+    |                  114 |         700.00 |   147.0000 |   847.0000 |
+    |                  115 |         700.00 |   147.0000 |   847.0000 |
+    |                  116 |         264.00 |    55.4400 |   319.4400 |
+    |                  117 |         154.00 |    32.3400 |   186.3400 |
+    |                  118 |         700.00 |   147.0000 |   847.0000 |
+    |                  119 |         700.00 |   147.0000 |   847.0000 |
+    |                  120 |         700.00 |   147.0000 |   847.0000 |
+    |                  121 |         700.00 |   147.0000 |   847.0000 |
+    |                  122 |         700.00 |   147.0000 |   847.0000 |
+    |                  123 |         700.00 |   147.0000 |   847.0000 |
+    |                  124 |         700.00 |   147.0000 |   847.0000 |
+    |                  125 |         700.00 |   147.0000 |   847.0000 |
+    |                  126 |         700.00 |   147.0000 |   847.0000 |
+    |                  127 |         700.00 |   147.0000 |   847.0000 |
+    |                  128 |          51.00 |    10.7100 |    61.7100 |
+    +----------------------+----------------+------------+------------+
     ```
+
+    
 
 16. La misma información que en la pregunta anterior, pero agrupada por código de producto.
 
     ```sql
+    SELECT dp.producto_codigo_producto, SUM((p.precio_venta*dp.cantidad)) AS base_imponible, SUM(((p.precio_venta*dp.cantidad)*0.21)) AS IVA, SUM(((p.precio_venta*dp.cantidad)+((p.precio_venta*dp.cantidad)*0.21))) AS total
+    FROM detalle_pedido AS dp, producto AS p
+    WHERE dp.producto_codigo_producto = p.codigo_producto
+    GROUP BY dp.producto_codigo_producto;
     
+    +--------------------------+----------------+------------+-------------+
+    | producto_codigo_producto | base_imponible | IVA        | total       |
+    +--------------------------+----------------+------------+-------------+
+    | FR-67                    |       19950.00 |  4189.5000 |  24139.5000 |
+    | OR-127                   |         280.00 |    58.8000 |    338.8000 |
+    | OR-141                   |         180.00 |    37.8000 |    217.8000 |
+    | OR-241                   |         475.00 |    99.7500 |    574.7500 |
+    | OR-99                    |         532.00 |   111.7200 |    643.7200 |
+    | FR-4                     |        2552.00 |   535.9200 |   3087.9200 |
+    | FR-40                    |         392.00 |    82.3200 |    474.3200 |
+    | OR-140                   |         200.00 |    42.0000 |    242.0000 |
+    | OR-159                   |         132.00 |    27.7200 |    159.7200 |
+    | OR-227                   |       15104.00 |  3171.8400 |  18275.8400 |
+    | OR-247                   |      128898.00 | 27068.5800 | 155966.5800 |
+    | FR-48                    |        1080.00 |   226.8000 |   1306.8000 |
+    | OR-122                   |         160.00 |    33.6000 |    193.6000 |
+    | OR-123                   |          70.00 |    14.7000 |     84.7000 |
+    | OR-213                   |        9310.00 |  1955.1000 |  11265.1000 |
+    | OR-217                   |         960.00 |   201.6000 |   1161.6000 |
+    | OR-218                   |         950.00 |   199.5000 |   1149.5000 |
+    | FR-31                    |          96.00 |    20.1600 |    116.1600 |
+    | FR-34                    |         336.00 |    70.5600 |    406.5600 |
+    | OR-152                   |          18.00 |     3.7800 |     21.7800 |
+    | OR-155                   |          24.00 |     5.0400 |     29.0400 |
+    | OR-156                   |         330.00 |    69.3000 |    399.3000 |
+    | OR-157                   |        2620.00 |   550.2000 |   3170.2000 |
+    | OR-222                   |        1827.00 |   383.6700 |   2210.6700 |
+    | FR-106                   |         913.00 |   191.7300 |   1104.7300 |
+    | FR-108                   |         576.00 |   120.9600 |    696.9600 |
+    | FR-11                    |       13100.00 |  2751.0000 |  15851.0000 |
+    | AR-001                   |         135.00 |    28.3500 |    163.3500 |
+    | AR-008                   |         455.00 |    95.5500 |    550.5500 |
+    | FR-69                    |        1911.00 |   401.3100 |   2312.3100 |
+    | FR-82                    |         980.00 |   205.8000 |   1185.8000 |
+    | FR-91                    |        2400.00 |   504.0000 |   2904.0000 |
+    | OR-234                   |        3520.00 |   739.2000 |   4259.2000 |
+    | AR-006                   |         291.00 |    61.1100 |    352.1100 |
+    | AR-009                   |         961.00 |   201.8100 |   1162.8100 |
+    | 11679                    |         630.00 |   132.3000 |    762.3000 |
+    | 21636                    |         560.00 |   117.6000 |    677.6000 |
+    | FR-100                   |        1254.00 |   263.3400 |   1517.3400 |
+    | FR-13                    |         741.00 |   155.6100 |    896.6100 |
+    | FR-84                    |         143.00 |    30.0300 |    173.0300 |
+    | OR-101                   |         144.00 |    30.2400 |    174.2400 |
+    | OR-203                   |         100.00 |    21.0000 |    121.0000 |
+    | 30310                    |        2640.00 |   554.4000 |   3194.4000 |
+    | FR-36                    |         621.00 |   130.4100 |    751.4100 |
+    | 22225                    |         984.00 |   206.6400 |   1190.6400 |
+    | FR-37                    |          45.00 |     9.4500 |     54.4500 |
+    | FR-64                    |         110.00 |    23.1000 |    133.1000 |
+    | OR-136                   |        2286.00 |   480.0600 |   2766.0600 |
+    | FR-22                    |          40.00 |     8.4000 |     48.4000 |
+    | FR-23                    |          64.00 |    13.4400 |     77.4400 |
+    | FR-75                    |         224.00 |    47.0400 |    271.0400 |
+    | OR-208                   |         884.00 |   185.6400 |   1069.6400 |
+    | FR-18                    |         108.00 |    22.6800 |    130.6800 |
+    | FR-53                    |         744.00 |   156.2400 |    900.2400 |
+    | OR-240                   |         468.00 |    98.2800 |    566.2800 |
+    | AR-002                   |         128.00 |    26.8800 |    154.8800 |
+    | FR-107                   |        1100.00 |   231.0000 |   1331.0000 |
+    | FR-85                    |        5320.00 |  1117.2000 |   6437.2000 |
+    | OR-249                   |         150.00 |    31.5000 |    181.5000 |
+    | FR-1                     |         168.00 |    35.2800 |    203.2800 |
+    | FR-77                    |        1050.00 |   220.5000 |   1270.5000 |
+    | FR-9                     |         232.00 |    48.7200 |    280.7200 |
+    | FR-94                    |        3552.00 |   745.9200 |   4297.9200 |
+    | FR-15                    |         225.00 |    47.2500 |    272.2500 |
+    | OR-188                   |         100.00 |    21.0000 |    121.0000 |
+    | OR-102                   |         522.00 |   109.6200 |    631.6200 |
+    | OR-186                   |         240.00 |    50.4000 |    290.4000 |
+    | OR-129                   |         330.00 |    69.3000 |    399.3000 |
+    | OR-160                   |         100.00 |    21.0000 |    121.0000 |
+    | AR-004                   |          30.00 |     6.3000 |     36.3000 |
+    | FR-12                    |         672.00 |   141.1200 |    813.1200 |
+    | FR-72                    |         128.00 |    26.8800 |    154.8800 |
+    | FR-89                    |         490.00 |   102.9000 |    592.9000 |
+    | OR-120                   |          25.00 |     5.2500 |     30.2500 |
+    | FR-102                   |         666.00 |   139.8600 |    805.8600 |
+    | OR-128                   |        2842.00 |   596.8200 |   3438.8200 |
+    | OR-193                   |         100.00 |    21.0000 |    121.0000 |
+    | FR-17                    |         846.00 |   177.6600 |   1023.6600 |
+    | FR-29                    |         960.00 |   201.6000 |   1161.6000 |
+    | OR-214                   |        2120.00 |   445.2000 |   2565.2000 |
+    | FR-3                     |         497.00 |   104.3700 |    601.3700 |
+    | FR-7                     |         348.00 |    73.0800 |    421.0800 |
+    | OR-172                   |        1602.00 |   336.4200 |   1938.4200 |
+    | OR-174                   |         432.00 |    90.7200 |    522.7200 |
+    | FR-47                    |         440.00 |    92.4000 |    532.4000 |
+    | OR-165                   |          30.00 |     6.3000 |     36.3000 |
+    | OR-181                   |         360.00 |    75.6000 |    435.6000 |
+    | OR-225                   |         840.00 |   176.4000 |   1016.4000 |
+    | OR-147                   |          42.00 |     8.8200 |     50.8200 |
+    | FR-105                   |         280.00 |    58.8000 |    338.8000 |
+    | FR-57                    |        1827.00 |   383.6700 |   2210.6700 |
+    | OR-176                   |         380.00 |    79.8000 |    459.8000 |
+    | AR-003                   |          17.00 |     3.5700 |     20.5700 |
+    | AR-005                   |          21.00 |     4.4100 |     25.4100 |
+    | AR-007                   |           9.00 |     1.8900 |     10.8900 |
+    | AR-010                   |          10.00 |     2.1000 |     12.1000 |
+    | FR-10                    |         119.00 |    24.9900 |    143.9900 |
+    | FR-101                   |         247.00 |    51.8700 |    298.8700 |
+    | FR-103                   |          25.00 |     5.2500 |     30.2500 |
+    | OR-236                   |        2205.00 |   463.0500 |   2668.0500 |
+    | OR-237                   |         950.00 |   199.5000 |   1149.5000 |
+    | OR-204                   |         500.00 |   105.0000 |    605.0000 |
+    | OR-205                   |         100.00 |    21.0000 |    121.0000 |
+    | OR-206                   |          25.00 |     5.2500 |     30.2500 |
+    | OR-226                   |         570.00 |   119.7000 |    689.7000 |
+    | OR-209                   |         500.00 |   105.0000 |    605.0000 |
+    | OR-210                   |        3120.00 |   655.2000 |   3775.2000 |
+    | OR-211                   |        4130.00 |   867.3000 |   4997.3000 |
+    | FR-2                     |           6.00 |     1.2600 |      7.2600 |
+    | FR-86                    |          22.00 |     4.6200 |     26.6200 |
+    | OR-116                   |          98.00 |    20.5800 |    118.5800 |
+    | FR-79                    |         946.00 |   198.6600 |   1144.6600 |
+    | OR-168                   |          20.00 |     4.2000 |     24.2000 |
+    | OR-115                   |          63.00 |    13.2300 |     76.2300 |
+    | OR-243                   |         128.00 |    26.8800 |    154.8800 |
+    | OR-130                   |         216.00 |    45.3600 |    261.3600 |
+    | OR-179                   |          30.00 |     6.3000 |     36.3000 |
+    | OR-196                   |         280.00 |    58.8000 |    338.8000 |
+    | OR-207                   |          16.00 |     3.3600 |     19.3600 |
+    | OR-250                   |          30.00 |     6.3000 |     36.3000 |
+    | FR-81                    |         147.00 |    30.8700 |    177.8700 |
+    | OR-139                   |         320.00 |    67.2000 |    387.2000 |
+    | OR-177                   |        2250.00 |   472.5000 |   2722.5000 |
+    | FR-87                    |        1584.00 |   332.6400 |   1916.6400 |
+    | FR-42                    |          96.00 |    20.1600 |    116.1600 |
+    | FR-66                    |         245.00 |    51.4500 |    296.4500 |
+    | FR-54                    |         351.00 |    73.7100 |    424.7100 |
+    | FR-58                    |         561.00 |   117.8100 |    678.8100 |
+    | FR-60                    |         352.00 |    73.9200 |    425.9200 |
+    | FR-43                    |          48.00 |    10.0800 |     58.0800 |
+    | FR-6                     |         112.00 |    23.5200 |    135.5200 |
+    | FR-71                    |         220.00 |    46.2000 |    266.2000 |
+    | FR-90                    |         280.00 |    58.8000 |    338.8000 |
+    | FR-41                    |          96.00 |    20.1600 |    116.1600 |
+    | FR-33                    |         216.00 |    45.3600 |    261.3600 |
+    | FR-56                    |         128.00 |    26.8800 |    154.8800 |
+    | FR-8                     |         108.00 |    22.6800 |    130.6800 |
+    | FR-45                    |         112.00 |    23.5200 |    135.5200 |
+    | OR-104                   |         200.00 |    42.0000 |    242.0000 |
+    | OR-119                   |          50.00 |    10.5000 |     60.5000 |
+    | OR-125                   |          15.00 |     3.1500 |     18.1500 |
+    | FR-16                    |          45.00 |     9.4500 |     54.4500 |
+    | OR-200                   |          40.00 |     8.4000 |     48.4000 |
+    | FR-78                    |          30.00 |     6.3000 |     36.3000 |
+    | FR-80                    |          32.00 |     6.7200 |     38.7200 |
+    | OR-146                   |          68.00 |    14.2800 |     82.2800 |
+    | OR-150                   |          36.00 |     7.5600 |     43.5600 |
+    +--------------------------+----------------+------------+-------------+
     ```
+
+    
 
 17. La misma información que en la pregunta anterior, pero agrupada por código de producto filtrada por los códigos que empiecen por OR.
 
     ```sql
+    SELECT dp.producto_codigo_producto, SUM((p.precio_venta*dp.cantidad)) AS base_imponible, SUM(((p.precio_venta*dp.cantidad)*0.21)) AS IVA, SUM(((p.precio_venta*dp.cantidad)+((p.precio_venta*dp.cantidad)*0.21))) AS total
+    FROM detalle_pedido AS dp, producto AS p
+    WHERE dp.producto_codigo_producto = p.codigo_producto AND p.codigo_producto LIKE 'OR%'
+    GROUP BY dp.producto_codigo_producto;
     
+    +--------------------------+----------------+------------+-------------+
+    | producto_codigo_producto | base_imponible | IVA        | total       |
+    +--------------------------+----------------+------------+-------------+
+    | OR-127                   |         280.00 |    58.8000 |    338.8000 |
+    | OR-141                   |         180.00 |    37.8000 |    217.8000 |
+    | OR-241                   |         475.00 |    99.7500 |    574.7500 |
+    | OR-99                    |         532.00 |   111.7200 |    643.7200 |
+    | OR-140                   |         200.00 |    42.0000 |    242.0000 |
+    | OR-159                   |         132.00 |    27.7200 |    159.7200 |
+    | OR-227                   |       15104.00 |  3171.8400 |  18275.8400 |
+    | OR-247                   |      128898.00 | 27068.5800 | 155966.5800 |
+    | OR-122                   |         160.00 |    33.6000 |    193.6000 |
+    | OR-123                   |          70.00 |    14.7000 |     84.7000 |
+    | OR-213                   |        9310.00 |  1955.1000 |  11265.1000 |
+    | OR-217                   |         960.00 |   201.6000 |   1161.6000 |
+    | OR-218                   |         950.00 |   199.5000 |   1149.5000 |
+    | OR-152                   |          18.00 |     3.7800 |     21.7800 |
+    | OR-155                   |          24.00 |     5.0400 |     29.0400 |
+    | OR-156                   |         330.00 |    69.3000 |    399.3000 |
+    | OR-157                   |        2620.00 |   550.2000 |   3170.2000 |
+    | OR-222                   |        1827.00 |   383.6700 |   2210.6700 |
+    | OR-234                   |        3520.00 |   739.2000 |   4259.2000 |
+    | OR-101                   |         144.00 |    30.2400 |    174.2400 |
+    | OR-203                   |         100.00 |    21.0000 |    121.0000 |
+    | OR-136                   |        2286.00 |   480.0600 |   2766.0600 |
+    | OR-208                   |         884.00 |   185.6400 |   1069.6400 |
+    | OR-240                   |         468.00 |    98.2800 |    566.2800 |
+    | OR-249                   |         150.00 |    31.5000 |    181.5000 |
+    | OR-188                   |         100.00 |    21.0000 |    121.0000 |
+    | OR-102                   |         522.00 |   109.6200 |    631.6200 |
+    | OR-186                   |         240.00 |    50.4000 |    290.4000 |
+    | OR-129                   |         330.00 |    69.3000 |    399.3000 |
+    | OR-160                   |         100.00 |    21.0000 |    121.0000 |
+    | OR-120                   |          25.00 |     5.2500 |     30.2500 |
+    | OR-128                   |        2842.00 |   596.8200 |   3438.8200 |
+    | OR-193                   |         100.00 |    21.0000 |    121.0000 |
+    | OR-214                   |        2120.00 |   445.2000 |   2565.2000 |
+    | OR-172                   |        1602.00 |   336.4200 |   1938.4200 |
+    | OR-174                   |         432.00 |    90.7200 |    522.7200 |
+    | OR-165                   |          30.00 |     6.3000 |     36.3000 |
+    | OR-181                   |         360.00 |    75.6000 |    435.6000 |
+    | OR-225                   |         840.00 |   176.4000 |   1016.4000 |
+    | OR-147                   |          42.00 |     8.8200 |     50.8200 |
+    | OR-176                   |         380.00 |    79.8000 |    459.8000 |
+    | OR-236                   |        2205.00 |   463.0500 |   2668.0500 |
+    | OR-237                   |         950.00 |   199.5000 |   1149.5000 |
+    | OR-204                   |         500.00 |   105.0000 |    605.0000 |
+    | OR-205                   |         100.00 |    21.0000 |    121.0000 |
+    | OR-206                   |          25.00 |     5.2500 |     30.2500 |
+    | OR-226                   |         570.00 |   119.7000 |    689.7000 |
+    | OR-209                   |         500.00 |   105.0000 |    605.0000 |
+    | OR-210                   |        3120.00 |   655.2000 |   3775.2000 |
+    | OR-211                   |        4130.00 |   867.3000 |   4997.3000 |
+    | OR-116                   |          98.00 |    20.5800 |    118.5800 |
+    | OR-168                   |          20.00 |     4.2000 |     24.2000 |
+    | OR-115                   |          63.00 |    13.2300 |     76.2300 |
+    | OR-243                   |         128.00 |    26.8800 |    154.8800 |
+    | OR-130                   |         216.00 |    45.3600 |    261.3600 |
+    | OR-179                   |          30.00 |     6.3000 |     36.3000 |
+    | OR-196                   |         280.00 |    58.8000 |    338.8000 |
+    | OR-207                   |          16.00 |     3.3600 |     19.3600 |
+    | OR-250                   |          30.00 |     6.3000 |     36.3000 |
+    | OR-139                   |         320.00 |    67.2000 |    387.2000 |
+    | OR-177                   |        2250.00 |   472.5000 |   2722.5000 |
+    | OR-104                   |         200.00 |    42.0000 |    242.0000 |
+    | OR-119                   |          50.00 |    10.5000 |     60.5000 |
+    | OR-125                   |          15.00 |     3.1500 |     18.1500 |
+    | OR-200                   |          40.00 |     8.4000 |     48.4000 |
+    | OR-146                   |          68.00 |    14.2800 |     82.2800 |
+    | OR-150                   |          36.00 |     7.5600 |     43.5600 |
+    +--------------------------+----------------+------------+-------------+
     ```
+
+    
 
 18. Lista las ventas totales de los productos que hayan facturado más de 3000 euros. Se mostrará el nombre, unidades vendidas, total facturado y total facturado con impuestos (21% IVA).
 
     ```sql
+    SELECT DISTINCT(p.nombre), SUM(dp.cantidad) AS cantidad, SUM((p.precio_venta*dp.cantidad)) AS total, SUM(((p.precio_venta*dp.cantidad)+((p.precio_venta*dp.cantidad)*0.21))) AS total_con_IVA
+    FROM producto AS p
+    INNER JOIN detalle_pedido AS dp
+    ON dp.producto_codigo_producto = p.codigo_producto
+    WHERE ((p.precio_venta*dp.cantidad)+((p.precio_venta*dp.cantidad)*0.21)) > 3000
+    GROUP BY p.nombre;
     
+    +---------------------------+----------+-----------+---------------+
+    | nombre                    | cantidad | total     | total_con_IVA |
+    +---------------------------+----------+-----------+---------------+
+    | Chamaerops Humilis        |      111 |   7104.00 |     8595.8400 |
+    | Bismarckia Nobilis        |       30 |   7980.00 |     9655.8000 |
+    | Trachycarpus Fortunei     |      272 | 125664.00 |   152053.4400 |
+    | Camelia japonica ejemplar |       29 |   2842.00 |     3438.8200 |
+    | Dracaena Drago            |       50 |   3200.00 |     3872.0000 |
+    | Beucarnea Recurvata       |      150 |   7250.00 |     8772.5000 |
+    | Kaki                      |       56 |   3920.00 |     4743.2000 |
+    | Limonero 30/40            |       73 |   7300.00 |     8833.0000 |
+    +---------------------------+----------+-----------+---------------+
     ```
+
+    
 
 19. Muestre la suma total de todos los pagos que se realizaron para cada uno de los años que aparecen en la tabla pagos.
 
     ```sql
+    SELECT YEAR(p.fecha_pago) AS año_pago, SUM(p.total) AS total_pagos
+    FROM pago AS p
+    GROUP BY YEAR(p.fecha_pago);
     
+    +----------+-------------+
+    | año_pago | total_pagos |
+    +----------+-------------+
+    |     2008 |    29252.00 |
+    |     2009 |    58553.00 |
+    |     2007 |    85170.00 |
+    |     2006 |    24965.00 |
+    +----------+-------------+
     ```
-
+    
     
 
 ##### Subconsultas
