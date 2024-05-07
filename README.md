@@ -2422,59 +2422,59 @@ VALUES
    +--------------------------------+--------------+
    | nombre_cliente                 | gama         |
    +--------------------------------+--------------+
-   | GoldFish Garden                | Aromáticas   |
-   | Golf S.A.                      | Aromáticas   |
-   | Jardinerías Matías SL          | Aromáticas   |
-   | El Jardin Viviente S.L         | Aromáticas   |
-   | Tendo Garden                   | Aromáticas   |
-   | Camunas Jardines S.L.          | Aromáticas   |
-   | Jardin de Flores               | Aromáticas   |
-   | Flores Marivi                  | Aromáticas   |
-   | Sotogrande                     | Aromáticas   |
-   | Jardineria Sara                | Aromáticas   |
-   | Dardena S.A.                   | Frutales     |
-   | Sotogrande                     | Frutales     |
-   | El Jardin Viviente S.L         | Frutales     |
-   | Tutifruti S.A                  | Frutales     |
-   | Beragua                        | Frutales     |
-   | Jardinerías Matías SL          | Frutales     |
-   | Camunas Jardines S.L.          | Frutales     |
-   | Jardines y Mansiones Cactus SL | Frutales     |
-   | Gerudo Valley                  | Frutales     |
    | GoldFish Garden                | Frutales     |
-   | Tendo Garden                   | Frutales     |
+   | GoldFish Garden                | Aromáticas   |
+   | GoldFish Garden                | Ornamentales |
    | Gardening Associates           | Frutales     |
+   | Gardening Associates           | Ornamentales |
+   | Gerudo Valley                  | Herramientas |
+   | Gerudo Valley                  | Ornamentales |
+   | Gerudo Valley                  | Frutales     |
+   | Tendo Garden                   | Frutales     |
+   | Tendo Garden                   | Ornamentales |
+   | Tendo Garden                   | Aromáticas   |
+   | Beragua                        | Herramientas |
+   | Beragua                        | Frutales     |
+   | Beragua                        | Ornamentales |
+   | Naturagua                      | Herramientas |
+   | Naturagua                      | Frutales     |
+   | Naturagua                      | Ornamentales |
+   | Camunas Jardines S.L.          | Aromáticas   |
+   | Camunas Jardines S.L.          | Frutales     |
+   | Camunas Jardines S.L.          | Ornamentales |
+   | Dardena S.A.                   | Herramientas |
+   | Dardena S.A.                   | Frutales     |
+   | Dardena S.A.                   | Ornamentales |
+   | Jardin de Flores               | Frutales     |
+   | Jardin de Flores               | Ornamentales |
+   | Jardin de Flores               | Aromáticas   |
+   | Jardin de Flores               | Herramientas |
+   | Flores Marivi                  | Ornamentales |
+   | Flores Marivi                  | Frutales     |
+   | Flores Marivi                  | Aromáticas   |
+   | Flores Marivi                  | Herramientas |
+   | Golf S.A.                      | Herramientas |
+   | Golf S.A.                      | Aromáticas   |
+   | Sotogrande                     | Aromáticas   |
+   | Sotogrande                     | Frutales     |
+   | Jardines y Mansiones Cactus SL | Frutales     |
+   | Jardines y Mansiones Cactus SL | Ornamentales |
+   | Jardinerías Matías SL          | Aromáticas   |
+   | Jardinerías Matías SL          | Frutales     |
+   | Jardinerías Matías SL          | Herramientas |
+   | Agrojardin                     | Ornamentales |
    | Agrojardin                     | Frutales     |
    | Jardineria Sara                | Frutales     |
-   | Naturagua                      | Frutales     |
-   | Jardin de Flores               | Frutales     |
-   | Flores Marivi                  | Frutales     |
-   | Flores S.L.                    | Frutales     |
-   | Beragua                        | Herramientas |
-   | Naturagua                      | Herramientas |
-   | Gerudo Valley                  | Herramientas |
-   | Golf S.A.                      | Herramientas |
-   | Dardena S.A.                   | Herramientas |
-   | Jardinerías Matías SL          | Herramientas |
-   | El Jardin Viviente S.L         | Herramientas |
-   | Jardin de Flores               | Herramientas |
-   | Flores Marivi                  | Herramientas |
-   | Jardineria Sara                | Herramientas |
-   | Beragua                        | Ornamentales |
-   | Gardening Associates           | Ornamentales |
-   | El Jardin Viviente S.L         | Ornamentales |
-   | Dardena S.A.                   | Ornamentales |
-   | Camunas Jardines S.L.          | Ornamentales |
-   | Tendo Garden                   | Ornamentales |
-   | Gerudo Valley                  | Ornamentales |
-   | Agrojardin                     | Ornamentales |
    | Jardineria Sara                | Ornamentales |
+   | Jardineria Sara                | Aromáticas   |
+   | Jardineria Sara                | Herramientas |
+   | Tutifruti S.A                  | Frutales     |
    | Tutifruti S.A                  | Ornamentales |
-   | Jardin de Flores               | Ornamentales |
-   | Flores Marivi                  | Ornamentales |
-   | Naturagua                      | Ornamentales |
-   | Jardines y Mansiones Cactus SL | Ornamentales |
-   | GoldFish Garden                | Ornamentales |
+   | Flores S.L.                    | Frutales     |
+   | El Jardin Viviente S.L         | Frutales     |
+   | El Jardin Viviente S.L         | Ornamentales |
+   | El Jardin Viviente S.L         | Aromáticas   |
+   | El Jardin Viviente S.L         | Herramientas |
    +--------------------------------+--------------+
    ```
 
