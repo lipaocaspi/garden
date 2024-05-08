@@ -52,8 +52,8 @@ CREATE TABLE producto (
   cantidad_en_stock SMALLINT(6) NOT NULL,
   precio_venta DECIMAL(15,2) NOT NULL,
   precio_proveedor DECIMAL(15,2),
-  codigo_dimension VARCHAR(5),
-  codigo_proveedor INT,
+  codigo_dimension VARCHAR(5) NOT NULL,
+  codigo_proveedor INT NOT NULL,
   CONSTRAINT PK_producto PRIMARY KEY (codigo_producto),
   CONSTRAINT FK_producto_gama_producto
     FOREIGN KEY (gama)
@@ -199,22 +199,45 @@ CREATE TABLE direccion (
   codigo_postal VARCHAR(10),
   codigo_ciudad VARCHAR(10) NOT NULL,
   codigo_tipo VARCHAR(5) NOT NULL,
-  codigo_cliente INT,
-  codigo_oficina VARCHAR(10),
   CONSTRAINT PK_direccion PRIMARY KEY (codigo_direccion),
   CONSTRAINT FK_direccion_ciudad
     FOREIGN KEY (codigo_ciudad)
     REFERENCES ciudad(codigo_ciudad),
   CONSTRAINT FK_direccion_tipo_direccion
     FOREIGN KEY (codigo_tipo)
-    REFERENCES tipo_direccion(codigo_tipo),
-  CONSTRAINT FK_direccion_cliente
-    FOREIGN KEY (codigo_cliente)
-    REFERENCES cliente(codigo_cliente),
-  CONSTRAINT FK_direccion_oficina
-    FOREIGN KEY (codigo_oficina)
-    REFERENCES oficina(codigo_oficina),
-  CHECK (codigo_oficina IS NULL OR codigo_cliente IS NULL)
+    REFERENCES tipo_direccion(codigo_tipo)
+);
+
+-- -----------------------------------------------------
+-- direccion_oficina
+-- -----------------------------------------------------
+CREATE TABLE direccion_oficina (
+  codigo_direccion_oficina VARCHAR(5) NOT NULL,
+  direccion_codigo_direccion VARCHAR(5) NOT NULL,
+  oficina_codigo_oficina VARCHAR(10) NOT NULL,
+  CONSTRAINT PK_direccion_oficina PRIMARY KEY (codigo_direccion_oficina),
+  CONSTRAINT FK_direccion_oficina_direccion
+    FOREIGN KEY (direccion_codigo_direccion)
+    REFERENCES direccion(codigo_direccion),
+  CONSTRAINT FK_direccion_oficina_oficina
+    FOREIGN KEY (oficina_codigo_oficina)
+    REFERENCES oficina(codigo_oficina)
+);
+
+-- -----------------------------------------------------
+-- direccion_cliente
+-- -----------------------------------------------------
+CREATE TABLE direccion_cliente (
+  codigo_direccion_cliente VARCHAR(5) NOT NULL,
+  direccion_codigo_direccion VARCHAR(5) NOT NULL,
+  cliente_codigo_cliente INT NOT NULL,
+  CONSTRAINT PK_direccion_cliente PRIMARY KEY (codigo_direccion_cliente),
+  CONSTRAINT FK_direccion_cliente_direccion
+    FOREIGN KEY (direccion_codigo_direccion)
+    REFERENCES direccion(codigo_direccion),
+  CONSTRAINT FK_direccion_cliente_cliente
+    FOREIGN KEY (cliente_codigo_cliente)
+    REFERENCES cliente(codigo_cliente)
 );
 
 -- -----------------------------------------------------
@@ -342,6 +365,38 @@ CREATE TABLE telefono (
     FOREIGN KEY (codigo_contacto)
     REFERENCES contacto(codigo_contacto),
   CHECK (codigo_oficina IS NULL OR codigo_contacto IS NULL)
+);
+
+-- -----------------------------------------------------
+-- telefono_contacto
+-- -----------------------------------------------------
+CREATE TABLE telefono_contacto (
+  codigo_telefono_contacto VARCHAR(5) NOT NULL,
+  contacto_codigo_contacto INT NOT NULL,
+  telefono_codigo_telefono VARCHAR(5) NOT NULL,
+  CONSTRAINT PK_telefono_contacto PRIMARY KEY (codigo_telefono_contacto),
+  CONSTRAINT FK_telefono_contacto_contacto
+    FOREIGN KEY (contacto_codigo_contacto)
+    REFERENCES contacto(codigo_contacto),
+  CONSTRAINT FK_telefono_contacto_telefono
+    FOREIGN KEY (telefono_codigo_telefono)
+    REFERENCES telefono(codigo_telefono)
+);
+
+-- -----------------------------------------------------
+-- telefono_oficina
+-- -----------------------------------------------------
+CREATE TABLE telefono_oficina (
+  codigo_telefono_oficina VARCHAR(5) NOT NULL,
+  oficina_codigo_oficina VARCHAR(10) NOT NULL,
+  telefono_codigo_telefono VARCHAR(5) NOT NULL,
+  CONSTRAINT PK_telefono_oficina PRIMARY KEY (codigo_telefono_oficina),
+  CONSTRAINT FK_telefono_oficina_oficina
+    FOREIGN KEY (oficina_codigo_oficina)
+    REFERENCES oficina(codigo_oficina),
+  CONSTRAINT FK_telefono_oficina_telefono
+    FOREIGN KEY (telefono_codigo_telefono)
+    REFERENCES telefono(codigo_telefono)
 );
 ```
 
@@ -858,53 +913,104 @@ VALUES
     (37,'The Magic Garden', 18, 10000),
     (38,'El Jardin Viviente S.L', 31, 8000);
 
-INSERT INTO direccion (codigo_direccion, linea_direccion1, linea_direccion2, codigo_postal, codigo_ciudad, codigo_tipo, codigo_cliente, codigo_oficina)
+INSERT INTO direccion (codigo_direccion, linea_direccion1, linea_direccion2, codigo_postal, codigo_ciudad, codigo_tipo)
 VALUES
-    (1,'False Street 52 2 A',NULL,'24006', 1, 2, 1, NULL),
-    (2,'Wall-e Avenue',NULL,'24010', 2, 2, 3, NULL),
-    (3,'Oaks Avenue nº22',NULL,'85495', 3, 2, 4, NULL),
-    (4,'Null Street nº69',NULL,'696969', 2, 2, 5, NULL),
-    (5,'C/Leganes 15',NULL,'28945', 4, 2, 6, NULL),
-    (6,'C/pintor segundo','Getafe','28942', 5, 2, 7, NULL),
-    (7,'C/sinesio delgado','Madrid','28930', 5, 2, 8, NULL),
-    (8,'C/majadahonda','Boadilla','28947', 5, 2, 9, NULL),
-    (9,'C/azores','Fuenlabrada','28946', 5, 2, 10, NULL),
-    (10,'C/Lagañas','Fuenlabrada','28943', 5, 2, 11, NULL),
-    (11,'C/Leganes 15',NULL,'28945',4, 2, 12, NULL),
-    (12,'C/Virgenes 45','C/Princesas 2 1ºB','28145', 6, 2, 13, NULL),
-    (13,'C/Nueva York 74',NULL,'28003', 5, 2, 14, NULL),
-    (14,'C/ Oña 34',NULL,'28950', 5, 2, 15, NULL),
-    (15,'C/Leganes24',NULL,'28945', 4, 2, 16, NULL),
-    (16,'C/Luis Salquillo4',NULL,'24586', 7, 2, 17, NULL),
-    (17,'Plaza Magallón 15',NULL,'28011', 5, 2, 18, NULL),
-    (18,'C/Estancado',NULL,'38297', 8, 2, 19, NULL),
-    (19,'C/Letardo',NULL,'12320', 9, 2, 20, NULL),
-    (20,'C/Roman 3',NULL,'35488', 10, 2, 21, NULL),
-    (21,'Avenida Tibidabo',NULL,'12320', 9, 2, 22, NULL),
-    (22,'C/Paseo del Parque',NULL,'11310', 11, 2, 23, NULL),
-    (23,'C/Miguel Echegaray 54',NULL,'28970', 12, 2, 24, NULL),
-    (24,'C/Callo 52',NULL,'28574', 4, 2, 25, NULL),
-    (25,'Polígono Industrial Maspalomas, Nº52','Móstoles','29874', 5, 2, 26, NULL),
-    (26,'C/Francisco Arce, Nº44','Bustarviejo','37845', 5, 2, 27, NULL),
-    (27,'C/Mar Caspio 43',NULL,'28904', 13, 2, 28, NULL),
-    (28,'C/Ibiza 32',NULL,'28574', 12, 2, 29, NULL),
-    (29,'C/Lima 1',NULL,'27584', 4, 2, 30, NULL),
-    (30,'C/Peru 78',NULL,'28945', 4, 2, 31, NULL),
-    (31,'6 place d Alleray 15Ã¨me',NULL,'75010', 14, 2, 32, NULL),
-    (32,'Quai du Louvre',NULL,'75058', 14, 2, 33, NULL),
-    (33,'level 24, St. Martins Tower.-31 Market St.',NULL,'2000', 15, 2, 35, NULL),
-    (34,'Avenida España',NULL,'29643', 5, 2, 36, NULL),
-    (35,'Lihgting Park',NULL,'65930', 19, 2, 37, NULL),
-    (36,'176 Cumberland Street The rocks',NULL,'2003', 20, 2, 38, NULL),
-    (37,'Avenida Diagonal, 38','3A escalera Derecha','08019', 17, 2, NULL, 'BCN-ES'),
-    (38,'1550 Court Place','Suite 102','02108', 18, 2, NULL, 'BOS-USA'),
-    (39,'52 Old Broad Street','Ground Floor','EC2N 1HN', 19, 2, NULL, 'LON-UK'),
-    (40,'Bulevar Indalecio Prieto, 32','','28032', 5, 2, NULL, 'MAD-ES'),
-    (41,'29 Rue Jouffroy d''abbans','','75017', 14, 2, NULL, 'PAR-FR'),
-    (42,'100 Market Street','Suite 300','94080', 1, 2, NULL, 'SFC-USA'),
-    (43,'5-11 Wentworth Avenue','Floor #2','NSW 2010', 20, 2, NULL, 'SYD-AU'),
-    (44,'Francisco Aguirre, 32','5º piso (exterior)','45632', 21, 2, NULL, 'TAL-ES'),
-    (45,'4-1 Kioicho','','102-8578', 22, 2, NULL, 'TOK-JP');
+    (1,'False Street 52 2 A',NULL,'24006', 1, 2),
+    (2,'Wall-e Avenue',NULL,'24010', 2, 2),
+    (3,'Oaks Avenue nº22',NULL,'85495', 3, 2),
+    (4,'Null Street nº69',NULL,'696969', 2, 2),
+    (5,'C/Leganes 15',NULL,'28945', 4, 2),
+    (6,'C/pintor segundo','Getafe','28942', 5, 2),
+    (7,'C/sinesio delgado','Madrid','28930', 5, 2),
+    (8,'C/majadahonda','Boadilla','28947', 5, 2),
+    (9,'C/azores','Fuenlabrada','28946', 5, 2),
+    (10,'C/Lagañas','Fuenlabrada','28943', 5, 2),
+    (11,'C/Leganes 15',NULL,'28945', 4, 2),
+    (12,'C/Virgenes 45','C/Princesas 2 1ºB','28145', 6, 2),
+    (13,'C/Nueva York 74',NULL,'28003', 5, 2),
+    (14,'C/ Oña 34',NULL,'28950', 5, 2),
+    (15,'C/Leganes24',NULL,'28945', 4, 2),
+    (16,'C/Luis Salquillo4',NULL,'24586', 7, 2),
+    (17,'Plaza Magallón 15',NULL,'28011', 5, 2),
+    (18,'C/Estancado',NULL,'38297', 8, 2),
+    (19,'C/Letardo',NULL,'12320', 9, 2),
+    (20,'C/Roman 3',NULL,'35488', 10, 2),
+    (21,'Avenida Tibidabo',NULL,'12320', 9, 2),
+    (22,'C/Paseo del Parque',NULL,'11310', 11, 2),
+    (23,'C/Miguel Echegaray 54',NULL,'28970', 12, 2),
+    (24,'C/Callo 52',NULL,'28574', 4, 2),
+    (25,'Polígono Industrial Maspalomas, Nº52','Móstoles','29874', 5, 2),
+    (26,'C/Francisco Arce, Nº44','Bustarviejo','37845', 5, 2),
+    (27,'C/Mar Caspio 43',NULL,'28904', 13, 2),
+    (28,'C/Ibiza 32',NULL,'28574', 12, 2),
+    (29,'C/Lima 1',NULL,'27584', 4, 2),
+    (30,'C/Peru 78',NULL,'28945', 4, 2),
+    (31,'6 place d Alleray 15Ã¨me',NULL,'75010', 14, 2),
+    (32,'Quai du Louvre',NULL,'75058', 14, 2),
+    (33,'level 24, St. Martins Tower.-31 Market St.',NULL,'2000', 15, 2),
+    (34,'Avenida España',NULL,'29643', 5, 2),
+    (35,'Lihgting Park',NULL,'65930', 19, 2),
+    (36,'176 Cumberland Street The rocks',NULL,'2003', 20, 2),
+    (37,'Avenida Diagonal, 38','3A escalera Derecha','08019', 17, 2),
+    (38,'1550 Court Place','Suite 102','02108', 18, 2),
+    (39,'52 Old Broad Street','Ground Floor','EC2N 1HN', 19, 2),
+    (40,'Bulevar Indalecio Prieto, 32','','28032', 5, 2),
+    (41,'29 Rue Jouffroy d''abbans','','75017', 14, 2),
+    (42,'100 Market Street','Suite 300','94080', 1, 2),
+    (43,'5-11 Wentworth Avenue','Floor #2','NSW 2010', 20, 2),
+    (44,'Francisco Aguirre, 32','5º piso (exterior)','45632', 21, 2),
+    (45,'4-1 Kioicho','','102-8578', 22, 2);
+    
+INSERT INTO direccion_oficina (codigo_direccion_oficina, direccion_codigo_direccion, oficina_codigo_oficina)
+VALUES
+    ('1', 37, 'BCN-ES'),
+    ('2', 38, 'BOS-USA'),
+    ('3', 39, 'LON-UK'),
+    ('4', 40, 'MAD-ES'),
+    ('5', 41, 'PAR-FR'),
+    ('6', 42, 'SFC-USA'),
+    ('7', 43, 'SYD-AU'),
+    ('8', 44, 'TAL-ES'),
+    ('9', 45, 'TOK-JP');
+    
+INSERT INTO direccion_cliente (codigo_direccion_cliente, direccion_codigo_direccion, cliente_codigo_cliente)
+VALUES
+    ('10', 1, 1),
+    ('11', 2, 3),
+    ('12', 3, 4),
+    ('13', 4, 5),
+    ('14', 5, 6),
+    ('15', 6, 7),
+    ('16', 7, 8),
+    ('17', 8, 9),
+    ('18', 9, 10),
+    ('19', 10, 11),
+    ('20', 11, 12),
+    ('21', 12, 13),
+    ('22', 13, 14),
+    ('23', 14, 15),
+    ('24', 15, 16),
+    ('25', 16, 17),
+    ('26', 17, 18),
+    ('27', 18, 19),
+    ('28', 19, 20),
+    ('29', 20, 21),
+    ('30', 21, 22),
+    ('31', 22, 23),
+    ('32', 23, 24),
+    ('33', 24, 25),
+    ('34', 25, 26),
+    ('35', 26, 27),
+    ('36', 27, 28),
+    ('37', 28, 29),
+    ('38', 29, 30),
+    ('39', 30, 31),
+    ('40', 31, 32),
+    ('41', 32, 33),
+    ('42', 33, 35),
+    ('43', 34, 36),
+    ('44', 35, 37),
+    ('45', 36, 38);
 
 INSERT INTO contacto (codigo_contacto, nombre_contacto, apellido_contacto, fax, codigo_cliente)
 VALUES
@@ -1430,53 +1536,104 @@ VALUES
 	('1', 'Fijo'),
     ('2', 'Móvil');
     
-INSERT INTO telefono (codigo_telefono, numero_telefono, codigo_tipo, codigo_oficina, codigo_contacto)
+INSERT INTO telefono (codigo_telefono, numero_telefono, codigo_tipo)
 VALUES
-	('1','+34 93 3561182', '1', 'BCN-ES', NULL),
-	('2','+1 215 837 0825', '1', 'BOS-USA', NULL),
-	('3','+44 20 78772041', '1', 'LON-UK', NULL),
-	('4','+34 91 7514487', '1', 'MAD-ES', NULL),
-	('5','+33 14 723 4404', '1', 'PAR-FR', NULL),
-	('6','+1 650 219 4782', '1', 'SFC-USA', NULL),
-	('7','+61 2 9264 2451', '1', 'SYD-AU', NULL),
-	('8','+34 925 867231', '1', 'TAL-ES', NULL),
-	('9','+81 33 224 5000', '1', 'TOK-JP', NULL),
-    ('10','5556901745', '1', NULL, 1),
-    ('11','5557410345', '1', NULL, 3),
-    ('12','5552323129', '1', NULL, 4),
-    ('13','55591233210', '1', NULL, 5),
-    ('14','34916540145', '1', NULL, 6),
-    ('15','654987321', '1', NULL, 7),
-    ('16','62456810', '1', NULL, 8),
-    ('17','689234750', '1', NULL, 9),
-    ('18','675598001', '1', NULL, 10),
-    ('19','655983045', '1', NULL, 11),
-    ('20','34916540145', '1', NULL, 12),
-    ('21','34914873241', '1', NULL, 13),
-    ('22','34912453217', '1', NULL, 14),
-    ('23','654865643', '1', NULL, 15),
-    ('24','666555444', '1', NULL, 16),
-    ('25','698754159', '1', NULL, 17),
-    ('26','612343529', '1', NULL, 18),
-    ('27','916458762', '1', NULL, 19),
-    ('28','964493072', '1', NULL, 20),
-    ('29','916485852', '1', NULL, 21),
-    ('30','916882323', '1', NULL, 22),
-    ('31','915576622', '1', NULL, 23),
-    ('32','654987690', '1', NULL, 24),
-    ('33','675842139', '1', NULL, 25),
-    ('34','916877445', '1', NULL, 26),
-    ('35','916544147', '1', NULL, 27),
-    ('36','675432926', '1', NULL, 28),
-    ('37','685746512', '1', NULL, 29),
-    ('38','675124537', '1', NULL, 30),
-    ('39','645925376', '1', NULL, 31),
-    ('40','(33)5120578961', '1', NULL, 32),
-    ('41','(33)0140205050', '1', NULL, 33),
-    ('42','2 9261-2433', '1', NULL, 35),
-    ('43','654352981', '1', NULL, 36),
-    ('44','926523468', '1', NULL, 37),
-    ('45','2 8005-7161', '1', NULL, 38);
+    ('1','+34 93 3561182', '1'),
+    ('2','+1 215 837 0825', '1'),
+    ('3','+44 20 78772041', '1'),
+    ('4','+34 91 7514487', '1'),
+    ('5','+33 14 723 4404', '1'),
+    ('6','+1 650 219 4782', '1'),
+    ('7','+61 2 9264 2451', '1'),
+    ('8','+34 925 867231', '1'),
+    ('9','+81 33 224 5000', '1'),
+    ('10','5556901745', '1'),
+    ('11','5557410345', '1'),
+    ('12','5552323129', '1'),
+    ('13','55591233210', '1'),
+    ('14','34916540145', '1'),
+    ('15','654987321', '1'),
+    ('16','62456810', '1'),
+    ('17','689234750', '1'),
+    ('18','675598001', '1'),
+    ('19','655983045', '1'),
+    ('20','34916540145', '1'),
+    ('21','34914873241', '1'),
+    ('22','34912453217', '1'),
+    ('23','654865643', '1'),
+    ('24','666555444', '1'),
+    ('25','698754159', '1'),
+    ('26','612343529', '1'),
+    ('27','916458762', '1'),
+    ('28','964493072', '1'),
+    ('29','916485852', '1'),
+    ('30','916882323', '1'),
+    ('31','915576622', '1'),
+    ('32','654987690', '1'),
+    ('33','675842139', '1'),
+    ('34','916877445', '1'),
+    ('35','916544147', '1'),
+    ('36','675432926', '1'),
+    ('37','685746512', '1'),
+    ('38','675124537', '1'),
+    ('39','645925376', '1'),
+    ('40','(33)5120578961', '1'),
+    ('41','(33)0140205050', '1'),
+    ('42','2 9261-2433', '1'),
+    ('43','654352981', '1'),
+    ('44','926523468', '1'),
+    ('45','2 8005-7161', '1');
+    
+INSERT INTO telefono_contacto (codigo_telefono_contacto, contacto_codigo_contacto, telefono_codigo_telefono)
+VALUES
+	('1', 1, '10'),
+    ('2', 3, '11'),
+    ('3', 4, '12'),
+    ('4', 5, '13'),
+    ('5', 6, '14'),
+    ('6', 7, '15'),
+    ('7', 8, '16'),
+    ('8', 9, '17'),
+    ('9', 10, '18'),
+    ('10', 11, '19'),
+    ('11', 12, '20'),
+    ('12', 13, '21'),
+    ('13', 14, '22'),
+    ('14', 15, '23'),
+    ('15', 16, '24'),
+    ('16', 17, '25'),
+    ('17', 18, '26'),
+    ('18', 19, '27'),
+    ('19', 20, '28'),
+    ('20', 21, '29'),
+    ('21', 22, '30'),
+    ('22', 23, '31'),
+    ('23', 24, '32'),
+    ('24', 25, '33'),
+    ('25', 26, '34'),
+    ('26', 27, '35'),
+    ('27', 28, '36'),
+    ('28', 29, '37'),
+    ('29', 30, '38'),
+    ('30', 31, '39'),
+    ('31', 32, '40'),
+    ('32', 33, '41'),
+    ('33', 35, '42'),
+    ('34', 36, '43'),
+    ('35', 37, '44'),
+    ('36', 38, '45');
+
+INSERT INTO telefono_oficina (codigo_telefono_oficina, oficina_codigo_oficina, telefono_codigo_telefono)
+VALUES
+	('37', 'BCN-ES', '1'),
+	('38', 'BOS-USA', '2'),
+	('39', 'LON-UK', '3'),
+	('40', 'MAD-ES', '4'),
+	('41', 'PAR-FR', '5'),
+	('42', 'SFC-USA', '6'),
+	('43', 'SYD-AU', '7'),
+	('44', 'TAL-ES', '8'),
+	('45', 'TOK-JP', '9');
 ```
 
 
