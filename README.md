@@ -2208,7 +2208,7 @@ VALUES
 
    ```sql
    /* RESIGNACIÓN */
-   SELECT d.linea_direccion1, d.linea_direccion2, c.nombre_ciudad
+   SELECT DISTINCT(d1.linea_direccion1), d1.linea_direccion2, c1.nombre_ciudad
    FROM cliente AS cl
    INNER JOIN empleado AS e
    ON cl.codigo_empleado_rep_ventas = e.codigo_empleado
@@ -2218,7 +2218,11 @@ VALUES
    ON d.codigo_oficina = o.codigo_oficina
    INNER JOIN ciudad AS c
    ON c.codigo_ciudad = d.codigo_ciudad
-   WHERE c.nombre_ciudad = 'Fuenlabrada';
+   INNER JOIN direccion AS d1
+   ON d1.codigo_cliente = cl.codigo_cliente
+   INNER JOIN ciudad AS c1
+   ON c1.codigo_ciudad = d1.codigo_ciudad
+   WHERE c1.nombre_ciudad = 'Fuenlabrada';
    ```
 
      
