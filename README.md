@@ -2086,7 +2086,7 @@ VALUES
    ```
 
 
-  
+
 
 3. Muestra el nombre de los clientes que no hayan realizado pagos junto con el nombre de sus representantes de ventas.
 
@@ -2207,22 +2207,26 @@ VALUES
 6. Lista la dirección de las oficinas que tengan clientes en Fuenlabrada.
 
    ```sql
-   /* RESIGNACIÓN */
-   SELECT DISTINCT(d1.linea_direccion1), d1.linea_direccion2, c1.nombre_ciudad
-   FROM cliente AS cl
-   INNER JOIN empleado AS e
-   ON cl.codigo_empleado_rep_ventas = e.codigo_empleado
-   INNER JOIN oficina AS o
-   ON o.codigo_oficina = e.codigo_oficina
-   INNER JOIN direccion AS d
-   ON d.codigo_oficina = o.codigo_oficina
-   INNER JOIN ciudad AS c
-   ON c.codigo_ciudad = d.codigo_ciudad
-   INNER JOIN direccion AS d1
-   ON d1.codigo_cliente = cl.codigo_cliente
-   INNER JOIN ciudad AS c1
-   ON c1.codigo_ciudad = d1.codigo_ciudad
-   WHERE c1.nombre_ciudad = 'Fuenlabrada';
+   SELECT DISTINCT(d.linea_direccion1), d.linea_direccion2, c.nombre_ciudad
+   FROM ciudad AS c, direccion AS d, oficina AS o, empleado AS e
+   WHERE e.codigo_empleado IN (
+       SELECT cl.codigo_empleado_rep_ventas
+          FROM cliente AS cl, direccion AS d, ciudad AS c
+          WHERE d.codigo_cliente = cl.codigo_cliente
+          	AND c.codigo_ciudad = d.codigo_ciudad
+           AND c.nombre_ciudad = 'Fuenlabrada'
+   )
+   	AND o.codigo_oficina = e.codigo_oficina
+   	AND o.codigo_oficina = d.codigo_oficina
+   	AND d.codigo_ciudad = c.codigo_ciudad;
+   
+   +------------------------------+---------------------+----------------------+
+   | linea_direccion1             | linea_direccion2    | nombre_ciudad        |
+   +------------------------------+---------------------+----------------------+
+   | Bulevar Indalecio Prieto, 32 |                     | Madrid               |
+   | Francisco Aguirre, 32        | 5º piso (exterior)  | Talavera de la Reina |
+   | 5-11 Wentworth Avenue        | Floor #2            | Sydney               |
+   +------------------------------+---------------------+----------------------+
    ```
 
      
@@ -2966,6 +2970,17 @@ VALUES
 
     ```sql
     /* RESIGNACIÓN */
+    SELECT DISTINCT(o.nombre_oficina)
+    FROM oficina AS o, empleado AS e
+    WHERE o.codigo_oficina = e.codigo_oficina
+    AND e.codigo_empleado NOT IN (
+        SELECT DISTINCT(cl.codigo_empleado_rep_ventas)
+        FROM cliente AS cl, pedido AS p, detalle_pedido AS dp, producto AS pr
+        WHERE p.codigo_cliente = cl.codigo_cliente
+            AND dp.pedido_codigo_pedido = p.codigo_pedido
+            AND pr.codigo_producto = dp.producto_codigo_producto
+            AND pr.gama = 'Frutales'
+    );
     ```
 
     
@@ -3272,12 +3287,129 @@ VALUES
 12. Calcula el número de productos diferentes que hay en cada uno de los pedidos.
 
     ```sql
-    /* RESIGNACIÓN */
-    SELECT DISTINCT(dp.pedido_codigo_pedido), COUNT(DISTINCT(p.codigo_producto)) AS cantidad_productos_dif
-    FROM producto AS p
-    INNER JOIN detalle_pedido AS dp
-    ON dp.producto_codigo_producto = p.codigo_producto
+    SELECT dp.pedido_codigo_pedido, COUNT(DISTINCT(dp.producto_codigo_producto)) AS cantidad_productos_dif
+    FROM detalle_pedido AS dp
     GROUP BY dp.pedido_codigo_pedido;
+    
+    +----------------------+------------------------+
+    | pedido_codigo_pedido | cantidad_productos_dif |
+    +----------------------+------------------------+
+    |                    1 |                      5 |
+    |                    2 |                      7 |
+    |                    3 |                      6 |
+    |                    4 |                      8 |
+    |                    8 |                      3 |
+    |                    9 |                      4 |
+    |                   10 |                      3 |
+    |                   11 |                      2 |
+    |                   12 |                      1 |
+    |                   13 |                      3 |
+    |                   14 |                      2 |
+    |                   15 |                      4 |
+    |                   16 |                      2 |
+    |                   17 |                      5 |
+    |                   18 |                      3 |
+    |                   19 |                      5 |
+    |                   20 |                      2 |
+    |                   21 |                      3 |
+    |                   22 |                      1 |
+    |                   23 |                      4 |
+    |                   24 |                      4 |
+    |                   25 |                      3 |
+    |                   26 |                      3 |
+    |                   27 |                      3 |
+    |                   28 |                      3 |
+    |                   29 |                      5 |
+    |                   30 |                      6 |
+    |                   31 |                      3 |
+    |                   32 |                      5 |
+    |                   33 |                      4 |
+    |                   34 |                      4 |
+    |                   35 |                      5 |
+    |                   36 |                      5 |
+    |                   37 |                      3 |
+    |                   38 |                      2 |
+    |                   39 |                      2 |
+    |                   40 |                      2 |
+    |                   41 |                      2 |
+    |                   42 |                      2 |
+    |                   43 |                      1 |
+    |                   44 |                      1 |
+    |                   45 |                      2 |
+    |                   46 |                      2 |
+    |                   47 |                      2 |
+    |                   48 |                      5 |
+    |                   49 |                      3 |
+    |                   50 |                      3 |
+    |                   51 |                      3 |
+    |                   52 |                      1 |
+    |                   53 |                      4 |
+    |                   54 |                      7 |
+    |                   55 |                      5 |
+    |                   56 |                      6 |
+    |                   57 |                      4 |
+    |                   58 |                      4 |
+    |                   59 |                      1 |
+    |                   60 |                      1 |
+    |                   61 |                      1 |
+    |                   62 |                      1 |
+    |                   63 |                      1 |
+    |                   64 |                      1 |
+    |                   65 |                      1 |
+    |                   66 |                      1 |
+    |                   67 |                      1 |
+    |                   68 |                      1 |
+    |                   74 |                      3 |
+    |                   75 |                      3 |
+    |                   76 |                      5 |
+    |                   77 |                      2 |
+    |                   78 |                      4 |
+    |                   79 |                      1 |
+    |                   80 |                      3 |
+    |                   81 |                      1 |
+    |                   82 |                      1 |
+    |                   83 |                      1 |
+    |                   89 |                      6 |
+    |                   90 |                      3 |
+    |                   91 |                      3 |
+    |                   92 |                      3 |
+    |                   93 |                      3 |
+    |                   94 |                      3 |
+    |                   95 |                      3 |
+    |                   96 |                      4 |
+    |                   97 |                      3 |
+    |                   98 |                      5 |
+    |                   99 |                      2 |
+    |                  100 |                      2 |
+    |                  101 |                      2 |
+    |                  102 |                      2 |
+    |                  103 |                      2 |
+    |                  104 |                      2 |
+    |                  105 |                      2 |
+    |                  106 |                      2 |
+    |                  107 |                      2 |
+    |                  108 |                      2 |
+    |                  109 |                      7 |
+    |                  110 |                      3 |
+    |                  111 |                      1 |
+    |                  112 |                      1 |
+    |                  113 |                      1 |
+    |                  114 |                      1 |
+    |                  115 |                      1 |
+    |                  116 |                      5 |
+    |                  117 |                      4 |
+    |                  118 |                      1 |
+    |                  119 |                      1 |
+    |                  120 |                      1 |
+    |                  121 |                      1 |
+    |                  122 |                      1 |
+    |                  123 |                      1 |
+    |                  124 |                      1 |
+    |                  125 |                      1 |
+    |                  126 |                      1 |
+    |                  127 |                      1 |
+    |                  128 |                      2 |
+    +----------------------+------------------------+
     ```
 
     
@@ -5192,10 +5324,21 @@ VALUES
 
 #### Procedimientos almacenados
 
-1. A
+1. Insertar datos en la tabla gama_producto.
 
    ```sql
-   
+   DELIMITER $$
+   CREATE PROCEDURE insert_gama_producto(
+   	IN gama VARCHAR(50),
+       IN descripcion_texto TEXT,
+       IN descripcion_html TEXT,
+       IN imagen VARCHAR(256)
+   )
+   BEGIN
+   	INSERT INTO gama_producto
+       VALUES (gama, descripcion_texto, descripcion_html, imagen);
+   END $$
+   DELIMITER ;
    ```
 
    
