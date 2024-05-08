@@ -5242,84 +5242,127 @@ VALUES
 
 #### Vistas
 
-1. A
+1. Crear una vista que muestre el puesto, nombre, apellidos y email de todos los empleados.
 
    ```sql
-   
+   CREATE VIEW datos_empleados AS
+   SELECT p.nombre_puesto, e.nombre, e.apellido1, e.apellido2, e.email
+   FROM puesto AS p, empleado AS e
+   WHERE p.codigo_puesto = e.codigo_puesto;
    ```
 
    
 
-2. B
+2. Crear una vista que muestre todos los pedidos que han sido rechazados.
 
    ```sql
-   
+   CREATE VIEW pedidos_rechazados AS
+   SELECT p.codigo_pedido, p.fecha_pedido, p.fecha_esperada, p.fecha_entrega, p.comentarios, p.codigo_cliente, e.nombre_estado
+   FROM pedido AS p, estado AS e
+   WHERE p.codigo_estado = e.codigo_estado AND e.nombre_estado = 'Rechazado';
    ```
 
    
 
-3. C
+3. Crear una vista que muestre todos los pagos hechos con PayPal.
 
    ```sql
-   
+   CREATE VIEW pagos_paypal AS
+   SELECT p.id_transaccion, p.fecha_pago, p.total, p.codigo_cliente, f.nombre_forma
+   FROM pago AS p, forma_pago AS f
+   WHERE p.codigo_forma = f.codigo_forma AND f.nombre_forma = 'Paypal';
    ```
 
    
 
-4. D
+4. Crear una vista que muestre el nombre de cada cliente y el nombre y apellido de su representante de ventas.
 
    ```sql
-   
+   CREATE VIEW representantes_clientes AS
+   SELECT c.nombre_cliente, e.nombre AS nombre_representante, e.apellido1 AS primer_apellido, e.apellido2 AS segundo_apellido
+   FROM cliente AS c
+   INNER JOIN empleado AS e
+   ON c.codigo_empleado_rep_ventas = e.codigo_empleado;
    ```
 
    
 
-5. E
+5. Crear una vista que muestre el nombre de los empleados junto con el nombre de sus jefes.
 
    ```sql
-   
+   CREATE VIEW empleados_jefes AS
+   SELECT e1.nombre AS nombre_empleado, e1.apellido1 AS apellido_empleado, e2.nombre AS nombre_jefe, e2.apellido1 AS apellido_jefe
+   FROM empleado AS e1
+   INNER JOIN empleado AS e2
+   ON e1.codigo_jefe = e2.codigo_empleado;
    ```
 
    
 
-6. F
+6. Crear una vista que muestre el nombre, apellidos, puesto y teléfono de la oficina de aquellos empleados que no sean representante de ventas de ningún cliente.
 
    ```sql
-   
+   CREATE VIEW empleados_sin_clientes AS
+   SELECT e.nombre, e.apellido1, e.apellido2, p.nombre_puesto, t.numero_telefono
+   FROM empleado AS e, puesto AS p, oficina AS o, telefono AS t
+   WHERE e.codigo_puesto = p.codigo_puesto
+   AND e.codigo_oficina = o.codigo_oficina
+   AND o.codigo_oficina = t.codigo_oficina
+   AND e.codigo_empleado NOT IN (
+   	SELECT c.codigo_empleado_rep_ventas
+       FROM cliente AS c
+   );
    ```
 
    
 
-7. G
+7. Crear una vista que muestre la suma total de todos los pagos que se realizaron para cada uno de los años que aparecen en la tabla pagos.
 
    ```sql
-   
+   CREATE VIEW pagos_por_año AS
+   SELECT YEAR(p.fecha_pago) AS año_pago, SUM(p.total) AS total_pagos
+   FROM pago AS p
+   GROUP BY YEAR(p.fecha_pago);
    ```
 
    
 
-8. H
+8. Crear una vista que devuelva el nombre de los representantes de ventas y el número de clientes al que atiende cada uno.
 
    ```sql
-   
+   CREATE VIEW representantes_numero_clientes AS
+   SELECT e.nombre AS nombre_representante, e.apellido1 AS apellido_representante, COUNT(c.codigo_cliente) AS numero_clientes
+   FROM empleado AS e
+   INNER JOIN cliente AS c
+   ON c.codigo_empleado_rep_ventas = e.codigo_empleado
+   GROUP BY e.nombre, e.apellido1;
    ```
 
    
 
-9. I
+9. Crear una vista que muestre todos los pedidos que han sido entregados.
 
    ```sql
-   
+   CREATE VIEW pedidos_entregados AS
+   SELECT p.codigo_pedido, p.fecha_pedido, p.fecha_esperada, p.fecha_entrega, p.comentarios, p.codigo_cliente, e.nombre_estado
+   FROM pedido AS p, estado AS e
+   WHERE p.codigo_estado = e.codigo_estado AND e.nombre_estado = 'Entregado';
    ```
 
    
 
-10. J
+10. Crear una vista que muestre el nombre de los clientes que hayan realizado pagos junto con el nombre de sus representantes de ventas.
 
     ```sql
-    
+    CREATE VIEW clientes_pagos AS
+    SELECT DISTINCT(c.nombre_cliente), e.nombre AS nombre_representante, e.apellido1 AS apellido_representante
+    FROM cliente AS c
+    INNER JOIN empleado AS e
+    ON c.codigo_empleado_rep_ventas = e.codigo_empleado
+    INNER JOIN pago AS p
+    ON p.codigo_cliente = c.codigo_cliente;
     ```
-
+    
     
 
 #### Procedimientos almacenados
@@ -5343,72 +5386,174 @@ VALUES
 
    
 
-2. B
+2.  Buscar los productos cuyo código empiece con FR y OR.
 
    ```sql
+   DELIMITER $$
+   CREATE PROCEDURE buscar_producto_codigo(
+   	IN codigo1 VARCHAR(15),
+       IN codigo2 VARCHAR(15)
+   )
+   BEGIN
+   	SELECT DISTINCT(p.nombre), p.gama
+   	FROM producto AS p
+   	WHERE p.codigo_producto LIKE CONCAT(codigo1, '%') OR p.codigo_producto LIKE CONCAT(codigo2, '%');
+   END $$
+   DELIMITER ;
    
+   CALL buscar_producto_codigo('FR', 'OR');
    ```
 
    
 
-3. C
+3. Insertar datos en la tabla proveedor.
 
    ```sql
-   
+   DELIMITER $$
+   CREATE PROCEDURE insert_proveedor(
+   	IN codigo_proveedor INT,
+     	IN nombre_proveedor VARCHAR(50)
+   )
+   BEGIN
+   	INSERT INTO proveedor
+       VALUES (codigo_proveedor, nombre_proveedor);
+   END $$
+   DELIMITER ;
    ```
 
    
 
-4. D
+4. Devolver un listado con todos los pagos que se realizaron en el año 2008 mediante Paypal.
 
    ```sql
+   DELIMITER $$
+   CREATE PROCEDURE buscar_pago_año(
+   	IN año VARCHAR(15),
+       IN forma VARCHAR(15)
+   )
+   BEGIN
+   	SELECT p.id_transaccion, p.fecha_pago, p.total, p.codigo_cliente, p.codigo_forma
+       FROM pago AS p, forma_pago AS f
+       WHERE p.codigo_forma = f.codigo_forma AND f.nombre_forma = forma AND YEAR(p.fecha_pago) = año;
+   END $$
+   DELIMITER ;
    
+   CALL buscar_pago_año('2008', 'PayPal');
    ```
 
    
 
-5. E
+5. Insertar datos en la tabla forma_pago.
 
    ```sql
-   
+   DELIMITER $$
+   CREATE PROCEDURE insert_forma_pago(
+   	IN codigo_forma VARCHAR(5),
+     	IN nombre_forma VARCHAR(40)
+   )
+   BEGIN
+   	INSERT INTO forma_pago
+       VALUES (codigo_forma, nombre_forma);
+   END $$
+   DELIMITER ;
    ```
 
    
 
-6. F
+6. Devolver el nombre, los apellidos y el email de los empleados que están a cargo de Alberto Soria.
 
    ```sql
+   DELIMITER $$
+   CREATE PROCEDURE buscar_empleados_jefe(
+   	IN nombre VARCHAR(50),
+       IN apellido VARCHAR(50)
+   )
+   BEGIN
+   	SELECT e.nombre, e.apellido1, e.apellido2, e.email
+       FROM empleado AS e
+       WHERE e.codigo_jefe = (
+           SELECT e.codigo_empleado
+           FROM empleado AS e
+           WHERE e.nombre = nombre AND e.apellido1 = apellido
+   	);
+   END $$
+   DELIMITER ;
    
+   CALL buscar_empleados_jefe('Alberto', 'Soria');
    ```
 
    
 
-7. G
+7. Insertar datos en la tabla pago.
 
    ```sql
-   
+   DELIMITER $$
+   CREATE PROCEDURE insert_pago(
+   	IN id_transaccion VARCHAR(50),
+     	IN fecha_pago DATE,
+     	IN total DECIMAL(15,2),
+     	IN codigo_cliente INT,
+     	IN codigo_forma VARCHAR(5)
+   )
+   BEGIN
+   	INSERT INTO pago
+       VALUES (id_transaccion, fecha_pago, total, codigo_cliente, codigo_forma);
+   END $$
+   DELIMITER ;
    ```
 
    
 
-8. H
+8. Calcular el número de clientes que tiene la empresa.
 
    ```sql
+   DELIMITER $$
+   CREATE PROCEDURE numero_clientes()
+   BEGIN
+   	SELECT COUNT(c.codigo_cliente) AS numero_clientes
+       FROM cliente AS c;
+   END $$
+   DELIMITER ;
    
+   CALL numero_clientes();
    ```
 
    
 
-9. I
+9. Insertar datos en la tabla tipo_direccion.
 
    ```sql
-   
+   DELIMITER $$
+   CREATE PROCEDURE insert_tipo_direccion(
+   	IN codigo_tipo VARCHAR(5),
+     	IN nombre_tipo VARCHAR(30)
+   )
+   BEGIN
+   	INSERT INTO tipo_direccion
+       VALUES (codigo_tipo, nombre_tipo);
+   END $$
+   DELIMITER ;
    ```
 
    
 
-10. J
+10. ¿Cuántos clientes existen con domicilio en la ciudad de Madrid?
 
     ```sql
+    DELIMITER $$
+    CREATE PROCEDURE numero_clientes_ciudad(
+    	IN nombre VARCHAR(50)
+    )
+    BEGIN
+    	SELECT COUNT(c.codigo_cliente) AS numero_clientes
+        FROM cliente AS c
+        INNER JOIN direccion AS d
+        ON d.codigo_cliente = c.codigo_cliente
+        INNER JOIN ciudad AS ci
+        ON ci.codigo_ciudad = d.codigo_ciudad
+        WHERE ci.nombre_ciudad = nombre;
+    END $$
+    DELIMITER ;
     
+    CALL numero_clientes_ciudad('Madrid');
     ```
