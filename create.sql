@@ -1,3 +1,5 @@
+CREATE DATABASE gardenDB;
+USE gardenDB;
 -- -----------------------------------------------------
 -- gama_producto
 -- -----------------------------------------------------
@@ -43,8 +45,8 @@ CREATE TABLE producto (
   cantidad_en_stock SMALLINT(6) NOT NULL,
   precio_venta DECIMAL(15,2) NOT NULL,
   precio_proveedor DECIMAL(15,2),
-  codigo_dimension VARCHAR(5),
-  codigo_proveedor INT,
+  codigo_dimension VARCHAR(5) NOT NULL,
+  codigo_proveedor INT NOT NULL,
   CONSTRAINT PK_producto PRIMARY KEY (codigo_producto),
   CONSTRAINT FK_producto_gama_producto
     FOREIGN KEY (gama)
@@ -190,22 +192,45 @@ CREATE TABLE direccion (
   codigo_postal VARCHAR(10),
   codigo_ciudad VARCHAR(10) NOT NULL,
   codigo_tipo VARCHAR(5) NOT NULL,
-  codigo_cliente INT,
-  codigo_oficina VARCHAR(10),
   CONSTRAINT PK_direccion PRIMARY KEY (codigo_direccion),
   CONSTRAINT FK_direccion_ciudad
     FOREIGN KEY (codigo_ciudad)
     REFERENCES ciudad(codigo_ciudad),
   CONSTRAINT FK_direccion_tipo_direccion
     FOREIGN KEY (codigo_tipo)
-    REFERENCES tipo_direccion(codigo_tipo),
-  CONSTRAINT FK_direccion_cliente
-    FOREIGN KEY (codigo_cliente)
-    REFERENCES cliente(codigo_cliente),
-  CONSTRAINT FK_direccion_oficina
-    FOREIGN KEY (codigo_oficina)
-    REFERENCES oficina(codigo_oficina),
-  CHECK (codigo_oficina IS NULL OR codigo_cliente IS NULL)
+    REFERENCES tipo_direccion(codigo_tipo)
+);
+
+-- -----------------------------------------------------
+-- direccion_oficina
+-- -----------------------------------------------------
+CREATE TABLE direccion_oficina (
+  codigo_direccion_oficina VARCHAR(5) NOT NULL,
+  direccion_codigo_direccion VARCHAR(5) NOT NULL,
+  oficina_codigo_oficina VARCHAR(10) NOT NULL,
+  CONSTRAINT PK_direccion_oficina PRIMARY KEY (codigo_direccion_oficina),
+  CONSTRAINT FK_direccion_oficina_direccion
+    FOREIGN KEY (direccion_codigo_direccion)
+    REFERENCES direccion(codigo_direccion),
+  CONSTRAINT FK_direccion_oficina_oficina
+    FOREIGN KEY (oficina_codigo_oficina)
+    REFERENCES oficina(codigo_oficina)
+);
+
+-- -----------------------------------------------------
+-- direccion_cliente
+-- -----------------------------------------------------
+CREATE TABLE direccion_cliente (
+  codigo_direccion_cliente VARCHAR(5) NOT NULL,
+  direccion_codigo_direccion VARCHAR(5) NOT NULL,
+  cliente_codigo_cliente INT NOT NULL,
+  CONSTRAINT PK_direccion_cliente PRIMARY KEY (codigo_direccion_cliente),
+  CONSTRAINT FK_direccion_cliente_direccion
+    FOREIGN KEY (direccion_codigo_direccion)
+    REFERENCES direccion(codigo_direccion),
+  CONSTRAINT FK_direccion_cliente_cliente
+    FOREIGN KEY (cliente_codigo_cliente)
+    REFERENCES cliente(codigo_cliente)
 );
 
 -- -----------------------------------------------------
@@ -333,4 +358,36 @@ CREATE TABLE telefono (
     FOREIGN KEY (codigo_contacto)
     REFERENCES contacto(codigo_contacto),
   CHECK (codigo_oficina IS NULL OR codigo_contacto IS NULL)
+);
+
+-- -----------------------------------------------------
+-- telefono_contacto
+-- -----------------------------------------------------
+CREATE TABLE telefono_contacto (
+  codigo_telefono_contacto VARCHAR(5) NOT NULL,
+  contacto_codigo_contacto INT NOT NULL,
+  telefono_codigo_telefono VARCHAR(5) NOT NULL,
+  CONSTRAINT PK_telefono_contacto PRIMARY KEY (codigo_telefono_contacto),
+  CONSTRAINT FK_telefono_contacto_contacto
+    FOREIGN KEY (contacto_codigo_contacto)
+    REFERENCES contacto(codigo_contacto),
+  CONSTRAINT FK_telefono_contacto_telefono
+    FOREIGN KEY (telefono_codigo_telefono)
+    REFERENCES telefono(codigo_telefono)
+);
+
+-- -----------------------------------------------------
+-- telefono_oficina
+-- -----------------------------------------------------
+CREATE TABLE telefono_oficina (
+  codigo_telefono_oficina VARCHAR(5) NOT NULL,
+  oficina_codigo_oficina VARCHAR(10) NOT NULL,
+  telefono_codigo_telefono VARCHAR(5) NOT NULL,
+  CONSTRAINT PK_telefono_oficina PRIMARY KEY (codigo_telefono_oficina),
+  CONSTRAINT FK_telefono_oficina_oficina
+    FOREIGN KEY (oficina_codigo_oficina)
+    REFERENCES oficina(codigo_oficina),
+  CONSTRAINT FK_telefono_oficina_telefono
+    FOREIGN KEY (telefono_codigo_telefono)
+    REFERENCES telefono(codigo_telefono)
 );
