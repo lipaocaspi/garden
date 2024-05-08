@@ -3878,7 +3878,18 @@ VALUES
 1. Devuelve el nombre del cliente con mayor límite de crédito.
 
    ```sql
+   SELECT c.nombre_cliente
+   FROM cliente AS c
+   WHERE c.limite_credito = (
+   	SELECT MAX(c.limite_credito)
+       FROM cliente AS c
+   );
    
+   +----------------+
+   | nombre_cliente |
+   +----------------+
+   | Tendo Garden   |
+   +----------------+
    ```
 
    
@@ -3886,41 +3897,194 @@ VALUES
 2. Devuelve el nombre del producto que tenga el precio de venta más caro.
 
    ```sql
+   SELECT p.nombre
+   FROM producto AS p
+   WHERE p.precio_venta = (
+   	SELECT MAX(p.precio_venta)
+       FROM producto AS p
+   );
    
+   +-----------------------+
+   | nombre                |
+   +-----------------------+
+   | Trachycarpus Fortunei |
+   +-----------------------+
    ```
+
+   
 
 3. Devuelve el nombre del producto del que se han vendido más unidades. (Tenga en cuenta que tendrá que calcular cuál es el número total de unidades que se han vendido de cada producto a partir de los datos de la tabla detalle_pedido).
 
-  ```sql
-  
-  ```
+   ```sql
+   SELECT DISTINCT(p.nombre)
+   FROM producto AS p, detalle_pedido AS dp
+   WHERE p.nombre = (
+   	SELECT DISTINCT(p.nombre)
+       FROM producto AS p
+       INNER JOIN detalle_pedido AS dp
+       ON dp.producto_codigo_producto = p.codigo_producto
+       GROUP BY p.nombre
+       ORDER BY COUNT(dp.cantidad) DESC
+       LIMIT 1
+   );
+   
+   +--------+
+   | nombre |
+   +--------+
+   | Cerezo |
+   +--------+
+   ```
 
-  
+     
 
 4. Los clientes cuyo límite de crédito sea mayor que los pagos que haya realizado. (Sin utilizar INNER JOIN).
 
-  ```sql
-  
-  ```
+   ```sql
+   SELECT c.nombre_cliente
+   FROM cliente AS c
+   WHERE c.limite_credito > (
+   	SELECT IFNULL(SUM(p.total), 0)
+       FROM pago AS p
+       WHERE p.codigo_cliente = c.codigo_cliente
+   );
+   
+   +--------------------------------+
+   | nombre_cliente                 |
+   +--------------------------------+
+   | Tendo Garden                   |
+   | Lasas S.A.                     |
+   | Beragua                        |
+   | Club Golf Puerta del hierro    |
+   | Naturagua                      |
+   | DaraDistribuciones             |
+   | Madrileña de riegos            |
+   | Lasas S.A.                     |
+   | Camunas Jardines S.L.          |
+   | Dardena S.A.                   |
+   | Jardin de Flores               |
+   | Flowers, S.A                   |
+   | Naturajardin                   |
+   | Golf S.A.                      |
+   | Americh Golf Management SL     |
+   | Aloha                          |
+   | El Prat                        |
+   | Sotogrande                     |
+   | Vivero Humanes                 |
+   | Fuenla City                    |
+   | Jardines y Mansiones Cactus SL |
+   | Jardinerías Matías SL          |
+   | Top Campo                      |
+   | Campohermoso                   |
+   | france telecom                 |
+   | Musée du Louvre                |
+   | Tutifruti S.A                  |
+   | Flores S.L.                    |
+   | The Magic Garden               |
+   | El Jardin Viviente S.L         |
+   +--------------------------------+
+   ```
+
+   
 
 
 5. Devuelve el producto que más unidades tiene en stock.
 
    ```sql
+   SELECT p.nombre
+   FROM producto AS p
+   WHERE p.cantidad_en_stock = (
+   	SELECT MAX(p.cantidad_en_stock)
+       FROM producto AS p
+   );
    
+   +---------------------------------+
+   | nombre                          |
+   +---------------------------------+
+   | Rosal copa                      |
+   | Albaricoquero Corbato           |
+   | Albaricoquero Moniqui           |
+   | Albaricoquero Kurrot            |
+   | Cerezo Burlat                   |
+   | Cerezo Picota                   |
+   | Cerezo Napoleón                 |
+   | Ciruelo R. Claudia Verde        |
+   | Ciruelo Santa Rosa              |
+   | Ciruelo Golden Japan            |
+   | Ciruelo Friar                   |
+   | Ciruelo Reina C. De Ollins      |
+   | Ciruelo Claudia Negra           |
+   | Granado Mollar de Elche         |
+   | Higuera Napolitana              |
+   | Higuera Verdal                  |
+   | Higuera Breva                   |
+   | Manzano Starking Delicious      |
+   | Manzano Reineta                 |
+   | Manzano Golden Delicious        |
+   | Membrillero Gigante de Wranja   |
+   | Melocotonero Spring Crest       |
+   | Melocotonero Amarillo de Agosto |
+   | Melocotonero Federica           |
+   | Melocotonero Paraguayo          |
+   | Nogal Común                     |
+   | Parra Uva de Mesa               |
+   | Peral Castell                   |
+   | Peral Williams                  |
+   | Peral Conference                |
+   | Peral Blanq. de Aranjuez        |
+   | Níspero Tanaca                  |
+   | Olivo Cipresino                 |
+   | Nectarina                       |
+   | Kaki Rojo Brillante             |
+   +---------------------------------+
    ```
+
+   
 
 6. Devuelve el producto que menos unidades tiene en stock.
 
    ```sql
+   SELECT p.nombre
+   FROM producto AS p
+   WHERE p.cantidad_en_stock = (
+   	SELECT MIN(p.cantidad_en_stock)
+       FROM producto AS p
+   );
    
+   +---------------+
+   | nombre        |
+   +---------------+
+   | Brahea Armata |
+   +---------------+
    ```
+
+   
 
 7. Devuelve el nombre, los apellidos y el email de los empleados que están a cargo de Alberto Soria.
 
-  ```sql
-  
-  ```
+   ```sql
+   SELECT e.nombre, e.apellido1, e.apellido2, e.email
+   FROM empleado AS e
+   WHERE e.codigo_jefe = (
+   	SELECT e.codigo_empleado
+       FROM empleado AS e
+       WHERE e.nombre = 'Alberto' AND e.apellido1 = 'Soria'
+   );
+   
+   +-------------+------------+-----------+---------------------------+
+   | nombre      | apellido1  | apellido2 | email                     |
+   +-------------+------------+-----------+---------------------------+
+   | Felipe      | Rosas      | Marquez   | frosas@jardineria.es      |
+   | Juan Carlos | Ortiz      | Serrano   | cortiz@jardineria.es      |
+   | Carlos      | Soria      | Jimenez   | csoria@jardineria.es      |
+   | Emmanuel    | Magaña     | Perez     | manu@jardineria.es        |
+   | Francois    | Fignon     |           | ffignon@gardening.com     |
+   | Michael     | Bolton     |           | mbolton@gardening.com     |
+   | Hilary      | Washington |           | hwashington@gardening.com |
+   | Nei         | Nishikori  |           | nnishikori@gardening.com  |
+   | Amy         | Johnson    |           | ajohnson@gardening.com    |
+   | Kevin       | Fallmer    |           | kfalmer@gardening.com     |
+   +-------------+------------+-----------+---------------------------+
+   ```
 
   
 
