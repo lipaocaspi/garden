@@ -1646,15 +1646,10 @@ VALUES
 
    ```sql
    SELECT o.codigo_oficina, c.nombre_ciudad
-   FROM oficina AS o, ciudad AS c, direccion AS d
-   WHERE d.codigo_ciudad = c.codigo_ciudad AND d.codigo_oficina = o.codigo_oficina;
-   
-   SELECT o.codigo_oficina, c.nombre_ciudad
-   FROM direccion AS d
-   INNER JOIN oficina AS o
-   ON d.codigo_oficina = o.codigo_oficina
-   INNER JOIN ciudad AS c
-   ON d.codigo_ciudad = c.codigo_ciudad;
+   FROM oficina AS o, ciudad AS c, direccion AS d, direccion_oficina AS do
+   WHERE d.codigo_ciudad = c.codigo_ciudad 
+    AND d.codigo_direccion = do.direccion_codigo_direccion
+    AND do.oficina_codigo_oficina = o.codigo_oficina;
    
    +----------------+----------------------+
    | codigo_oficina | nombre_ciudad        |
@@ -1677,9 +1672,11 @@ VALUES
 
    ```sql
    SELECT c.nombre_ciudad, t.numero_telefono
-   FROM ciudad AS c, region AS r, pais AS p, telefono AS t, direccion AS d, oficina AS o
-   WHERE t.codigo_oficina = o.codigo_oficina 
-   	AND o.codigo_oficina = d.codigo_oficina 
+   FROM ciudad AS c, region AS r, pais AS p, telefono AS t, telefono_oficina AS t0, direccion AS d, oficina AS o, direccion_oficina AS do
+   WHERE t0.telefono_codigo_telefono = t.codigo_telefono
+    AND t0.oficina_codigo_oficina = o.codigo_oficina 
+   	AND o.codigo_oficina = do.oficina_codigo_oficina 
+    AND do.direccion_codigo_direccion = d.codigo_direccion
    	AND d.codigo_ciudad = c.codigo_ciudad 
    	AND c.codigo_region = r.codigo_region 
    	AND r.codigo_pais = p.codigo_pais 
@@ -1761,8 +1758,9 @@ VALUES
 
    ```sql
    SELECT c.nombre_cliente
-   FROM cliente AS c, direccion AS d, ciudad AS ci, region AS r, pais AS p
-   WHERE c.codigo_cliente = d.codigo_cliente 
+   FROM cliente AS c, direccion AS d, ciudad AS ci, region AS r, pais AS p, direccion_cliente AS do
+   WHERE do.cliente_codigo_cliente = c.codigo_cliente
+    AND do.direccion_codigo_direccion = d.codigo_direccion 
    	AND d.codigo_ciudad = ci.codigo_ciudad 
    	AND ci.codigo_region = r.codigo_region 
    	AND r.codigo_pais = p.codigo_pais 
@@ -2133,8 +2131,9 @@ VALUES
 
     ```sql
     SELECT c.codigo_cliente, c.nombre_cliente, ci.nombre_ciudad, c.codigo_empleado_rep_ventas, c.limite_credito
-    FROM cliente AS c, direccion AS d, ciudad AS ci
-    WHERE c.codigo_cliente = d.codigo_cliente 
+    FROM cliente AS c, direccion AS d, ciudad AS ci, direccion_cliente AS dc
+    WHERE dc.cliente_codigo_cliente = c.codigo_cliente
+        AND dc.direccion_codigo_direccion = d.codigo_direccion
     	AND d.codigo_ciudad = ci.codigo_ciudad 
     	AND ci.nombre_ciudad = 'Madrid' 
     	AND c.codigo_empleado_rep_ventas IN (11, 30);
@@ -2290,8 +2289,10 @@ VALUES
    ON p.codigo_cliente = c.codigo_cliente
    INNER JOIN oficina AS o
    ON o.codigo_oficina = e.codigo_oficina
+   INNER JOIN direccion_oficina AS do
+   ON do.oficina_codigo_oficina = o.codigo_oficina
    INNER JOIN direccion AS d
-   ON d.codigo_oficina = o.codigo_oficina
+   ON d.codigo_direccion = do.direccion_codigo_direccion
    INNER JOIN ciudad AS ci
    ON ci.codigo_ciudad = d.codigo_ciudad;
    
@@ -2330,8 +2331,10 @@ VALUES
    ON c.codigo_empleado_rep_ventas = e.codigo_empleado
    INNER JOIN oficina AS o
    ON o.codigo_oficina = e.codigo_oficina
+   INNER JOIN direccion_oficina AS do
+   ON do.oficina_codigo_oficina = o.codigo_oficina
    INNER JOIN direccion AS d
-   ON d.codigo_oficina = o.codigo_oficina
+   ON d.codigo_direccion = do.direccion_codigo_direccion
    INNER JOIN ciudad AS ci
    ON ci.codigo_ciudad = d.codigo_ciudad
    WHERE c.codigo_cliente NOT IN (SELECT p.codigo_cliente FROM pago AS p);
@@ -2365,16 +2368,18 @@ VALUES
 
    ```sql
    SELECT DISTINCT(d.linea_direccion1), d.linea_direccion2, c.nombre_ciudad
-   FROM ciudad AS c, direccion AS d, oficina AS o, empleado AS e
+   FROM ciudad AS c, direccion AS d, oficina AS o, empleado AS e, direccion_oficina AS do
    WHERE e.codigo_empleado IN (
        SELECT cl.codigo_empleado_rep_ventas
-          FROM cliente AS cl, direccion AS d, ciudad AS c
-          WHERE d.codigo_cliente = cl.codigo_cliente
+          FROM cliente AS cl, direccion AS d, ciudad AS c, direccion_cliente as dc
+          WHERE dc.cliente_codigo_cliente = cl.codigo_cliente
+            AND d.codigo_direccion = dc.direccion_codigo_direccion
           	AND c.codigo_ciudad = d.codigo_ciudad
-           AND c.nombre_ciudad = 'Fuenlabrada'
+            AND c.nombre_ciudad = 'Fuenlabrada'
    )
    	AND o.codigo_oficina = e.codigo_oficina
-   	AND o.codigo_oficina = d.codigo_oficina
+    AND do.oficina_codigo_oficina = o.codigo_oficina
+   	AND d.codigo_direccion = do.direccion_codigo_direccion
    	AND d.codigo_ciudad = c.codigo_ciudad;
    
    +------------------------------+---------------------+----------------------+
@@ -2397,8 +2402,10 @@ VALUES
    ON e.codigo_empleado = c.codigo_empleado_rep_ventas
    INNER JOIN oficina AS o
    ON o.codigo_oficina = e.codigo_oficina
+   INNER JOIN direccion_oficina as do
+   ON do.oficina_codigo_oficina = o.codigo_oficina
    INNER JOIN direccion AS d
-   ON d.codigo_oficina = o.codigo_oficina
+   ON d.codigo_direccion = do.direccion_codigo_direccion
    INNER JOIN ciudad AS ci
    ON ci.codigo_ciudad = d.codigo_ciudad;
    
@@ -3320,8 +3327,10 @@ VALUES
    ```sql
    SELECT COUNT(c.codigo_cliente) AS clientes_madrid
    FROM cliente AS c
+   INNER JOIN direccion_cliente AS dc
+   ON dc.cliente_codigo_cliente = c.codigo_cliente
    INNER JOIN direccion AS d
-   ON d.codigo_cliente = c.codigo_cliente
+   ON d.codigo_direccion = dc.direccion_codigo_direccion
    INNER JOIN ciudad AS ci
    ON ci.codigo_ciudad = d.codigo_ciudad
    WHERE ci.nombre_ciudad = 'Madrid';
@@ -3340,8 +3349,10 @@ VALUES
    ```sql
    SELECT ci.nombre_ciudad, COUNT(c.codigo_cliente) AS numero_clientes
    FROM cliente AS c
+   INNER JOIN direccion_cliente AS dc
+   ON dc.cliente_codigo_cliente = c.codigo_cliente
    INNER JOIN direccion AS d
-   ON d.codigo_cliente = c.codigo_cliente
+   ON d.codigo_direccion = dc.direccion_codigo_direccion
    INNER JOIN ciudad AS ci
    ON ci.codigo_ciudad = d.codigo_ciudad
    WHERE ci.nombre_ciudad LIKE 'M%'
@@ -4682,14 +4693,15 @@ VALUES
 
     ```sql
     SELECT e.nombre, e.apellido1, e.apellido2, p.nombre_puesto, t.numero_telefono
-    FROM empleado AS e, puesto AS p, oficina AS o, telefono AS t
+    FROM empleado AS e, puesto AS p, oficina AS o, telefono AS t, telefono_oficina AS t0
     WHERE e.codigo_puesto = p.codigo_puesto
-    AND e.codigo_oficina = o.codigo_oficina
-    AND o.codigo_oficina = t.codigo_oficina
-    AND e.codigo_empleado NOT IN (
-    	SELECT c.codigo_empleado_rep_ventas
-        FROM cliente AS c
-    );
+        AND e.codigo_oficina = o.codigo_oficina
+        AND o.codigo_oficina = t0.oficina_codigo_oficina
+        AND t0.telefono_codigo_telefono = t.codigo_telefono
+        AND e.codigo_empleado NOT IN (
+            SELECT c.codigo_empleado_rep_ventas
+            FROM cliente AS c
+        );
     
     +-------------+------------+-----------+-----------------------+-----------------+
     | nombre      | apellido1  | apellido2 | nombre_puesto         | numero_telefono |
@@ -5228,10 +5240,11 @@ VALUES
 
    ```sql
    SELECT c.nombre_cliente, e.nombre AS nombre_representante, e.apellido1 AS apellido_representante, t.numero_telefono AS numero_oficina
-   FROM cliente AS c, empleado AS e, oficina AS o, telefono AS t
+   FROM cliente AS c, empleado AS e, oficina AS o, telefono AS t, telefono_oficina AS t0
    WHERE c.codigo_empleado_rep_ventas = e.codigo_empleado
    AND e.codigo_oficina = o.codigo_oficina
-   AND o.codigo_oficina = t.codigo_oficina
+   AND o.codigo_oficina = t0.oficina_codigo_oficina
+   AND t0.telefono_codigo_telefono = t.codigo_telefono
    AND c.codigo_cliente NOT IN (
    	SELECT p.codigo_cliente
        FROM pago AS p
@@ -5273,8 +5286,10 @@ VALUES
    ON e.codigo_empleado = c.codigo_empleado_rep_ventas
    INNER JOIN oficina AS o
    ON o.codigo_oficina = e.codigo_oficina
+   INNER JOIN direccion_oficina AS do
+   ON do.oficina_codigo_oficina = o.codigo_oficina
    INNER JOIN direccion AS d
-   ON d.codigo_oficina = o.codigo_oficina
+   ON d.codigo_direccion = do.direccion_codigo_direccion
    INNER JOIN ciudad AS ci
    ON ci.codigo_ciudad = d.codigo_ciudad;
    
@@ -5332,8 +5347,10 @@ VALUES
    ON e.codigo_puesto = p.codigo_puesto
    INNER JOIN oficina AS o
    ON e.codigo_oficina = o.codigo_oficina
+   INNER JOIN telefono_oficina as t0
+   ON t0.oficina_codigo_oficina = o.codigo_oficina
    INNER JOIN telefono AS t
-   ON o.codigo_oficina = t.codigo_oficina
+   ON t.codigo_telefono = t0.telefono_codigo_telefono
    AND e.codigo_empleado NOT IN (
    	SELECT c.codigo_empleado_rep_ventas
        FROM cliente AS c
@@ -5374,8 +5391,10 @@ VALUES
    FROM empleado AS e
    INNER JOIN oficina AS o
    ON o.codigo_oficina = e.codigo_oficina
+   INNER JOIN direccion_oficina AS do
+   ON do.oficina_codigo_oficina = o.codigo_oficina
    INNER JOIN direccion AS d
-   ON d.codigo_oficina = o.codigo_oficina
+   ON d.codigo_direccion = do.direccion_codigo_direccion
    INNER JOIN ciudad AS c
    ON c.codigo_ciudad = d.codigo_ciudad
    GROUP BY c.nombre_ciudad;
@@ -5461,14 +5480,15 @@ VALUES
    ```sql
    CREATE VIEW empleados_sin_clientes AS
    SELECT e.nombre, e.apellido1, e.apellido2, p.nombre_puesto, t.numero_telefono
-   FROM empleado AS e, puesto AS p, oficina AS o, telefono AS t
-   WHERE e.codigo_puesto = p.codigo_puesto
-   AND e.codigo_oficina = o.codigo_oficina
-   AND o.codigo_oficina = t.codigo_oficina
-   AND e.codigo_empleado NOT IN (
-   	SELECT c.codigo_empleado_rep_ventas
-       FROM cliente AS c
-   );
+    FROM empleado AS e, puesto AS p, oficina AS o, telefono AS t, telefono_oficina AS t0
+    WHERE e.codigo_puesto = p.codigo_puesto
+        AND e.codigo_oficina = o.codigo_oficina
+        AND o.codigo_oficina = t0.oficina_codigo_oficina
+        AND t0.telefono_codigo_telefono = t.codigo_telefono
+        AND e.codigo_empleado NOT IN (
+            SELECT c.codigo_empleado_rep_ventas
+            FROM cliente AS c
+        );
    ```
 
    
@@ -5702,10 +5722,12 @@ VALUES
     	IN nombre VARCHAR(50)
     )
     BEGIN
-    	SELECT COUNT(c.codigo_cliente) AS numero_clientes
+    	SELECT COUNT(c.codigo_cliente) AS clientes_madrid
         FROM cliente AS c
+        INNER JOIN direccion_cliente AS dc
+        ON dc.cliente_codigo_cliente = c.codigo_cliente
         INNER JOIN direccion AS d
-        ON d.codigo_cliente = c.codigo_cliente
+        ON d.codigo_direccion = dc.direccion_codigo_direccion
         INNER JOIN ciudad AS ci
         ON ci.codigo_ciudad = d.codigo_ciudad
         WHERE ci.nombre_ciudad = nombre;
