@@ -2378,7 +2378,7 @@ VALUES
             AND c.nombre_ciudad = 'Fuenlabrada'
    )
    	AND o.codigo_oficina = e.codigo_oficina
-    AND do.oficina_codigo_oficina = o.codigo_oficina
+    	AND do.oficina_codigo_oficina = o.codigo_oficina
    	AND d.codigo_direccion = do.direccion_codigo_direccion
    	AND d.codigo_ciudad = c.codigo_ciudad;
    
@@ -3133,18 +3133,30 @@ VALUES
 10. Devuelve las oficinas donde no trabajan ninguno de los empleados que hayan sido los representantes de ventas de algún cliente que haya realizado la compra de algún producto de la gama Frutales.
 
     ```sql
-    /* RESIGNACIÓN */
     SELECT DISTINCT(o.nombre_oficina)
-    FROM oficina AS o, empleado AS e
-    WHERE o.codigo_oficina = e.codigo_oficina
-    AND e.codigo_empleado NOT IN (
-        SELECT DISTINCT(cl.codigo_empleado_rep_ventas)
-        FROM cliente AS cl, pedido AS p, detalle_pedido AS dp, producto AS pr
-        WHERE p.codigo_cliente = cl.codigo_cliente
-            AND dp.pedido_codigo_pedido = p.codigo_pedido
-            AND pr.codigo_producto = dp.producto_codigo_producto
-            AND pr.gama = 'Frutales'
-    );
+    FROM detalle_pedido AS dp
+    INNER JOIN producto AS p
+    ON p.codigo_producto = dp.producto_codigo_producto
+    INNER JOIN pedido AS pe
+    ON pe.codigo_pedido = dp.pedido_codigo_pedido
+    INNER JOIN cliente AS c
+    ON c.codigo_cliente = pe.codigo_cliente
+    INNER JOIN empleado AS e
+    ON e.codigo_empleado = c.codigo_empleado_rep_ventas
+    RIGHT JOIN oficina AS o
+    ON e.codigo_oficina = o.codigo_oficina
+    WHERE p.gama = 'Frutales';
+    
+    +--------------------+
+    | nombre_oficina     |
+    +--------------------+
+    | Talavera-España    |
+    | Madrid-España      |
+    | Barcelona-España   |
+    | San Francisco-EEUU |
+    | Boston-EEUU        |
+    | Sydney-Australia   |
+    +--------------------+
     ```
 
     
@@ -4734,7 +4746,29 @@ VALUES
 16. Devuelve las oficinas donde no trabajan ninguno de los empleados que hayan sido los representantes de ventas de algún cliente que haya realizado la compra de algún producto de la gama Frutales.
 
     ```sql
-    /* RESIGNACIÓN */
+    SELECT DISTINCT(o.nombre_oficina)
+    FROM oficina AS o
+    LEFT JOIN empleado AS e
+    ON o.codigo_oficina = e.codigo_oficina
+    WHERE e.codigo_empleado IN (
+    	SELECT DISTINCT(cl.codigo_empleado_rep_ventas)
+        FROM cliente AS cl, pedido AS p, detalle_pedido AS dp, producto AS pr
+        WHERE p.codigo_cliente = cl.codigo_cliente
+        	AND dp.pedido_codigo_pedido = p.codigo_pedido
+           	AND pr.codigo_producto = dp.producto_codigo_producto
+           	AND pr.gama = 'Frutales'
+    );
+    
+    +--------------------+
+    | nombre_oficina     |
+    +--------------------+
+    | Barcelona-España   |
+    | Boston-EEUU        |
+    | Madrid-España      |
+    | San Francisco-EEUU |
+    | Sydney-Australia   |
+    | Talavera-España    |
+    +--------------------+
     ```
 
     
