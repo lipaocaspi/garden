@@ -21,7 +21,6 @@ CREATE TABLE gama_producto (
 -- -----------------------------------------------------
 -- dimension
 -- -----------------------------------------------------
-/* 1FN */
 CREATE TABLE dimension (
   codigo_dimension VARCHAR(5) NOT NULL,
   alto DECIMAL(15,2),
@@ -33,7 +32,6 @@ CREATE TABLE dimension (
 -- -----------------------------------------------------
 -- proveedor
 -- -----------------------------------------------------
-/* 1FN, 2FN */
 CREATE TABLE proveedor (
   codigo_proveedor INT NOT NULL,
   nombre_proveedor VARCHAR(50) NOT NULL,
@@ -43,7 +41,6 @@ CREATE TABLE proveedor (
 -- -----------------------------------------------------
 -- producto
 -- -----------------------------------------------------
-/* 1FN, 2FN, 3FN y 4FN */
 CREATE TABLE producto (
   codigo_producto VARCHAR(15) NOT NULL,
   nombre VARCHAR(70) NOT NULL,
@@ -69,7 +66,6 @@ CREATE TABLE producto (
 -- -----------------------------------------------------
 -- pais
 -- -----------------------------------------------------
-/* 1FN */
 CREATE TABLE pais (
   codigo_pais VARCHAR(10) NOT NULL,
   nombre_pais VARCHAR(50) NOT NULL,
@@ -79,7 +75,6 @@ CREATE TABLE pais (
 -- -----------------------------------------------------
 -- region
 -- -----------------------------------------------------
-/* 1FN */
 CREATE TABLE region (
   codigo_region VARCHAR(10) NOT NULL,
   nombre_region VARCHAR(50) NOT NULL,
@@ -93,7 +88,6 @@ CREATE TABLE region (
 -- -----------------------------------------------------
 -- ciudad
 -- -----------------------------------------------------
-/* 1FN */
 CREATE TABLE ciudad (
   codigo_ciudad VARCHAR(10) NOT NULL,
   nombre_ciudad VARCHAR(50) NOT NULL,
@@ -107,7 +101,6 @@ CREATE TABLE ciudad (
 -- -----------------------------------------------------
 -- tipo_direccion
 -- -----------------------------------------------------
-/* 1FN */
 CREATE TABLE tipo_direccion (
   codigo_tipo VARCHAR(5) NOT NULL,
   nombre_tipo VARCHAR(30) NOT NULL,
@@ -117,7 +110,6 @@ CREATE TABLE tipo_direccion (
 -- -----------------------------------------------------
 -- oficina
 -- -----------------------------------------------------
-/* 1FN, 2FN, 3FN y 4FN */
 CREATE TABLE oficina (
   codigo_oficina VARCHAR(10) NOT NULL,
   nombre_oficina VARCHAR(30) NOT NULL,
@@ -127,7 +119,6 @@ CREATE TABLE oficina (
 -- -----------------------------------------------------
 -- puesto
 -- -----------------------------------------------------
-/* 1FN */
 CREATE TABLE puesto (
   codigo_puesto VARCHAR(5) NOT NULL,
   nombre_puesto VARCHAR(50) NOT NULL,
@@ -137,7 +128,6 @@ CREATE TABLE puesto (
 -- -----------------------------------------------------
 -- extension
 -- -----------------------------------------------------
-/* 1FN */
 CREATE TABLE extension (
   codigo_extension VARCHAR(5) NOT NULL,
   numero_extension VARCHAR(10) NOT NULL,
@@ -147,7 +137,6 @@ CREATE TABLE extension (
 -- -----------------------------------------------------
 -- empleado
 -- -----------------------------------------------------
-/* 1FN, 2FN, 3FN y 4FN */
 CREATE TABLE empleado (
   codigo_empleado INT NOT NULL,
   nombre VARCHAR(50) NOT NULL,
@@ -176,7 +165,6 @@ CREATE TABLE empleado (
 -- -----------------------------------------------------
 -- cliente
 -- -----------------------------------------------------
-/* 1FN, 2FN, 3FN y 4FN */
 CREATE TABLE cliente (
   codigo_cliente INT NOT NULL,
   nombre_cliente VARCHAR(50) NOT NULL,
@@ -191,7 +179,6 @@ CREATE TABLE cliente (
 -- -----------------------------------------------------
 -- direccion
 -- -----------------------------------------------------
-/* 1FN, 2FN, 3FN y 4FN */
 CREATE TABLE direccion (
   codigo_direccion VARCHAR(5) NOT NULL,
   linea_direccion1 VARCHAR(50) NOT NULL,
@@ -259,7 +246,6 @@ CREATE TABLE contacto (
 -- -----------------------------------------------------
 -- estado
 -- -----------------------------------------------------
-/* 1FN */
 CREATE TABLE estado (
   codigo_estado VARCHAR(5) NOT NULL,
   nombre_estado VARCHAR(15) NOT NULL,
@@ -269,7 +255,6 @@ CREATE TABLE estado (
 -- -----------------------------------------------------
 -- pedido
 -- -----------------------------------------------------
-/* 1FN */
 CREATE TABLE pedido (
   codigo_pedido INT NOT NULL,
   fecha_pedido DATE NOT NULL,
@@ -308,7 +293,6 @@ CREATE TABLE detalle_pedido (
 -- -----------------------------------------------------
 -- forma_pago
 -- -----------------------------------------------------
-/* 1FN */
 CREATE TABLE forma_pago (
   codigo_forma VARCHAR(5) NOT NULL,
   nombre_forma VARCHAR(40) NOT NULL,
@@ -318,7 +302,6 @@ CREATE TABLE forma_pago (
 -- -----------------------------------------------------
 -- pago
 -- -----------------------------------------------------
-/* 1FN */
 CREATE TABLE pago (
   id_transaccion VARCHAR(50) NOT NULL,
   fecha_pago DATE NOT NULL,
@@ -337,7 +320,6 @@ CREATE TABLE pago (
 -- -----------------------------------------------------
 -- tipo_telefono
 -- -----------------------------------------------------
-/* 1FN */
 CREATE TABLE tipo_telefono (
   codigo_tipo VARCHAR(5) NOT NULL,
   nombre_tipo VARCHAR(20) NOT NULL,
@@ -347,7 +329,6 @@ CREATE TABLE tipo_telefono (
 -- -----------------------------------------------------
 -- telefono
 -- -----------------------------------------------------
-/* 1FN */
 CREATE TABLE telefono (
   codigo_telefono VARCHAR(5) NOT NULL,
   numero_telefono VARCHAR(20) NOT NULL,
